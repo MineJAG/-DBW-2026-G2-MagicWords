@@ -1,0 +1,24 @@
+
+nav {
+    background-color: #11111B;
+    width: 100%;
+    height: 80px;
+}
+
+nav img {
+    height: 65px;
+    width: 65px;
+}
+
+nav button {
+    background: #1E1E2E;
+    color: #CBA6F7;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background: #1E1E2E;
+    color: #CBA6F7;
+}
