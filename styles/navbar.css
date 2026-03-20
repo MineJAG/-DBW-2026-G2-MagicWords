@@ -1,0 +1,26 @@
+nav {
+    background-color: #11111B;
+    width: 100%;
+}
+
+nav img {
+    height: 65px;
+    width: 65px;
+}
+
+nav button {
+    background: #1E1E2E;
+    color: #CBA6F7;
+    border: none;
+    font-size: larger;
+    border-style: solid;
+    border-color: #CBA6F7;
+    border-width: 2px;
+    border-radius: 7px;
+}
+
+nav button:hover {
+    background: #CBA6F7;
+    color: #1E1E2E;
+    box-shadow: 0 0 10px #CBA6F7;
+}
