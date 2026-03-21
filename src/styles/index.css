@@ -48,3 +48,42 @@ body {
 .display-1 {
   font-weight: 500;
 }
+
+.game-button {
+  background-color: #1E1E2E;
+  transition: background-color 0.3s ease;
+  border-radius: 100%;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #cba6f7;
+  padding: 0;
+  cursor: pointer;
+}
+
+.game-button:hover {
+  background-color: #cba6f7;
+}
+
+.game-button a {
+  color: #cba6f7;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 0;
+}
+
+.game-button:hover a {
+  color: #1E1E2E;
+}
+
+.game-icon {
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+
