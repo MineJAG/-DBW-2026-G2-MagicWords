@@ -1,4 +1,4 @@
-import "../styles/index.css";
+import "../styles/variable.css";
 import "../styles/navbar.css";
 import Button from "./button.jsx";
 import {Logo} from "./images.jsx";

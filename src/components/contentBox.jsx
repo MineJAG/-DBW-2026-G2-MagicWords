@@ -1,6 +1,6 @@
 export function ContentBoxBig({ content1, content2 }) {
   return (
-    <div className="text-container">
+    <div className="text-container text-container-big-size">
       <div className="row align-items-center">
         <div className="col-8 text-start">{content1}</div>
         <div class="col-4 text-center">{content2}</div>
@@ -10,7 +10,7 @@ export function ContentBoxBig({ content1, content2 }) {
 }
 
 export function ContentBoxMedium({ content1, content2, icon }) {
-  return (<div className="text-container">
+  return (<div className="text-container text-container-medium-size p-4 m-5">
     <div className="row align-items-center">
       <div className="col-8 text-start">{content1}</div>
       <div class="col-4 text-end">{icon}</div>

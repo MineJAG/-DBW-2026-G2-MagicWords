@@ -1,7 +1,7 @@
 nav {
-  background-color: #11111b;
+  background-color: var(--ink-black);
   width: 100%;
-  text-decoration: none;
+  text-decoration: var(--remove-decoration);
 }
 
 nav img {
@@ -10,27 +10,27 @@ nav img {
 }
 
 nav button {
-  background: #1e1e2e;
-  color: #cba6f7;
+  background: var(--shadow-grey);
+  color: var(--light-purple);
   border: none;
   font-size: larger;
-  border-style: solid;
-  border-color: #cba6f7;
-  border-width: 2px;
+  border-style: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-widht);
   border-radius: 7px;
-  text-decoration: none;
-  transition: background 0.5s ease;
-  transition: color 0.5s ease;
+  text-decoration: var(--remove-decoration);
+  transition: var(--transition-background);
+  transition: var(--transition-color);
 }
 
 nav button:hover {
-  background: #cba6f7;
-  color: #1e1e2e;
-  box-shadow: 0 0 10px #cba6f7;
-  text-decoration: none;
+  background: var(--light-purple);
+  color: var(--shadow-grey);
+  box-shadow: var(--shadow);
+  text-decoration: var(--remove-decoration);
 }
 
 nav button a {
-  text-decoration: none;
+  text-decoration: var(--remove-decoration);
   color: inherit;
 }
