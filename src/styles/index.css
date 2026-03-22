@@ -44,13 +44,19 @@ body {
   font-weight: 500;
 }
 
+.text-container:hover, .text-container img:hover {
+  transition: var(--transition-shadow);
+  box-shadow: var(--shadow);
+}
+
 .text-container-big-size {
   width: 90%;
   height: 0%;
 }
 
 .text-container-medium-size {
-  width: 400px;
+  width: 450px;
+  height: 450px;
 }
 
 .display-1 {
