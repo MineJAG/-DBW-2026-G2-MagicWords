@@ -1,34 +1,36 @@
 nav {
-    background-color: #11111B;
-    width: 100%;
-    text-decoration: none;
+  background-color: var(--ink-black);
+  width: 100%;
+  text-decoration: var(--remove-decoration);
 }
 
 nav img {
-    height: 65px;
-    width: 65px;
+  height: 65px;
+  width: 65px;
 }
 
 nav button {
-    background: #1E1E2E;
-    color: #CBA6F7;
-    border: none;
-    font-size: larger;
-    border-style: solid;
-    border-color: #CBA6F7;
-    border-width: 2px;
-    border-radius: 7px;
-    text-decoration: none;
+  background: var(--shadow-grey);
+  color: var(--light-purple);
+  border: none;
+  font-size: larger;
+  border-style: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-widht);
+  border-radius: 7px;
+  text-decoration: var(--remove-decoration);
+  transition: var(--transition-background);
+  transition: var(--transition-color);
 }
 
 nav button:hover {
-    background: #CBA6F7;
-    color: #1E1E2E;
-    box-shadow: 0 0 10px #CBA6F7;
-    text-decoration: none;
+  background: var(--light-purple);
+  color: var(--shadow-grey);
+  box-shadow: var(--shadow);
+  text-decoration: var(--remove-decoration);
 }
 
 nav button a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: var(--remove-decoration);
+  color: inherit;
 }

@@ -1,0 +1,19 @@
+:root {
+    --light-purple: #cba6f7;
+    --dark-purple: #9748f8;
+    --light-gray: #cdd6f4;
+    --ink-black: #11111b;
+    --shadow-grey: #1e1e2e;
+    --space-indigo: #313244;
+
+    --border-circle: 100%;
+    --border-widht: 2px;
+    --border-type: solid;
+    
+    --shadow: 0 0 10px var(--light-purple);
+
+    --remove-decoration: none;
+    
+    --transition-color: color 0.3s ease;
+    --transition-background: background 0.3s ease;
+}
