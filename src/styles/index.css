@@ -81,9 +81,18 @@ body {
   color: #1E1E2E;
 }
 
-.game-icon {
+.game-icon-button {
   width: 200px;
   height: 200px;
   display: block;
 }
+
+.game-icon-box {
+  width: 60px;
+  height: 60px;
+  color: #9748F8;
+}
+
+
+
 
