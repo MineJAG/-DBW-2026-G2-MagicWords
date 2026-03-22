@@ -21,6 +21,7 @@ nav button {
   text-decoration: var(--remove-decoration);
   transition: var(--transition-background);
   transition: var(--transition-color);
+  transition: var(--transition-shadow);
 }
 
 nav button:hover {

@@ -14,6 +14,7 @@
 
     --remove-decoration: none;
     
-    --transition-color: color 0.3s ease;
-    --transition-background: background 0.3s ease;
+    --transition-color: color 0.5s ease;
+    --transition-background: background 0.5s ease;
+    --transition-shadow: box-shadow 0.2s ease;
 }
