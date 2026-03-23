@@ -1,4 +1,4 @@
-import {Icon} from "./images.jsx";
+import {Icon} from "./icons.jsx";
 
 export default function Button({link, text}) {
   return (

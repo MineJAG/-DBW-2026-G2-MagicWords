@@ -9,15 +9,3 @@ export const Placeholder = () => {
   return <img src={placeholder} alt="profile picture" />;
 };
 
-export function Icon({className, path}) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      className={className}
-      viewBox="0 0 16 16"
-    >
-      <path d={path} />
-    </svg>
-  );
-}
