@@ -18,5 +18,15 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1"
-  }
+  },
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MineJAG/-DBW-2026-G2-MagicWords.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/MineJAG/-DBW-2026-G2-MagicWords/issues"
+  },
+  "homepage": "https://github.com/MineJAG/-DBW-2026-G2-MagicWords#readme"
 }
