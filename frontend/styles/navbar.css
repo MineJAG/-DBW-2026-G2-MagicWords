@@ -2,18 +2,18 @@ nav {
   background-color: var(--ink-black);
   width: 100%;
   text-decoration: var(--remove-decoration);
+  font-size: larger;
+  color: var(--light-purple);
 }
 
 nav img {
   height: 65px;
-  width: 65px;
 }
 
 nav button {
   background: var(--shadow-grey);
   color: var(--light-purple);
   border: none;
-  font-size: larger;
   border-style: var(--border-type);
   border-color: var(--light-purple);
   border-width: var(--border-widht);
@@ -24,7 +24,7 @@ nav button {
   transition: var(--transition-shadow);
 }
 
-nav button:hover {
+nav button:hover, nav a>img:hover {
   background: var(--light-purple);
   color: var(--shadow-grey);
   box-shadow: var(--shadow);
@@ -34,4 +34,28 @@ nav button:hover {
 nav button a {
   text-decoration: var(--remove-decoration);
   color: inherit;
+}
+
+nav p {
+  color: var(--light-purple);
+  font-weight: 550;
+}
+
+nav svg, nav a>img {
+  height: 50px
+}
+
+nav a>img {
+  border-radius: var(--border-circle);
+  border: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-widht);
+  transition: var(--transition-background);
+  transition: var(--transition-color);
+  transition: var(--transition-shadow);
+  
+}
+
+nav a>img:hover {
+  opacity: 0.8;
 }

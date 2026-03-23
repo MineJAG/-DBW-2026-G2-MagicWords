@@ -1,11 +1,22 @@
-import { useState } from "react";
-import "../styles/variable.css";
-import "../styles/navbar.css";
+import { useState, useEffect } from "react";
+import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
 import { Logo } from "./images.jsx";
+import { Placeholder } from "./images.jsx";
+
+import "../styles/variable.css";
+import "../styles/navbar.css";
 
 export default function Navbar() {
-  var [user, setUser] = useState(null); //TODO substituir
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setUser({
+      name: "Bibby",
+      picture: <Placeholder />,
+    });
+  }, []);
+
   return (
     <nav>
       <div className="container-fluid">
@@ -13,29 +24,33 @@ export default function Navbar() {
           <div className="col-1">
             <Logo />
           </div>
+
           <div className="col-9 text-start">
             <Button link="/" text="Home" />
           </div>
+
           {user ? (
             <>
               <div className="col-1 text-end">
-                <Button link="/" text={user.name} />
+                <p className="m-0">{user.name}</p>
               </div>
-            {user.picture ? ( <> <div className="col-1 text-start">
-                <Button link="/" text="Sign Out" />
-              </div></>
-              
-            ): (<><div className="col-1 text-start">
-                <Button link="/" text="Sign Up" />
-              </div></>)}
+
+              <div className="col-1 text-start">
+                {user.picture ? (
+                  <a href="/profile" type="button" className="">{user.picture}</a>
+                ) : (
+                  <Icon name="anonymous" />
+                )}
+              </div>
             </>
           ) : (
             <>
               <div className="col-1 text-end">
-                <Button link="/" text="Sign In" />
+                <Button link="/signin" text="Sign In" />
               </div>
+
               <div className="col-1 text-start">
-                <Button link="/" text="Sign Up" />
+                <Button link="/signup" text="Sign Up" />
               </div>
             </>
           )}
