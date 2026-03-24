@@ -1,12 +1,21 @@
 .signin-page {
   background-color: var(--shadow-grey);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.signin-background-wrapper {
+  width: 400px;
+  height: 400px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .signin-background-wrapper img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
   display: block;
 }
