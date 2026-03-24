@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar.jsx";
-import { SignBackground } from "../components/images.jsx";
+import { Image } from "../components/images.jsx";
 
 import "../styles/variable.css";
 import "../styles/signin.css";
@@ -14,7 +14,7 @@ export default function Signup() {
             
           </div>
           <div className="col-6 m-0">
-            <SignBackground />
+            <Image name="signBackground" className={"signin-background-wrapper"} />
           </div>
         </div>
       </div>

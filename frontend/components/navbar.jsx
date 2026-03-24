@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
-import { Logo } from "./images.jsx";
-import { Placeholder } from "./images.jsx";
+import { Image } from "./images.jsx";
 
 import "../styles/variable.css";
 import "../styles/navbar.css";
@@ -23,7 +22,7 @@ export default function Navbar() {
       <div className="container-fluid">
         <div className="row align-items-center">
           <div className="col-1">
-            <Logo />
+            <Image name="logo" />
           </div>
 
           <div className="col-9 text-start">
