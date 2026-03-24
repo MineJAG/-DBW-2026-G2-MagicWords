@@ -6,16 +6,18 @@ import "../styles/signin.css";
 
 export default function Signup() {
   return (
-    <>
+    <div className="signin-page">
       <Navbar />
       <div className="container-fluid">
         <div className="row">
           <div className="col-6">
             <SignBackground />
           </div>
-          <div className="col-6"></div>
+          <div className="col-6">
+            <p></p>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

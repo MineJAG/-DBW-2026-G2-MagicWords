@@ -26,7 +26,7 @@ export default function Navbar() {
           </div>
 
           <div className="col-9 text-start">
-            <Button link="/" text="Home" />
+            <Button link="/home" text="Home" />
           </div>
 
           {user ? (
