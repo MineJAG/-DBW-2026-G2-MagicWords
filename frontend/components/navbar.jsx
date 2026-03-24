@@ -13,7 +13,7 @@ export default function Navbar() {
   useEffect(() => {
     setUser({
       name: "Bibby",
-      picture: <Placeholder />,
+      picture: null,
     });
   }, []);
 
@@ -37,9 +37,9 @@ export default function Navbar() {
 
               <div className="col-1 text-start">
                 {user.picture ? (
-                  <a href="/profile" type="button" className="">{user.picture}</a>
+                  <a href="/profile" type="button" >{user.picture}</a>
                 ) : (
-                  <Icon name="anonymous" />
+                  <a href="/profile" type="button"><Icon name="anonymous" /></a>
                 )}
               </div>
             </>

@@ -8,6 +8,7 @@ nav {
 
 nav img {
   height: 65px;
+  width: 65px;
 }
 
 nav button {
@@ -42,7 +43,8 @@ nav p {
 }
 
 nav svg, nav a>img {
-  height: 50px
+  height: 50px;
+  width: 50px;
 }
 
 nav a>img {
@@ -58,4 +60,9 @@ nav a>img {
 
 nav a>img:hover {
   opacity: 0.8;
+}
+
+nav a {
+  text-decoration: var(--remove-decoration);
+  color: inherit;
 }
