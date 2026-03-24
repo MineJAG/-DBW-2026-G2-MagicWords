@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
@@ -7,15 +8,15 @@ import { Placeholder } from "./images.jsx";
 import "../styles/variable.css";
 import "../styles/navbar.css";
 
-export default function Navbar() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+/*  useEffect(() => {
     setUser({
-      name: "Bibby",
+      name: null,
       picture: null,
     });
   }, []);
+  */
+export default function Navbar() {
+  const [user, setUser] = useState(null);
 
   return (
     <nav>
@@ -37,9 +38,9 @@ export default function Navbar() {
 
               <div className="col-1 text-start">
                 {user.picture ? (
-                  <a href="/profile" type="button" >{user.picture}</a>
+                  <Link to="/profile">{user.picture}</Link>
                 ) : (
-                  <a href="/profile" type="button"><Icon name="anonymous" /></a>
+                  <Link to="/profile"><Icon name="anonymous" /></Link>
                 )}
               </div>
             </>

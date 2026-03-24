@@ -11,10 +11,10 @@ export default function Signup() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-6">
-            <SignBackground />
+            
           </div>
-          <div className="col-6">
-            <p></p>
+          <div className="col-6 m-0">
+            <SignBackground />
           </div>
         </div>
       </div>

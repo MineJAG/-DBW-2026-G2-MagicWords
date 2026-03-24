@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import {Icon} from "./icons.jsx";
 
 export default function Button({link, text}) {
   return (
     <button>
-      <a href={link}>{text}</a>
+      <Link to={link}>{text}</Link>
     </button>
   );
 }
@@ -11,9 +12,9 @@ export default function Button({link, text}) {
 export function GameButton({className, link, path}) {
   return (
     <button className="game-button">
-      <a href={link}>
+      <Link to={link}>
         <Icon className={className} path={path}/>
-      </a>
+      </Link>
     </button>
   );
 }
