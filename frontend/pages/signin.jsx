@@ -13,7 +13,7 @@ export default function Signup() {
           <div className="col-6">
             
           </div>
-          <div className="col-6 m-0">
+          <div className="col-6 signin-image-col">
             <Image name="signBackground" className={"signin-background-wrapper"} />
           </div>
         </div>

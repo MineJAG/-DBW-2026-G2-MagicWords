@@ -4,6 +4,7 @@ nav {
   text-decoration: var(--remove-decoration);
   font-size: larger;
   color: var(--light-purple);
+  height: var(--navbar-size);
 }
 
 nav img {

@@ -1,6 +1,12 @@
 .signin-page {
   background-color: var(--shadow-grey);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.signin-image-col {
+  padding: 0;
+  margin: 0;
 }
 
 .signin-background-wrapper {
