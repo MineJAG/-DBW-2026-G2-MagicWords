@@ -1,0 +1,38 @@
+.signin-page {
+  background-color: var(--shadow-grey);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.signin-container {
+  height: calc(100vh - 60px);
+  padding: 0;
+}
+
+.signin-row {
+  height: 100%;
+  margin: 0;
+  display: flex;
+}
+
+.signin-content-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  height: 100%;
+  padding: 25px 120px 25px 120px;
+}
+
+.signin-image-col {
+  padding: 0;
+  margin: 0;
+}
+
+.signin-background-wrapper {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}

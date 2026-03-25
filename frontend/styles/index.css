@@ -1,12 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
-html,
-body {
+/* Home page specific styles */
+.home-page {
   background: url("../assets/images/home-background.png");
-  font-family: "Roboto", sans-serif;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  width: 100%;
+}
+
+html,
+body {
+  font-family: var(--font);
   color: var(--light-gray);
 }
 

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
     --light-purple: #cba6f7;
     --dark-purple: #9748f8;
@@ -6,6 +8,8 @@
     --shadow-grey: #1e1e2e;
     --space-indigo: #313244;
 
+    --navbar-size: 65px;
+
     --border-circle: 100%;
     --border-widht: 2px;
     --border-type: solid;
@@ -13,6 +17,8 @@
     --shadow: 0 0 10px var(--light-purple);
 
     --remove-decoration: none;
+
+    --font: "Roboto", sans-serif;
     
     --transition-color: color 0.5s ease;
     --transition-background: background 0.5s ease;

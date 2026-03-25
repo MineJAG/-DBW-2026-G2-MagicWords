@@ -1,41 +1,56 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Icon } from "./icons.jsx";
+import Button from "./button.jsx";
+import { Image } from "./images.jsx";
+
 import "../styles/variable.css";
 import "../styles/navbar.css";
-import Button from "./button.jsx";
-import { Logo } from "./images.jsx";
 
+/*  useEffect(() => {
+    setUser({
+      name: null,
+      picture: null,
+    });
+  }, []);
+  */
 export default function Navbar() {
-  var [user, setUser] = useState(null); //TODO substituir
+  const [user, setUser] = useState(null);
+
   return (
     <nav>
       <div className="container-fluid">
         <div className="row align-items-center">
           <div className="col-1">
-            <Logo />
+            <Image name="logo" />
           </div>
+
           <div className="col-9 text-start">
-            <Button link="/" text="Home" />
+            <Button link="/home" text="Home" />
           </div>
+
           {user ? (
             <>
               <div className="col-1 text-end">
-                <Button link="/" text={user.name} />
+                <p className="m-0">{user.name}</p>
               </div>
-            {user.picture ? ( <> <div className="col-1 text-start">
-                <Button link="/" text="Sign Out" />
-              </div></>
-              
-            ): (<><div className="col-1 text-start">
-                <Button link="/" text="Sign Up" />
-              </div></>)}
+
+              <div className="col-1 text-start">
+                {user.picture ? (
+                  <Link to="/profile">{user.picture}</Link>
+                ) : (
+                  <Link to="/profile"><Icon name="anonymous" /></Link>
+                )}
+              </div>
             </>
           ) : (
             <>
               <div className="col-1 text-end">
-                <Button link="/" text="Sign In" />
+                <Button link="/signin" text="Sign In" />
               </div>
+
               <div className="col-1 text-start">
-                <Button link="/" text="Sign Up" />
+                <Button link="/signup" text="Sign Up" />
               </div>
             </>
           )}
