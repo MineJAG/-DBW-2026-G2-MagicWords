@@ -8,8 +8,8 @@ export default function Signup() {
   return (
     <div className="signin-page">
       <Navbar />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid signin-container">
+        <div className="row signin-row">
           <div className="col-6">
             
           </div>
