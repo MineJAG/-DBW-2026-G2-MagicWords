@@ -12,6 +12,16 @@
 .signin-row {
   height: 100%;
   margin: 0;
+  display: flex;
+}
+
+.signin-content-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  height: 100%;
+  padding: 25px 120px 25px 120px;
 }
 
 .signin-image-col {
