@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import Navbar from "../components/navbar.jsx";
 import { Image } from "../components/images.jsx";
 import { SigninForm } from "../components/form.jsx";
+import { initializeFormValidation } from "../hooks/formValidation.js";
 
 import "../styles/variable.css";
 import "../styles/signin.css";
 
-export default function Signup() {
+export default function Signin() {
+  useEffect(() => initializeFormValidation(), []);
+
   return (
     <div className="signin-page">
       <Navbar />
@@ -20,5 +24,6 @@ export default function Signup() {
         </div>
       </div>
     </div>
+
   );
 }
