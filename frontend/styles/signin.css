@@ -13,20 +13,24 @@
   height: 100%;
   margin: 0;
   display: flex;
+  justify-content: center;
 }
 
 .signin-content-col {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: 50px 100px;
   height: 100%;
-  padding: 25px 120px 25px 120px;
 }
 
 .signin-image-col {
   padding: 0;
   margin: 0;
+  background: url(../assets/images/sign-background.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
 }
 
 .signin-background-wrapper {
@@ -35,4 +39,22 @@
   object-fit: cover;
   object-position: center;
   display: block;
+}
+
+@media (max-width: 992px) {
+  .signin-page {
+    background: url(../assets/images/sign-background.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  .signin-image-col {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .signin-content-col {
+    padding: 10px;
+  }
 }
