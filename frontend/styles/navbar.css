@@ -4,12 +4,12 @@ nav {
   text-decoration: var(--remove-decoration);
   font-size: larger;
   color: var(--light-purple);
-  height: var(--navbar-size);
+  height: 130px;
 }
 
 nav img {
-  height: 65px;
-  width: 65px;
+  height: 130px;
+  width: 130px;
 }
 
 nav button {
@@ -26,7 +26,8 @@ nav button {
   transition: var(--transition-shadow);
 }
 
-nav button:hover, nav a>img:hover {
+nav button:hover,
+nav a > img:hover {
   background: var(--light-purple);
   color: var(--shadow-grey);
   box-shadow: var(--shadow);
@@ -43,12 +44,13 @@ nav p {
   font-weight: 550;
 }
 
-nav svg, nav a>img {
+nav svg,
+nav a > img {
   height: 50px;
   width: 50px;
 }
 
-nav a>img {
+nav a > img {
   border-radius: var(--border-circle);
   border: var(--border-type);
   border-color: var(--light-purple);
@@ -56,14 +58,29 @@ nav a>img {
   transition: var(--transition-background);
   transition: var(--transition-color);
   transition: var(--transition-shadow);
-  
 }
 
-nav a>img:hover {
+nav a > img:hover {
   opacity: 0.8;
 }
 
 nav a {
   text-decoration: var(--remove-decoration);
   color: inherit;
+  font-size: 45px;
+}
+
+@media (min-width: 992px) {
+  nav {
+    height: 65px;
+  }
+
+  nav img {
+    height: 65px;
+    width: 65px;
+  }
+
+  nav a {
+    font-size: 20px;
+  }
 }
