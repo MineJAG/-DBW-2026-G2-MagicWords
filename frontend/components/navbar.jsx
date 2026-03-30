@@ -12,50 +12,29 @@ export default function Navbar() {
 
   return (
     <nav>
-      <div className="container-fluid">
-        <div className="row align-items-center">
-          <div className="col-2 col-sm-2 col-md-2 col-lg-2">
-            <Image name="logo" />
-          </div>
+      <div className="navbar-inner">
+        
+        <div className="navbar-start">
+          <Image name="logo" />
+          <Button link="/home" text="Home" />
+        </div>
 
-          <div
-            className={
-              user
-                ? "col-6 col-sm-6 col-md-6 col-lg-7 text-start"
-                : "col-4 col-sm-4 col-md-4 col-lg-6 text-start"
-            }
-          >
-            <Button link="/home" text="Home" />
-          </div>
-
+        <div className="navbar-end">
           {user ? (
             <>
-              <div className="col-3 col-sm-3 col-md-3 col-lg-2 text-end">
-                <p className="m-0">{user.name}</p>
-              </div>
-
-              <div className="col-1 col-sm-1 col-md-1 col-lg-1 text-start">
-                {user.picture ? (
-                  <Link to="/profile">{user.picture}</Link>
-                ) : (
-                  <Link to="/profile">
-                    <Icon name="anonymous" />
-                  </Link>
-                )}
-              </div>
+              <p className="navbar-username">{user.name}</p>
+              <Link to="/profile">
+                {user.picture ? user.picture : <Icon name="anonymous" />}
+              </Link>
             </>
           ) : (
             <>
-              <div className="col-3 col-sm-3 col-md-3 col-lg-2 text-end">
-                <Button link="/signin" text="Sign In" />
-              </div>
-
-              <div className="col-3 col-sm-3 col-md-3 col-lg-2 text-start">
-                <Button link="/signup" text="Sign Up" />
-              </div>
+              <Button link="/signin" text="Sign In" />
+              <Button link="/signup" text="Sign Up" />
             </>
           )}
         </div>
+
       </div>
     </nav>
   );
