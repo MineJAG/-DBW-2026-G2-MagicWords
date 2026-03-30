@@ -4,7 +4,7 @@
   border-radius: 20px;
   border: var(--border-type);
   border-color: var(--light-purple);
-  border-width: var(--border-widht);
+  border-width: var(--border-width);
   color: var(--light-purple);
 }
 
@@ -35,7 +35,7 @@
   background-color: var(--shadow-grey);
   border: var(--border-type);
   border-color: var(--light-purple);
-  border-width: var(--border-widht);
+  border-width: var(--border-width);
   color: var(--light-purple);
   padding: 5px;
   margin-bottom: 10px;
@@ -72,7 +72,7 @@
   border: none;
   border-style: var(--border-type);
   border-color: var(--light-purple);
-  border-width: var(--border-widht);
+  border-width: var(--border-width);
   border-radius: 7px;
   text-decoration: var(--remove-decoration);
   transition: var(--transition-background);
