@@ -19,7 +19,7 @@ body {
   border-radius: 10px;
   border: var(--border-type);
   border-color: var(--light-purple);
-  border-width: var(--border-width);
+  border-width: var(--border-widht);
   color: var(--light-purple);
   width: fit-content;
 }
@@ -28,7 +28,7 @@ body {
   border-radius: var(--border-circle);
   border: var(--border-type);
   border-color: var(--light-purple);
-  border-width: var(--border-width);
+  border-width: var(--border-widht);
   width: 225px;
 }
 
@@ -75,7 +75,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--border-width) var(--border-type) var(--light-purple);
+  border: var(--border-widht) var(--border-type) var(--light-purple);
   padding: 0;
   cursor: pointer;
 }
