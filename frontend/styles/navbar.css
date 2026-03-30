@@ -4,12 +4,12 @@ nav {
   text-decoration: var(--remove-decoration);
   font-size: larger;
   color: var(--light-purple);
-  height: 130px;
+  height: 60px;
 }
 
 nav img {
-  height: 130px;
-  width: 130px;
+  height: 60px;
+  width: 60px;
 }
 
 nav button {
@@ -21,9 +21,7 @@ nav button {
   border-width: var(--border-width);
   border-radius: 7px;
   text-decoration: var(--remove-decoration);
-  transition: var(--transition-background);
-  transition: var(--transition-color);
-  transition: var(--transition-shadow);
+  transition: var(--transition-background), var(--transition-color), var(--transition-shadow);
 }
 
 nav button:hover,
@@ -55,9 +53,7 @@ nav a > img {
   border: var(--border-type);
   border-color: var(--light-purple);
   border-width: var(--border-width);
-  transition: var(--transition-background);
-  transition: var(--transition-color);
-  transition: var(--transition-shadow);
+  transition: var(--transition-background), var(--transition-color), var(--transition-shadow);
 }
 
 nav a > img:hover {
@@ -67,19 +63,17 @@ nav a > img:hover {
 nav a {
   text-decoration: var(--remove-decoration);
   color: inherit;
-  font-size: 45px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  nav a {
+    font-size: 20px;
+  }
 }
 
 @media (min-width: 992px) {
-  nav {
-    height: 65px;
-  }
-
-  nav img {
-    height: 65px;
-    width: 65px;
-  }
-
   nav a {
     font-size: 20px;
   }
