@@ -13,7 +13,7 @@ export function GameButton({className, link, path}) {
   return (
     <button className="game-button">
       <Link to={link}>
-        <Icon className={className} path={path}/>
+        <Icon className={className} name={path}/>
       </Link>
     </button>
   );
