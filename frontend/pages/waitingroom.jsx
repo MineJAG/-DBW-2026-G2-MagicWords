@@ -3,6 +3,7 @@ import { Image } from "../components/images.jsx";
 import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
+import "../styles/waitingroom.css";
 
 import { useState } from "react";
 
