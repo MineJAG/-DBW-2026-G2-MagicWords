@@ -32,7 +32,7 @@
 
 .player-list {
   background: var(--shadow-grey);
-  padding: 20px;
+  padding: 30px;
   border: 1.5px var(--border-type) var(--light-purple);
   border-radius: 20px;
   display: flex;
