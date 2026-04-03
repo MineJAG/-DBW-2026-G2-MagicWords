@@ -1,0 +1,41 @@
+.kb-wrapper {
+  display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  .kb-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: fit-content;
+    margin: 20px auto;
+  }
+
+  .kb-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .kb-key {
+    min-width: 55px;
+    height: 55px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--ink-black);
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 1px var(--border-type) var(--shadow-grey);
+    box-shadow: 0 4px 0 var(--space-indigo);
+  }
+
+  .kb-keyactive {
+    background: var(--light-purple);
+    color: var(--ink-black);
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--shadow-grey);
+  }
+}
