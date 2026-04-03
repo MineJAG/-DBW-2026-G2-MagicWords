@@ -23,7 +23,7 @@ export default function Keyboard() {
             />
           ))}
         </div>
-      ))}d
+      ))}
     </div>
   );
 }
