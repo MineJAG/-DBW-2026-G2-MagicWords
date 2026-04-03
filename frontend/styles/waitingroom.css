@@ -1,0 +1,126 @@
+@import "../styles/variable.css";
+
+.waiting-room-page {
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font);
+  color: var(--light-gray);
+  background: url("../assets/images/game-background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+.container.text-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  padding: 20px;
+  color: var(--light-gray);
+  text-align: center;
+}
+
+.player-list {
+  background: var(--shadow-grey);
+  padding: 20px;
+  border: 1.5px var(--border-type) var(--light-purple);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.player {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-avatar {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-circle);
+  overflow: hidden;
+}
+
+.player-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: var(--ink-black);
+  border: 1px var(--border-type) var(--light-purple);
+  border-radius: 10px;
+  color: var(--light-purple);
+  font-size: 20px;
+}
+
+.player-host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f6c344;
+}
+
+@media (max-width: 768px) {
+  .container.text-center {
+    padding-top: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .header {
+    font-size: 40px;
+    margin-bottom: 32px;
+  }
+
+  .player-list {
+    max-width: 100%;
+    padding: 24px 16px 20px;
+    border-radius: 20px;
+  }
+
+  .player {
+    gap: 12px;
+  }
+
+  .player-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .player-name {
+    font-size: 20px;
+    min-height: 34px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    font-size: 30px;
+  }
+
+  .player-list {
+    padding: 20px 14px 16px;
+  }
+
+  .player-name {
+    font-size: 16px;
+  }
+}
