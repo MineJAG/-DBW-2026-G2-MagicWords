@@ -1,0 +1,36 @@
+.scoreboard {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e2f;
+}
+
+.scoreboard-list {
+  flex: 1;
+}
+
+.scoreboard-row {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.scoreboard-score {
+  font-size: 20px;
+  text-align: right;
+}
+
+.scoreboard-avatar Icon{
+  width: 24px;
+  height: 24px;
+}
+
+.scoreboard-avatar img {
+  width: 24px;
+  height: 24px;
+}
+
+.scoreboard-name {
+  flex: 1;
+  overflow: hidden;
+}
