@@ -12,6 +12,8 @@ export default function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/waitingroom" element={<WaitingRoom />} />
+      <Route path="/multiplayer" element={<Multiplayer />} />
+      <Route path="/singleplayer" element={<Singleplayer />} />
     </Routes>
   );
 }
