@@ -3,6 +3,8 @@ import Index from "./index.jsx";
 import Signup from "./signup.jsx";
 import Signin from "./signin.jsx";
 import WaitingRoom from "./waitingroom.jsx";
+import Multiplayer from "./multiplayer.jsx";
+import Singleplayer from "./singpleplayer.jsx";
 
 export default function App() {
   return (
