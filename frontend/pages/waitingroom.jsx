@@ -1,6 +1,8 @@
 import Navbar from "../components/navbar.jsx";
 import { Image } from "../components/images.jsx";
 import { Icon } from "../components/icons.jsx";
+import { Link } from "react-router-dom";
+import Button from "../components/button.jsx";
 
 import "../styles/variable.css";
 import "../styles/waitingroom.css";
@@ -43,6 +45,7 @@ export default function WaitingRoom() {
                 {player.isHost && <div className="player-host">Host</div>}
               </div>
             ))}
+            <Button link="/Multiplayer" text="START" />
           </div>
         </div>
       </div>
