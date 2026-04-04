@@ -1,0 +1,99 @@
+.multiplayer-page {
+  min-height: 800px;
+  background-image: url("../assets/images/game-background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.info {
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.mode {
+  color: var(--light-purple);
+}
+
+.timer {
+  color: var(--light-gray);
+}
+
+.word {
+  font-size: 60px;
+  color: var(--light-gray);
+}
+
+.usedWords {
+  font-size: 18px;
+  color: var(--light-gray);
+  margin-bottom: 28px;
+  min-height: 40px;
+}
+
+.input-box {
+  width: 90%;
+  height: 46px;
+  background: var(--ink-black);
+  border: 1px var(--border-type) var(--light-purple);
+  border-radius: 10px;
+  color: var(--light-gray);
+  display: flex;
+  font-size: 24px;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.keyboard {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .scoreboard-panel {
+    width: 100%;
+    max-height: 40vh;
+    overflow-y: auto;
+    border-right: none;
+    border-bottom: 1px var(--border-type) var(--light-purple);
+  }
+
+  .main {
+    padding: 16px 12px;
+  }
+
+  .usedWords {
+    margin-bottom: 16px;
+  }
+}
