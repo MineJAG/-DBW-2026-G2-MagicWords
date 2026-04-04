@@ -23,7 +23,7 @@ export default function Multiplayer() {
     <div className="multiplayer-page">
       <Navbar />
       <div className="layout">
-        <aside><ScoreBoard players={players} /></aside>
+        <div><ScoreBoard players={players} /></div>
         <div className="main">
           <div className="info">
             <div className="header">
