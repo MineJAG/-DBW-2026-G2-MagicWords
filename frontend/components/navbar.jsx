@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
 import { Image } from "./images.jsx";
@@ -8,8 +8,11 @@ import "../styles/variable.css";
 import "../styles/navbar.css";
 
 export default function Navbar() {
-  const [user, setUser] = useState(null);
-
+  const [user, setUser] = useState({
+    name: "John Doe",
+    picture: <Image name="placeholder" />
+  });
+  
   return (
     <nav>
       <div className="navbar-inner">
