@@ -1,22 +1,22 @@
-.signin-page {
+.sign-page {
   background-color: var(--shadow-grey);
   height: 100vh;
   overflow: hidden;
 }
 
-.signin-container {
+.sign-container {
   height: calc(100vh - 60px);
   padding: 0;
 }
 
-.signin-row {
+.sign-row {
   height: 100%;
   margin: 0;
   display: flex;
   justify-content: center;
 }
 
-.signin-content-col {
+.sign-content-col {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +24,7 @@
   height: 100%;
 }
 
-.signin-image-col {
+.sign-image-col {
   padding: 0;
   margin: 0;
   background: url(../assets/images/sign-background.png);
@@ -33,7 +33,7 @@
   background-size: 100% 100%;
 }
 
-.signin-background-wrapper {
+.sign-background-wrapper {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -42,14 +42,14 @@
 }
 
 @media (max-width: 992px) {
-  .signin-page {
+  .sign-page {
     background: url(../assets/images/sign-background.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
   }
 
-  .signin-image-col {
+  .sign-image-col {
     display: none;
   }
 }
