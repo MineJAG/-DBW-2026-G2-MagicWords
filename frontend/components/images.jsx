@@ -1,11 +1,11 @@
 import logo from "../assets/images/logo.png";
 import placeholder from "../assets/images/placeholder.png";
-import purpleLeavesBackground from "../assets/images/sign-background.png";
+import purpleLeafsBackground from "../assets/images/purpleLeafsBackground.png";
 
 const images = {
   logo,
   placeholder,
-  purpleLeavesBackground,
+  purpleLeafsBackground,
 };
 
 export function Image({ className, name, alt = "" }) {

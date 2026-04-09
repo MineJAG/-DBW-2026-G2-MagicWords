@@ -1,13 +1,20 @@
 import Navbar from "../components/navbar.jsx";
-import { SmallDisplay } from "../components/textDisplay.jsx";
 
 import "../styles/variable.css";
+import "../styles/profile.css";
 
 export default function Profile() {
   return (
     <>
-      <Navbar />
-      <SmallDisplay text="Profile" />
+      <div className="profile-page">
+        <Navbar />
+        <div className="m-4 text-center">
+          <h1 className="display-3 fw-medium">Profile</h1>
+        </div>
+        
+
+
+      </div>
     </>
   );
 }

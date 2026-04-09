@@ -12,11 +12,11 @@ export default function Index() {
     <div className="home-page">
       <Navbar />
       <div className="container-fluid">
-        <div className="row m-5 text-center">
-          <h1 className="display-1">Magic Words</h1>
+        <div className="m-5 text-center">
+          <h1 className="display-1 fw-medium">Magic Words</h1>
         </div>
 
-        <div className="row m-4 justify-content-center">
+        <div className="m-4 justify-content-center">
           <ContentBoxBig
             content1={
               <>

@@ -1,0 +1,8 @@
+.profile-page {
+  background: url("../assets/images/purpleLeafsBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100vh;
+}
