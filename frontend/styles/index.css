@@ -7,12 +7,6 @@
   width: 100%;
 }
 
-html,
-body {
-  font-family: var(--font);
-  color: var(--light-gray);
-}
-
 .text-container {
   background: var(--shadow-grey);
   padding: 25px;

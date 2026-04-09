@@ -1,3 +1,9 @@
+html,
+body {
+  font-family: var(--font);
+  color: var(--light-gray);
+}
+
 nav {
   background-color: var(--ink-black);
   width: 100%;
