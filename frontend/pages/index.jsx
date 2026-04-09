@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar.jsx";
-import { BigDisplay } from "../components/title.jsx";
+import { BigDisplay } from "../components/textDisplay.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
 import { Image } from "../components/images.jsx";
 import { GameButton } from "../components/button.jsx";
