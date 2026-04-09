@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { use, useState } from "react";
 import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
-import { Image } from "./images.jsx";
+import Image from "./images.jsx";
 
 import "../styles/variable.css";
 import "../styles/navbar.css";

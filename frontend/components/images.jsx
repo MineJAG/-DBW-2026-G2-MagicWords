@@ -8,14 +8,7 @@ const images = {
   purpleLeafsBackground,
 };
 
-export function Image({ className, name, alt = "" }) {
+export default function Image({ className, name, alt = "" }) {
   const src = images[name];
-
-  // Optional safety check (helps debugging instead of silent failure)
-  if (!src) {
-    console.error(`Image "${name}" not found in images map`);
-    return null;
-  }
-
   return <img src={src} className={className} alt={alt} />;
 }

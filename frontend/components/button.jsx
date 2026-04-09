@@ -18,3 +18,11 @@ export function GameButton({className, link, path}) {
     </button>
   );
 }
+
+export function AvatarButton({}) {
+  return (
+    <button className="avatar-edit-btn" aria-label="Edit avatar">
+        <Icon name="edit"/>
+      </button>
+  );
+}

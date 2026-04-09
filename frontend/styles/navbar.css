@@ -19,7 +19,7 @@ nav img {
 }
 
 nav button {
-  background: var(--shadow-grey);
+  background: var(--ink-black);
   color: var(--light-purple);
   border: none;
   border-style: var(--border-type);
@@ -33,7 +33,7 @@ nav button {
 nav button:hover,
 nav a > img:hover {
   background: var(--light-purple);
-  color: var(--shadow-grey);
+  color: var(--ink-black);
   box-shadow: var(--shadow);
   text-decoration: var(--remove-decoration);
 }
