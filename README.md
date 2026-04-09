@@ -19,5 +19,3 @@ contains styles for the navbar
 images.jsx:
 is where we'll be putting every image for easier calling
 
-----
-textDisplay is to be used in the page normally but not inside containers for text

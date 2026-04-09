@@ -1,5 +1,4 @@
 import Navbar from "../components/navbar.jsx";
-import { BigDisplay } from "../components/textDisplay.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
 import { Image } from "../components/images.jsx";
 import { GameButton } from "../components/button.jsx";
@@ -14,7 +13,7 @@ export default function Index() {
       <Navbar />
       <div className="container-fluid">
         <div className="row m-5 text-center">
-          <BigDisplay text="Magic Words" />
+          <h1 className="display-1">Magic Words</h1>
         </div>
 
         <div className="row m-4 justify-content-center">
