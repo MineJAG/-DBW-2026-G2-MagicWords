@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/navbar.jsx";
 import Avatar from "../components/avatar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
@@ -8,6 +8,22 @@ import "../styles/variable.css";
 import "../styles/profile.css";
 
 export default function Profile() {
+  const [isDark, setIsDark] = useState(
+    () => localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.remove("light");
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+      root.classList.add("light");
+    }
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }, [isDark]);
+
   const [user, setUser] = useState({
     name: "John Doe",
     picture: null,
@@ -26,6 +42,13 @@ export default function Profile() {
         <Navbar />
         <div className="m-4 text-center">
           <h1 className="display-3 fw-medium">Profile</h1>
+
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => setIsDark(prev => !prev)}
+          >
+            {isDark ? "☀️ Light Mode" : "🌙 Dark Mode"}
+          </button>
         </div>
 
         <div>
@@ -44,7 +67,6 @@ export default function Profile() {
                         <th>Values</th>
                       </tr>
                     </thead>
-
                     <tbody>
                       <tr>
                         <td>Games Played</td>

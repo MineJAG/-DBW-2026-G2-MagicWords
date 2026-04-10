@@ -106,6 +106,13 @@ nav a {
   margin: 0;
 }
 
+:root.light .logo-dark {
+  display: none;
+}
+
+:root.dark .logo-light {
+  display: none;
+}
 /*TODO: For text containers */
 .text-container {
   background: var(--shadow-grey);
@@ -154,4 +161,8 @@ nav a {
 
 .text-container-profile-size {
   width: 80%;
+}
+
+:root.light .text-container svg {
+  color: var(--light-purple);
 }

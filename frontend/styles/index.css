@@ -1,10 +1,13 @@
-/* Home page specific styles */
 .home-page {
-  background: url("../assets/images/home-background.png");
+  background-image: url("../assets/images/home-background.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   width: 100%;
+}
+
+:root.light .home-page {
+  background-image: url("../assets/images/home-background-light.png");
 }
 
 .game-button {

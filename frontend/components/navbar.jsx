@@ -18,7 +18,8 @@ export default function Navbar() {
       <div className="navbar-inner">
         
         <div className="navbar-start">
-          <Image name="logo" />
+          <Image className="logo-dark" name="logoDark" />
+          <Image className="logo-light" name="logoLight" />
           <Button link="/home" text="Home" />
         </div>
 
