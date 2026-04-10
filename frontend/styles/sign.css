@@ -27,7 +27,7 @@
 .sign-image-col {
   padding: 0;
   margin: 0;
-  background: url(../assets/images/sign-background.png);
+  background: url(../assets/images/purpleLeafsBackground.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%;
@@ -43,7 +43,7 @@
 
 @media (max-width: 992px) {
   .sign-page {
-    background: url(../assets/images/sign-background.png);
+    background: url(../assets/images/purpleLeafsBackground.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
@@ -57,4 +57,103 @@
   .signin-content-col {
     padding: 10px;
   }
+}
+
+/*TODO: form style */
+
+.form-container {
+  background: var(--space-indigo);
+  padding: 25px;
+  border-radius: 20px;
+  border: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-width);
+  color: var(--light-purple);
+}
+
+.form-container h4 {
+  text-align: center;
+  margin-bottom: 35px;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+.form-container p,
+.form-container input {
+  text-align: start;
+  margin: 0;
+  padding: 5px 0px 5px 0px;
+  font-size: larger;
+}
+
+.form-container span {
+  text-align: start;
+  margin: 0;
+  padding: 0;
+  font-size: medium;
+}
+
+.form-container input {
+  border-radius: 10px;
+  background-color: var(--shadow-grey);
+  border: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-width);
+  color: var(--light-purple);
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 100%;
+  outline: none;
+}
+
+.form-container input::placeholder {
+  color: var(--light-purple);
+  opacity: 0.5;
+}
+
+.form-container input:hover {
+  color: var(--light-gray);
+  border-color: var(--light-purple);
+  box-shadow: 0 0 4px var(--light-purple);
+}
+
+.form-container input:focus {
+  color: var(--light-gray);
+  box-shadow: var(--shadow);
+  border-color: var(--light-purple);
+  outline: none;
+}
+
+.form-container input[type="submit"] {
+  font-size: x-large;
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+  width: fit-content;
+  background: var(--shadow-grey);
+  color: var(--light-purple);
+  border: none;
+  border-style: var(--border-type);
+  border-color: var(--light-purple);
+  border-width: var(--border-width);
+  border-radius: 7px;
+  text-decoration: var(--remove-decoration);
+  transition: var(--transition-background);
+  transition: var(--transition-color);
+  transition: var(--transition-shadow);
+}
+
+.form-container input[type="submit"]:hover {
+  background: var(--light-purple);
+  color: var(--shadow-grey);
+  box-shadow: var(--shadow);
+  text-decoration: var(--remove-decoration);
+}
+
+.error {
+  color: #ff2d2d;
+  text-align: start;
+  margin: 0;
+  padding: 0;
+  font-size: medium;
 }
