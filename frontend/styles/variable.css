@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
+    --lighter-purple: #e8d8ff;
     --light-purple: #cba6f7;
     --dark-purple: #9748f8;
-    --light-gray: #cdd6f4;
+    --light-gray: #e2e2e2;
     --ink-black: #11111b;
     --shadow-grey: #1e1e2e;
     --space-indigo: #313244;

@@ -47,6 +47,69 @@
 .avatar-edit-btn:hover {
   box-shadow: var(--shadow);
   background: var(--light-purple);
-  color: var(--shadow-grey)
-  
+  color: var(--shadow-grey);
+}
+
+/* made for the stats table*/
+.stats-table {
+  width: 100%;
+  max-width: 520px;
+  margin: 0;
+
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  border-radius: 10px;
+
+  background: #ffffff08;
+  box-shadow: 0 8px 24px #0000002e;
+}
+
+.stats-table thead th {
+  padding: 14px 18px;
+  font-size: x-large;
+  font-weight: 700;
+  text-align: left;
+
+  color: var(--light-purple);
+  background: #b08cff1f;
+
+  border-bottom: var(--border-width) var(--border-type) var(--light-purple);
+}
+
+.stats-table thead th:last-child {
+  text-align: right;
+}
+
+.stats-table tbody td {
+  padding: 14px 18px;
+  font-size: large;
+
+  border-bottom: 1px var(--border-type) #c8a0ff59;
+}
+
+.stats-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stats-table tbody td:first-child {
+  color: var(--lighter-purple);
+  font-weight: 600;
+}
+
+.stats-table tbody td:last-child {
+  color: var(--light-gray);
+  font-weight: 700;
+  text-align: right;
+}
+
+.stats-table tbody tr:nth-child(even) {
+  background: #ffffff05;
+}
+
+.stats-table tbody tr:hover {
+  background: #b08cff14;
+  transition: var(--transition-background);
 }
