@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/navbar.jsx";
 import Avatar from "../components/avatar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
+import SalesChart from "../components/chart.jsx";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
@@ -13,7 +14,7 @@ export default function Profile() {
     stats: {
       gamesPlayed: 100,
       highestScore: 5000,
-      gamesWon: 50,
+      gamesWon: 175,
       gamesLost: 50,
       winRate: 50,
     },
@@ -69,7 +70,7 @@ export default function Profile() {
                   </table>
                 </>
               }
-              content2={<Avatar />}
+              content2={<SalesChart won={user.stats.gamesWon} lost={user.stats.gamesLost} />}
               size="text-container-profile-size"
             />
           </div>
