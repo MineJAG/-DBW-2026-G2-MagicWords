@@ -1,3 +1,4 @@
+import Chart from 'chart.js/auto';
 import Navbar from "../components/navbar.jsx";
 import Avatar from "../components/avatar.jsx";
 

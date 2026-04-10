@@ -16,7 +16,7 @@ export default function Index() {
           <h1 className="display-1 fw-medium">Magic Words</h1>
         </div>
 
-        <div className="m-4 justify-content-center">
+        <div className="m-4 flex-row d-flex justify-content-center">
           <ContentBoxBig
             content1={
               <>
