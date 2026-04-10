@@ -5,7 +5,7 @@ import Button from "./button.jsx";
 import Image from "./images.jsx";
 
 import "../styles/variable.css";
-import "../styles/navbar.css";
+import "../styles/main.css";
 
 export default function Navbar() {
   const [user, setUser] = useState({
