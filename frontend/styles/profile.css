@@ -3,8 +3,6 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  width: 100%;
-  min-height: 100vh;
 }
 
 :root.light .profile-page {
@@ -116,4 +114,8 @@
 .stats-table tbody tr:hover {
   background: #b08cff14;
   transition: var(--transition-background);
+}
+
+.m-top {
+  margin-top: 60px;
 }

@@ -1,29 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "../components/navbar.jsx";
 import Avatar from "../components/avatar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
-import SalesChart from "../components/chart.jsx";
+import DoughnutChart from "../components/doughnutChart.jsx";
+import RadarChart from "../components/radarChart.jsx";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
 
 export default function Profile() {
-  const [isDark, setIsDark] = useState(
-    () => localStorage.getItem("theme") === "dark"
-  );
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.classList.remove("light");
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-      root.classList.add("light");
-    }
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  }, [isDark]);
-
   const [user, setUser] = useState({
     name: "John Doe",
     picture: null,
@@ -33,6 +18,11 @@ export default function Profile() {
       gamesWon: 175,
       gamesLost: 50,
       winRate: 50,
+      totalWordsFound: 1200,
+      longestWordFound: "Chipingongo",
+      averageWordLength: 6.5,
+      mostWordsInOneMatch: 15,
+      longestStreak: 10,
     },
   });
 
@@ -42,16 +32,9 @@ export default function Profile() {
         <Navbar />
         <div className="m-4 text-center">
           <h1 className="display-3 fw-medium">Profile</h1>
-
-          <button
-            className="btn btn-outline-secondary"
-            onClick={() => setIsDark(prev => !prev)}
-          >
-            {isDark ? "☀️ Light Mode" : "🌙 Dark Mode"}
-          </button>
         </div>
 
-        <div>
+        <div className="m-top">
           <div className="text-center m-2">
             <h1 className="display-5 fw-medium">Overall Performance</h1>
           </div>
@@ -67,6 +50,7 @@ export default function Profile() {
                         <th>Values</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       <tr>
                         <td>Games Played</td>
@@ -92,7 +76,55 @@ export default function Profile() {
                   </table>
                 </>
               }
-              content2={<SalesChart won={user.stats.gamesWon} lost={user.stats.gamesLost} />}
+              content2={<DoughnutChart stats={user.stats} />}
+              size="text-container-profile-size"
+            />
+          </div>
+        </div>
+
+        <div className="m-top">
+          <div className="text-center m-2">
+            <h1 className="display-5 fw-medium">Word Mastery</h1>
+          </div>
+
+          <div className="m-1 d-flex flex-nowrap justify-content-center">
+            <ContentBoxBig
+              content1={
+                <>
+                  <table className="stats-table">
+                    <thead>
+                      <tr>
+                        <th>Stats</th>
+                        <th>Values</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>Total Words Found</td>
+                        <td>{user.stats.totalWordsFound}</td>
+                      </tr>
+                      <tr>
+                        <td>Longest Word Found</td>
+                        <td>{user.stats.longestWordFound}</td>
+                      </tr>
+                      <tr>
+                        <td>Average Word Length</td>
+                        <td>{user.stats.averageWordLength}</td>
+                      </tr>
+                      <tr>
+                        <td>Most Words in One Match</td>
+                        <td>{user.stats.mostWordsInOneMatch}</td>
+                      </tr>
+                      <tr>
+                        <td>Longest Streak</td>
+                        <td>{user.stats.longestStreak}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              }
+              content2={<RadarChart stats={user.stats} />}
               size="text-container-profile-size"
             />
           </div>

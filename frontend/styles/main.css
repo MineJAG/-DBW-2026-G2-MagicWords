@@ -106,6 +106,46 @@ nav a {
   margin: 0;
 }
 
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: var(--ink-black);
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  border-radius: 999px;
+  padding: 2px;
+  transition: var(--transition-background), var(--transition-shadow);
+}
+
+.theme-toggle:hover {
+  box-shadow: var(--shadow);
+}
+
+.toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
+.toggle-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--light-purple);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-dark .toggle-thumb {
+  transform: translateX(16px);
+}
+
+.toggle-light .toggle-thumb {
+  transform: translateX(0px);
+}
+
 :root.light .logo-dark {
   display: none;
 }
