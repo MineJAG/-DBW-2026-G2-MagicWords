@@ -7,6 +7,10 @@
   min-height: 100vh;
 }
 
+:root.light .profile-page {
+  background: url("../assets/images/sign-light.png");
+}
+
 .avatar-wrapper {
   position: relative;
   display: inline-block;

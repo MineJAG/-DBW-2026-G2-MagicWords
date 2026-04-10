@@ -8,10 +8,7 @@ import "../styles/variable.css";
 import "../styles/main.css";
 
 export default function Navbar() {
-  const [user, setUser] = useState({
-    name: "John Doe",
-    picture: <Image name="placeholder" />
-  });
+  const [user, setUser] = useState(null);
   
   return (
     <nav>

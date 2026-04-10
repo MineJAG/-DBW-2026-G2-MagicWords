@@ -27,10 +27,15 @@
 .sign-image-col {
   padding: 0;
   margin: 0;
-  background: url(../assets/images/purpleLeafsBackground.png);
+  background-image: url(../assets/images/purpleLeafsBackground.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% 100%;
+  background-size: cover;
+}
+
+:root.light .sign-image-col {
+  background-image: url(../assets/images/sign-light.png);
+  background-size: cover;
 }
 
 .sign-background-wrapper {
@@ -43,10 +48,15 @@
 
 @media (max-width: 992px) {
   .sign-page {
-    background: url(../assets/images/purpleLeafsBackground.png);
+    background-image: url(../assets/images/purpleLeafsBackground.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 100% 100%;
+    background-size: cover;
+  }
+
+:root.light .sign-page {
+    background-image: url(../assets/images/sign-light.png);
+    background-size: cover;
   }
 
   .sign-image-col {
