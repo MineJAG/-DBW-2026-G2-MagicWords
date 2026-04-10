@@ -9,7 +9,7 @@ import "../styles/profile.css";
 export default function Profile() {
   const [user, setUser] = useState({
     name: "John Doe",
-    picture: <Avatar />,
+    picture: null,
     stats: {
       gamesPlayed: 100,
       highestScore: 5000,
