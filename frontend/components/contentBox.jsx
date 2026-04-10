@@ -20,3 +20,13 @@ export function ContentBoxMedium({ content1, content2, icon }) {
     </div>
   </div>);
 }
+
+export function ContentBoxSmall({ content1 }) {
+  return (
+    <div className="text-container">
+      <div className="align-items-center">
+        <div className="text-start">{content1}</div>
+      </div>
+    </div>
+  );
+}

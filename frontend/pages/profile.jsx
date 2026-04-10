@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Navbar from "../components/navbar.jsx";
-import Avatar from "../components/avatar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
 import RadarChart from "../components/radarChart.jsx";
@@ -32,6 +31,12 @@ export default function Profile() {
         <Navbar />
         <div className="m-4 text-center">
           <h1 className="display-3 fw-medium">Profile</h1>
+        </div>
+
+        <div>
+          <div className="row">
+            
+          </div>
         </div>
 
         <div className="m-top">
