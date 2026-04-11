@@ -39,8 +39,6 @@ export default function Avatar({ src, alt = "Profile picture" }) {
         className="avatar-input"
         onChange={handleFileChange}
       />
-
-      {fileName && <p className="avatar-filename">{fileName}</p>}
     </div>
   );
 }

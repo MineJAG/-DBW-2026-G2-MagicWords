@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
@@ -7,6 +7,7 @@ import Avatar from "../components/avatar.jsx";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
+import { Icon } from "../components/icons.jsx";
 
 export default function Profile() {
   const [user, setUser] = useState({
@@ -26,6 +27,30 @@ export default function Profile() {
     },
   });
 
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(user.name);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditingName && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditingName]);
+
+  function handleConfirm() {
+    const trimmed = editName.trim();
+    if (trimmed) {
+      setUser((prev) => ({ ...prev, name: trimmed }));
+    }
+    setIsEditingName(false);
+  }
+
+  function handleCancel() {
+    setEditName(user.name);
+    setIsEditingName(false);
+  }
+
   return (
     <>
       <div className="profile-page">
@@ -36,7 +61,46 @@ export default function Profile() {
 
         <div>
           <div className="row">
-            <Avatar src={user.picture} alt={`${user.name}'s profile picture`} />
+            <div className="col-6 d-flex align-items-center justify-content-center">
+              <div className="username-box">
+                {isEditingName ? (
+                  <div className="edit-name-container">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      className="edit-name-input"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                    />
+                    <span className="edit-action-btn confirm-btn" onClick={handleConfirm}>
+                      <Icon name="check" />
+                    </span>
+                    <span className="edit-action-btn cancel-btn" onClick={handleCancel}>
+                      <Icon name="close" />
+                    </span>
+                  </div>
+                ) : (
+                  <div className="display-name-container">
+                    <p className="fw-medium display-name-text">{user.name}</p>
+                    <span
+                      className="edit-trigger-btn"
+                      onClick={() => {
+                        setEditName(user.name);
+                        setIsEditingName(true);
+                      }}
+                    >
+                      <Icon name="edit" />
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-6 d-flex align-items-center justify-content-center">
+              <Avatar
+                src={user.picture}
+                alt={`${user.name}'s profile picture`}
+              />
+            </div>
           </div>
         </div>
 

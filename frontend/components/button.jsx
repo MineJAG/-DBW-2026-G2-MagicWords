@@ -23,7 +23,7 @@ export function UploadButton({ onClick }) {
   return (
     /* stopPropagation so to not escape to the parents */
     <button className="upload-button" onClick={(e) => { e.stopPropagation(); onClick(); }}>
-      <Icon name="upload" />
+      <Icon name="edit" />
     </button>
   );
 }
