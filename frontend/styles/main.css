@@ -206,3 +206,27 @@ nav a {
 :root.light .text-container svg {
   color: var(--light-purple);
 }
+
+/*TODO: For upload button */
+.upload-button {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-circle);
+  background-color: var(--shadow-grey);
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  color: var(--light-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-background), var(--transition-shadow);
+}
+
+.upload-button:hover {
+  background-color: var(--light-purple);
+  color: var(--shadow-grey);
+  box-shadow: var(--shadow);
+}

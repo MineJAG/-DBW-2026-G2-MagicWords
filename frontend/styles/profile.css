@@ -76,3 +76,63 @@
 .m-top {
   margin-top: 60px;
 }
+
+/*TODO: Avatar*/
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-circle {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: var(--border-circle);
+  overflow: visible;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--border-circle);
+  object-fit: cover;
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  display: block;
+  transition: var(--transition-shadow);
+}
+
+.avatar-circle:hover .avatar-img {
+  box-shadow: var(--shadow);
+}
+
+.avatar-fallback {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--border-circle);
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  background-color: var(--space-indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-shadow);
+}
+
+.avatar-fallback-icon {
+  color: var(--light-purple);
+  opacity: 0.6;
+}
+
+.avatar-input {
+  display: none;
+}
+
+.avatar-filename {
+  font-size: medium;
+  color: var(--light-purple);
+  opacity: 0.7;
+  margin: 0;
+}
+
