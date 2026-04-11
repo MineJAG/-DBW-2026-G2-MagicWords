@@ -2,8 +2,8 @@ export function ContentBoxBig({ content1, content2, size }) {
   return (
     <div className={`text-container ${size || 'text-container-big-size'}`}>
       <div className="row align-items-center">
-        <div className="col-8 text-start">{content1}</div>
-        <div className="col-4 text-center">{content2}</div>
+        <div className="col-lg-8 col-12 text-start">{content1}</div>
+        <div className="col-lg-4 col-12 text-center chart-col">{content2}</div>
       </div>
     </div>
   );

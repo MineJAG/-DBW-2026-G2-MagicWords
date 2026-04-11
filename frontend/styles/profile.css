@@ -1,15 +1,13 @@
 .profile-page {
-  background: url("../assets/images/purpleLeafsBackground.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: var(--ink-black) url("../assets/images/purpleLeafsBackground.png") center / cover no-repeat fixed;
+  min-height: 100vh;
 }
 
 :root.light .profile-page {
-  background: url("../assets/images/sign-light.png");
+  background: var(--ink-black) url("../assets/images/sign-light.png") center / cover no-repeat fixed;
 }
 
-/* made for the stats table*/
+/* made for the stats table */
 .stats-table {
   width: 100%;
   max-width: 520px;
@@ -22,7 +20,7 @@
   border: var(--border-width) var(--border-type) var(--light-purple);
   border-radius: 10px;
 
-  background: #ffffff08;
+  background: transparent;
   box-shadow: 0 8px 24px #0000002e;
 }
 
@@ -65,7 +63,7 @@
 }
 
 .stats-table tbody tr:nth-child(even) {
-  background: #ffffff05;
+  background: transparent;
 }
 
 .stats-table tbody tr:hover {
@@ -77,7 +75,7 @@
   margin-top: 60px;
 }
 
-/*TODO: Avatar*/
+/* Avatar */
 .avatar-wrapper {
   display: flex;
   flex-direction: column;
@@ -136,7 +134,7 @@
   margin: 0;
 }
 
-/* ── Username box (add to profile.css) ── */
+/* ── Username box ── */
 
 .username-box {
   background: var(--shadow-grey);
@@ -164,8 +162,6 @@
   font-size: x-large;
   margin: 0;
 }
-
-/* TODO: edit name box*/
 
 .edit-trigger-btn {
   display: inline-flex;
@@ -233,4 +229,62 @@
 
 .cancel-btn:hover {
   background: #f38ba826;
+}
+
+@media (max-width: 991px) {
+  .chart-col {
+    display: none !important;
+  }
+
+  .profile-top-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .profile-top-row > div {
+    flex: 0 0 auto;
+    max-width: 100%;
+    width: auto;
+  }
+
+  .stats-table {
+    max-width: 100%;
+  }
+
+  .text-container-profile-size {
+    width: 95%;
+  }
+}
+
+@media (max-width: 575px) {
+  .username-box {
+    min-width: 150px;
+    padding: 10px 16px;
+  }
+
+  .display-name-text {
+    font-size: large;
+  }
+
+  .avatar-circle,
+  .avatar-img,
+  .avatar-fallback {
+    width: 120px;
+    height: 120px;
+  }
+
+  .stats-table thead th {
+    padding: 10px 12px;
+    font-size: large;
+  }
+
+  .stats-table tbody td {
+    padding: 10px 12px;
+    font-size: medium;
+  }
+
+  .m-top {
+    margin-top: 30px;
+  }
 }
