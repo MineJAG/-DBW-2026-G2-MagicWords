@@ -6,6 +6,8 @@ import WaitingRoom from "./waitingroom.jsx";
 import Multiplayer from "./multiplayer.jsx";
 import Singleplayer from "./singpleplayer.jsx";
 import Profile from "./profile.jsx";
+import LeaderboardMultiplayer from "./leaderboardMultiplayer.jsx";
+import LeaderboardSingleplayer from "./leaderboardSingleplayer.jsx";
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
       <Route path="/multiplayer" element={<Multiplayer />} />
       <Route path="/singleplayer" element={<Singleplayer />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/leaderboard-multiplayer" element={<LeaderboardMultiplayer />} />
+      <Route path="/leaderboard-singleplayer" element={<LeaderboardSingleplayer />} />
     </Routes>
   );
 }
