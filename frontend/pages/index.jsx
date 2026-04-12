@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
 import Image from "../components/images.jsx";
-import { GameButton } from "../components/button.jsx";
 import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
@@ -36,6 +36,38 @@ export default function Index() {
             }
             content2={<Image name="placeholder" />}
           />
+        </div>
+
+        <div className="row my-5">
+          <div className="mode-selector">
+            <Link to="/">
+              <div className="mode-circle mode-circle-big">
+                <Icon className="mode-icon-box" name="multiplayer" />
+                <span className="mode-label">Multiplayer</span>
+              </div>
+            </Link>
+
+            <div className="mode-cluster">
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm">
+                  <Icon className="mode-icon-box" name="singleplayer" />
+                  <span className="mode-label">Singleplayer</span>
+                </div>
+              </Link>
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm mode-cluster-middle">
+                  <Icon className="mode-icon-box" name="home" />
+                  <span className="mode-label">Create Room</span>
+                </div>
+              </Link>
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm">
+                  <Icon className="mode-icon-box" name="code" />
+                  <span className="mode-label">Enter Code</span>
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
 
         <div className="row align-content-center vh-50">

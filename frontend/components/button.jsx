@@ -9,16 +9,6 @@ export default function Button({ link, text }) {
   );
 }
 
-export function GameButton({ className, link, path }) {
-  return (
-    <button className="game-button">
-      <Link to={link}>
-        <Icon className={className} name={path} />
-      </Link>
-    </button>
-  );
-}
-
 export function UploadButton({ onClick }) {
   return (
     /* stopPropagation so to not escape to the parents */
