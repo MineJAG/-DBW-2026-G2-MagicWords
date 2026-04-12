@@ -55,3 +55,39 @@ export function SigninForm() {
     </div>
   );
 }
+
+export function LoginForm() {
+  const {
+    setUsernameOrEmail,
+    setPassword,
+    errors,
+    handleSubmit,
+  } = signUpFormValidation();
+  return (
+    <div className="form-container">
+      <h4>Sign Up</h4>
+      <form
+        action="/"
+        method="post"
+        className="row g-3"
+        onSubmit={handleSubmit}
+      >
+        <p>Insert your username or email.</p>
+        <input
+          type="text"
+          onChange={(e) => setUsernameOrEmail(e.target.value)}
+          placeholder="Username or Email"
+        />
+        <div className="error"></div>
+        <p>Insert your password.</p>
+        <input
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <div className="error"></div>
+        <input type="submit" value="Sign Up" />
+      </form>
+    </div>
+  );
+}
