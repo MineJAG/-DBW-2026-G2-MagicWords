@@ -1,25 +1,43 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
-    --light-purple: #cba6f7;
-    --dark-purple: #9748f8;
-    --light-gray: #cdd6f4;
-    --ink-black: #11111b;
-    --shadow-grey: #1e1e2e;
-    --space-indigo: #313244;
+  --lighter-purple: #e8d8ff;
+  --light-purple: #cba6f7;
+  --dark-purple: #9748f8;
+  --light-gray: #e2e2e2;
+  --ink-black: #11111b;
+  --shadow-grey: #1e1e2e;
+  --space-indigo: #313244;
 
+  --border-circle: 100%;
+  --border-width: 2px;
+  --border-type: solid;
 
-    --border-circle: 100%;
-    --border-width: 2px;
-    --border-type: solid;
-    
-    --shadow: 0 0 10px var(--light-purple);
+  --shadow: 0 0 10px var(--light-purple);
+  --remove-decoration: none;
+  --font: "Roboto", sans-serif;
 
-    --remove-decoration: none;
+  --transition-color: color 0.5s ease;
+  --transition-background: background 0.5s ease;
+  --transition-shadow: box-shadow 0.2s ease;
+}
 
-    --font: "Roboto", sans-serif;
-    
-    --transition-color: color 0.5s ease;
-    --transition-background: background 0.5s ease;
-    --transition-shadow: box-shadow 0.2s ease;
+:root.dark {
+  --lighter-purple: #e8d8ff;
+  --light-purple: #cba6f7;
+  --dark-purple: #9748f8;
+  --light-gray: #e2e2e2;
+  --ink-black: #11111b;
+  --shadow-grey: #1e1e2e;
+  --space-indigo: #313244;
+}
+
+:root.light {
+  --lighter-purple: #1a0533;
+  --light-purple: #9748f8;
+  --dark-purple: #cba6f7;
+  --light-gray: #313244;
+  --ink-black: #f4f4f4;
+  --shadow-grey: #f5f0ff;
+  --space-indigo: #ede8ff;
 }

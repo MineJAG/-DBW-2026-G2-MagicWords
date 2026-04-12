@@ -1,3 +1,76 @@
+.sign-page {
+  background-color: var(--shadow-grey);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sign-container {
+  height: calc(100vh - 60px);
+  padding: 0;
+}
+
+.sign-row {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sign-content-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 100px;
+  height: 100%;
+}
+
+.sign-image-col {
+  padding: 0;
+  margin: 0;
+  background-image: url(../assets/images/purpleLeafsBackground.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+:root.light .sign-image-col {
+  background-image: url(../assets/images/sign-light.png);
+  background-size: cover;
+}
+
+.sign-background-wrapper {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .sign-page {
+    background-image: url(../assets/images/purpleLeafsBackground.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+:root.light .sign-page {
+    background-image: url(../assets/images/sign-light.png);
+    background-size: cover;
+  }
+
+  .sign-image-col {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .signin-content-col {
+    padding: 10px;
+  }
+}
+
+/*TODO: form style */
+
 .form-container {
   background: var(--space-indigo);
   padding: 25px;
