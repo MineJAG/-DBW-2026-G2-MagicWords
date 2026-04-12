@@ -1,7 +1,6 @@
 "use strict";
 import { useState } from "react";
 
-
 export function signUpFormValidation() {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
