@@ -71,7 +71,7 @@ export default function Index() {
         </div>
 
         <div className="row align-content-center vh-50">
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -102,7 +102,7 @@ export default function Index() {
               icon={<Icon className={"game-icon-box"} name={"multiplayer"} />}
             />
           </div>
-          <div className="col-6 d-flex justify-content-start">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -136,7 +136,7 @@ export default function Index() {
         </div>
 
         <div className="row align-content-center">
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -169,7 +169,7 @@ export default function Index() {
               icon={<Icon className={"game-icon-box"} name={"home"} />}
             />
           </div>
-          <div className="col-6 d-flex justify-content-start">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
