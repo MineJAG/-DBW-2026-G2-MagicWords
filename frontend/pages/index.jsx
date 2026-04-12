@@ -40,7 +40,7 @@ export default function Index() {
 
         <div className="row my-5">
           <div className="mode-selector">
-            <Link to="/">
+            <Link to="/WaitingRoom">
               <div className="mode-circle mode-circle-big">
                 <Icon className="mode-icon-box" name="multiplayer" />
                 <span className="mode-label">Multiplayer</span>
@@ -48,13 +48,13 @@ export default function Index() {
             </Link>
 
             <div className="mode-cluster">
-              <Link to="/">
+              <Link to="/SinglePlayer">
                 <div className="mode-circle mode-circle-sm">
                   <Icon className="mode-icon-box" name="singleplayer" />
                   <span className="mode-label">Singleplayer</span>
                 </div>
               </Link>
-              <Link to="/">
+              <Link to="/WaitingRoom">
                 <div className="mode-circle mode-circle-sm mode-cluster-middle">
                   <Icon className="mode-icon-box" name="home" />
                   <span className="mode-label">Create Room</span>
