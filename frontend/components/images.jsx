@@ -1,21 +1,16 @@
-import logo from "../assets/images/logo.png";
+import logoDark from "../assets/images/logo.png";
+import logoLight from "../assets/images/logo-light.png";
 import placeholder from "../assets/images/placeholder.png";
-import signBackground from "../assets/images/sign-background.png";
+import purpleLeafsBackground from "../assets/images/purpleLeafsBackground.png";
 
 const images = {
-  logo,
+  logoDark,
+  logoLight,
   placeholder,
-  signBackground,
+  purpleLeafsBackground,
 };
 
-export function Image({ className, name, alt = "" }) {
+export default function Image({ className, name, alt = "" }) {
   const src = images[name];
-
-  // Optional safety check (helps debugging instead of silent failure)
-  if (!src) {
-    console.error(`Image "${name}" not found in images map`);
-    return null;
-  }
-
   return <img src={src} className={className} alt={alt} />;
 }

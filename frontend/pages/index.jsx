@@ -1,8 +1,7 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/navbar.jsx";
-import { BigDisplay } from "../components/title.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
-import { Image } from "../components/images.jsx";
-import { GameButton } from "../components/button.jsx";
+import Image from "../components/images.jsx";
 import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
@@ -13,11 +12,11 @@ export default function Index() {
     <div className="home-page">
       <Navbar />
       <div className="container-fluid">
-        <div className="row m-5 text-center">
-          <BigDisplay text="Magic Words" />
+        <div className="m-5 text-center">
+          <h1 className="display-1 fw-medium">Magic Words</h1>
         </div>
 
-        <div className="row m-4 justify-content-center">
+        <div className="m-4 flex-row d-flex justify-content-center">
           <ContentBoxBig
             content1={
               <>
@@ -39,8 +38,40 @@ export default function Index() {
           />
         </div>
 
+        <div className="row my-5">
+          <div className="mode-selector">
+            <Link to="/">
+              <div className="mode-circle mode-circle-big">
+                <Icon className="mode-icon-box" name="multiplayer" />
+                <span className="mode-label">Multiplayer</span>
+              </div>
+            </Link>
+
+            <div className="mode-cluster">
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm">
+                  <Icon className="mode-icon-box" name="singleplayer" />
+                  <span className="mode-label">Singleplayer</span>
+                </div>
+              </Link>
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm mode-cluster-middle">
+                  <Icon className="mode-icon-box" name="home" />
+                  <span className="mode-label">Create Room</span>
+                </div>
+              </Link>
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm">
+                  <Icon className="mode-icon-box" name="code" />
+                  <span className="mode-label">Enter Code</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className="row align-content-center vh-50">
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -71,7 +102,7 @@ export default function Index() {
               icon={<Icon className={"game-icon-box"} name={"multiplayer"} />}
             />
           </div>
-          <div className="col-6 d-flex justify-content-start">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -105,7 +136,7 @@ export default function Index() {
         </div>
 
         <div className="row align-content-center">
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>
@@ -138,7 +169,7 @@ export default function Index() {
               icon={<Icon className={"game-icon-box"} name={"home"} />}
             />
           </div>
-          <div className="col-6 d-flex justify-content-start">
+          <div className="col-12 col-lg-6 d-flex justify-content-center">
             <ContentBoxMedium
               content1={
                 <>

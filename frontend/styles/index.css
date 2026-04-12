@@ -1,111 +1,125 @@
-/* Home page specific styles */
 .home-page {
-  background: url("../assets/images/home-background.png");
+  background-image: url("../assets/images/home-background.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   width: 100%;
 }
 
-html,
-body {
-  font-family: var(--font);
-  color: var(--light-gray);
-}
-
-.text-container {
-  background: var(--shadow-grey);
-  padding: 25px;
-  border-radius: 10px;
-  border: var(--border-type);
-  border-color: var(--light-purple);
-  border-width: var(--border-width);
-  color: var(--light-purple);
-  width: fit-content;
-}
-
-.text-container img {
-  border-radius: var(--border-circle);
-  border: var(--border-type);
-  border-color: var(--light-purple);
-  border-width: var(--border-width);
-  width: 225px;
-}
-
-.text-container p,
-.text-container li {
-  font-size: medium;
-  font-weight: 300;
-}
-
-.text-container h4 {
-  font-size: larger;
-}
-
-.text-container h5 {
-  font-size: large;
-  font-weight: 500;
-}
-
-.text-container:hover, .text-container img:hover {
-  transition: var(--transition-shadow);
-  box-shadow: var(--shadow);
-}
-
-.text-container-big-size {
-  width: 90%;
-  height: 0%;
-}
-
-.text-container-medium-size {
-  width: 450px;
-  height: 450px;
-}
-
-.display-1 {
-  font-weight: 500;
-}
-
-.game-button {
-  background-color: var(--shadow-grey);
-  transition: var(--transition-background);
-  border-radius: var(--border-circle);
-  width: 300px;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: var(--border-width) var(--border-type) var(--light-purple);
-  padding: 0;
-  cursor: pointer;
-}
-
-.game-button:hover {
-  background-color: var(--light-purple);
-}
-
-.game-button a {
-  color: var(--light-purple);
-  transition: var(--transition-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: var(--remove-decoration);
-  line-height: 0;
-}
-
-.game-button:hover a {
-  color: var(--shadow-grey);
-}
-
-.game-icon-button {
-  width: 200px;
-  height: 200px;
-  display: block;
+:root.light .home-page {
+  background-image: url("../assets/images/home-background-light.png");
 }
 
 .game-icon-box {
   width: 60px;
   height: 60px;
   color: var(--dark-purple);
+}
+
+.mode-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-selector a {
+  text-decoration: none;
+}
+
+.mode-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: -20px;
+}
+
+.mode-circle {
+  border-radius: 50%;
+  background: var(--shadow-grey);
+  border: var(--border-width) var(--border-type) var(--light-purple);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: var(--transition-background);
+  transition: var(--transition-color);
+  transition: var(--transition-shadow);
+}
+
+.mode-circle:hover,
+.mode-circle:hover .mode-label,
+.mode-circle:hover .mode-icon-box {
+  box-shadow: var(--shadow);
+  background: var(--light-purple);
+  color: var(--shadow-grey);
+}
+
+.mode-circle-big {
+  width: 350px;
+  height: 350px;
+  z-index: 2;
+}
+
+.mode-circle-sm {
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  margin-top: -18px;
+}
+
+.mode-cluster-middle {
+  margin-left: 150px;
+}
+
+.mode-icon-box {
+  width: 60%;
+  height: 60%;
+  color: var(--light-purple);
+}
+
+.mode-label {
+  color: var(--light-purple);
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+  text-align: center;
+}
+
+.mode-circle:hover .mode-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 991px) {
+  .mode-circle-big {
+    width: 300px;
+    height: 300px;
+    z-index: 2;
+  }
+
+  .mode-circle-sm {
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+    margin-top: -18px;
+  }
+
+  .mode-selector {
+    flex-direction: column;
+  }
+
+  .mode-circle-big {
+    margin-bottom: 50px;
+  }
+
+  .mode-cluster-middle {
+    margin-top: -70px;
+  }
 }

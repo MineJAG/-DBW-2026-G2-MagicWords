@@ -5,6 +5,7 @@ import Signin from "./signin.jsx";
 import WaitingRoom from "./waitingroom.jsx";
 import Multiplayer from "./multiplayer.jsx";
 import Singleplayer from "./singpleplayer.jsx";
+import Profile from "./profile.jsx";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/waitingroom" element={<WaitingRoom />} />
       <Route path="/multiplayer" element={<Multiplayer />} />
       <Route path="/singleplayer" element={<Singleplayer />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

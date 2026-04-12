@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import {Icon} from "./icons.jsx";
+import { Icon } from "./icons.jsx";
 
-export default function Button({link, text}) {
+export default function Button({ link, text }) {
   return (
     <button>
       <Link to={link}>{text}</Link>
@@ -9,12 +9,11 @@ export default function Button({link, text}) {
   );
 }
 
-export function GameButton({className, link, path}) {
+export function UploadButton({ onClick }) {
   return (
-    <button className="game-button">
-      <Link to={link}>
-        <Icon className={className} path={path}/>
-      </Link>
+    /* stopPropagation so to not escape to the parents */
+    <button className="upload-button" onClick={(e) => { e.stopPropagation(); onClick(); }}>
+      <Icon name="edit" />
     </button>
   );
 }
