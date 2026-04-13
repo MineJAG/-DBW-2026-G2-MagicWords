@@ -3,7 +3,7 @@
   background-size: cover;
   display: flex;
   align-items: flex-start;
-  justify-content: center;;
+  justify-content: center;
 }
 
 :root.light .leaderboard-content-score {
@@ -20,12 +20,17 @@
   display: flex;
 }
 
-.leaderboard-content-score-yellowbox {
-    height: 100vh;
-    background: #f4bf3a;
-    min-height: 100vh;
+.leaderboard-content-score > .row > .col-12 {
+  display: flex;
+  flex-direction: column;
+  min-height: 94vh;
+  padding: 0;
 }
 
+.leaderboard-content-score-yellowbox {
+  flex: 1;
+  background: #f4bf3a;
+}
 .leaderboard-content-stats-title {
   font-size: 25px;
   color: var(--light-gray);
