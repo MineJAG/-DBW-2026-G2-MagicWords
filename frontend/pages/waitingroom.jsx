@@ -1,5 +1,4 @@
 import Navbar from "../components/navbar.jsx";
-import { Image } from "../components/images.jsx";
 import { Icon } from "../components/icons.jsx";
 import Button from "../components/button.jsx";
 
@@ -34,11 +33,6 @@ export default function WaitingRoom() {
             {players.map((player, index) => (
               <div key={index} className="player">
                 <div className="player-avatar">
-                  {player.avatar ? (
-                    <Image src={player.avatar}/>
-                  ) : (
-                    <Icon name="anonymous"/>
-                  )}
                 </div>
                 <div className="player-name">{player.name}</div>
                 {player.isHost && <div className="player-host"><Icon name="Star"/></div>}
