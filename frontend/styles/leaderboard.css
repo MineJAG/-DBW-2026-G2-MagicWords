@@ -1,0 +1,68 @@
+.leaderboard-box-content-header h1 {
+  text-align: center;
+  color: var(--light-gray);
+  font-weight: bold;
+  margin: 20px 0 30px;
+}
+
+.leaderboard-box-content-body-left,
+.leaderboard-box-content-body-center,
+.leaderboard-box-content-body-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0;
+  width: 20vw;
+}
+.leaderboard-box-content-body .row {
+  flex-wrap: nowrap;
+}
+
+.leaderboard-box-content-body-left-player,
+.leaderboard-box-content-body-center-player,
+.leaderboard-box-content-body-right-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--light-gray);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.leaderboard-box-content-body-left-player-avatar,
+.leaderboard-box-content-body-center-player-avatar,
+.leaderboard-box-content-body-right-player-avatar {
+  width: 10vh;
+  height: 10vh;
+  overflow: hidden;
+}
+
+.leaderboard-box-content-body-left-graybox,
+.leaderboard-box-content-body-center-yellowbox,
+.leaderboard-box-content-body-right-brownbox {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--ink-black);
+}
+
+/* Heights create the podium step effect */
+.leaderboard-box-content-body-left-graybox {
+  background: #888;
+  height: 40vh;
+}
+
+.leaderboard-box-content-body-center-yellowbox {
+  background: #f4bf3a;
+  height: 50vh;
+}
+
+.leaderboard-box-content-body-right-brownbox {
+  background: #b07c3a;
+  height: 30vh;
+}
