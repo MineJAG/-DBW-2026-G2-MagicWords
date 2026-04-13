@@ -21,7 +21,7 @@ export function SigninForm() {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="e.g. klaud23"
         />
-        <div id="username-error" className="error">{errors.username}</div>
+        <div className="error">{errors.username}</div>
 
         <p>Insert your email.</p>
         <input
@@ -29,7 +29,7 @@ export function SigninForm() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="example@email.com"
         />
-        <div id="email-error" className="error">{errors.email}</div>
+        <div className="error">{errors.email}</div>
 
         <p>Insert your password.</p>
         <span>Must be 6–12 characters and include at least one number.</span>
@@ -38,7 +38,7 @@ export function SigninForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <div id="password-error" className="error">{errors.password}</div>
+        <div className="error">{errors.password}</div>
 
         <p>Confirm password.</p>
         <input
@@ -46,7 +46,7 @@ export function SigninForm() {
           onChange={(e) => setPasswordVerification(e.target.value)}
           placeholder="Password Confirmation"
         />
-        <div id="password-verification-error" className="error">
+        <div className="error">
           {errors.passwordVerification}
         </div>
 
@@ -78,14 +78,18 @@ export function LoginForm() {
           onChange={(e) => setUsernameOrEmail(e.target.value)}
           placeholder="Username or Email"
         />
-        <div className="error"></div>
+        <div className="error">
+          {errors.usernameOrEmail}
+        </div>
         <p>Insert your password.</p>
         <input
           type="password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <div className="error"></div>
+        <div className="error">
+          {errors.password}
+        </div>
         <input type="submit" value="Sign Up" />
       </form>
     </div>
