@@ -3,7 +3,7 @@ import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
 import RadarChart from "../components/radarChart.jsx";
-import Avatar from "../components/avatar.jsx";
+import { Avatar } from "../components/avatar.jsx";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
