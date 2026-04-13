@@ -4,6 +4,7 @@ import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
 import RadarChart from "../components/radarChart.jsx";
 import { Avatar } from "../components/avatar.jsx";
+import { profileValidation } from "../hooks/profileValidation.js";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
@@ -28,8 +29,15 @@ export default function Profile() {
   });
 
   const [isEditingName, setIsEditingName] = useState(false);
-  const [editName, setEditName] = useState(user.name);
   const inputRef = useRef(null);
+
+  const {
+    username: editName,
+    setUsername: setEditName,
+    errors,
+    handleSubmit: validateName,
+    resetValidation,
+  } = profileValidation(user.name);
 
   useEffect(() => {
     if (isEditingName && inputRef.current) {
@@ -39,15 +47,15 @@ export default function Profile() {
   }, [isEditingName]);
 
   function handleConfirm() {
-    const trimmed = editName.trim();
-    if (trimmed) {
-      setUser((prev) => ({ ...prev, name: trimmed }));
-    }
+    const isValid = validateName();
+    if (!isValid) return;
+
+    setUser((prev) => ({ ...prev, name: editName.trim() }));
     setIsEditingName(false);
   }
 
   function handleCancel() {
-    setEditName(user.name);
+    resetValidation(user.name);
     setIsEditingName(false);
   }
 
@@ -63,28 +71,31 @@ export default function Profile() {
           <div>
             <div className="row profile-top-row justify-content-center">
               <div className="col-lg-6 col-auto d-flex align-items-center justify-content-center">
-                <div className="username-box">
+                <div className="username-box d-flex flex-column align-items-center justify-content-center">
                   {isEditingName ? (
-                    <div className="edit-name-container">
-                      <input
-                        ref={inputRef}
-                        type="text"
-                        className="edit-name-input"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                      />
-                      <span
-                        className="edit-action-btn confirm-btn"
-                        onClick={handleConfirm}
-                      >
-                        <Icon name="check" />
-                      </span>
-                      <span
-                        className="edit-action-btn cancel-btn"
-                        onClick={handleCancel}
-                      >
-                        <Icon name="close" />
-                      </span>
+                    <div>
+                      <div className="d-flex align-items-center">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          className="edit-name-input"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                        />
+                        <span
+                          className="edit-action-btn confirm-btn"
+                          onClick={handleConfirm}
+                        >
+                          <Icon name="check" />
+                        </span>
+                        <span
+                          className="edit-action-btn cancel-btn"
+                          onClick={handleCancel}
+                        >
+                          <Icon name="close" />
+                        </span>
+                      </div>
+                      <div className="error">{errors.username}</div>
                     </div>
                   ) : (
                     <div className="display-name-container">
@@ -92,7 +103,7 @@ export default function Profile() {
                       <span
                         className="edit-trigger-btn"
                         onClick={() => {
-                          setEditName(user.name);
+                          resetValidation(user.name);
                           setIsEditingName(true);
                         }}
                       >

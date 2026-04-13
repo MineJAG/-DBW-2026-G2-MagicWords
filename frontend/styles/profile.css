@@ -134,13 +134,13 @@
   margin: 0;
 }
 
-/* ── Username box ── */
+/* Username box */
 
 .username-box {
   background: var(--shadow-grey);
   border: 2px solid var(--light-purple);
   border-radius: 12px;
-  padding: 12px 24px;
+  padding: 12px;
   color: var(--light-purple);
   min-width: 200px;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
@@ -150,7 +150,7 @@
   box-shadow: 0 0 14px rgba(203, 166, 247, 0.25);
 }
 
-/* ── Display mode ── */
+/* Display mode */
 
 .display-name-container {
   display: flex;

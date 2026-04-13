@@ -15,6 +15,8 @@ export function signUpFormValidation() {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail)) {
         newErrors.usernameOrEmail = "Please enter a valid email address.";
       }
+    } else if (usernameOrEmail.length < 5 || usernameOrEmail.length > 20) {
+      newErrors.usernameOrEmail = "Username must be between 5 and 20 characters.";
     }
     if (!password) {
       newErrors.password = "Password is required.";
