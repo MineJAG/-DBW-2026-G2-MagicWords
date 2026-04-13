@@ -1,0 +1,59 @@
+.leaderboard-content-score {
+  background: url("../assets/images/purpleLeafsBackground.png");
+  background-size: cover;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;;
+}
+
+:root.light .leaderboard-content-score {
+  background: url("../assets/images/sign-light.png");
+  background-size: cover;
+}
+
+.leaderboard-content-score-value {
+  text-align: left;
+  margin-top : 10vh;
+  color: var(--light-gray);
+  font-size: 20px;
+  padding: 20px;
+  display: flex;
+}
+
+.leaderboard-content-score-yellowbox {
+    height: 100vh;
+    background: #f4bf3a;
+    min-height: 100vh;
+}
+
+.leaderboard-content-stats-title {
+  font-size: 25px;
+  color: var(--light-gray);
+  text-align: center;
+  margin-top: 20px;
+  padding-bottom: 60px;
+}
+
+.leaderboard-content-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard-content-stats-user-Avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 150px;
+}
+
+.leaderboard-content-stats-user-name {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size : 30px;
+}
+
+.leaderboard-content-stats-list {
+  margin-top: 20px;
+  color: var(--light-gray);
+}
