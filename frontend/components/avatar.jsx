@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { UploadButton } from "./button.jsx";
 import { Icon } from "./icons.jsx";
 
-export default function Avatar({ src, alt = "Profile picture" }) {
-  const [imgSrc, setImgSrc] = useState(src || null);
+export function Avatar({ src, alt = "Profile picture" }) {
+  const [user, setUser] = useState({ picture: src || null });
   const [fileName, setFileName] = useState("");
   const inputRef = useRef(null);
 
@@ -12,7 +12,7 @@ export default function Avatar({ src, alt = "Profile picture" }) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      setImgSrc(ev.target.result);
+      setUser((prev) => ({ ...prev, picture: ev.target.result }));
       setFileName(file.name);
     };
     reader.readAsDataURL(file);
@@ -21,8 +21,8 @@ export default function Avatar({ src, alt = "Profile picture" }) {
   return (
     <div className="avatar-wrapper">
       <div className="avatar-circle" onClick={() => inputRef.current.click()}>
-        {imgSrc ? (
-          <img src={imgSrc} alt={alt} className="avatar-img" />
+        {user.picture ? (
+          <img src={user.picture} alt={alt} className="avatar-img" />
         ) : (
           <div className="avatar-fallback">
             <Icon name="anonymous" className="avatar-fallback-icon" />
@@ -39,6 +39,28 @@ export default function Avatar({ src, alt = "Profile picture" }) {
         className="avatar-input"
         onChange={handleFileChange}
       />
+    </div>
+  );
+}
+
+export function AvatarPreview({ src, alt = "Profile picture" }) {
+  const isElement = typeof src === "object" && src !== null;
+
+  return (
+    <div className="avatar-wrapper">
+      <div className="avatar-circle">
+        {src ? (
+          isElement ? (
+            src
+          ) : (
+            <img src={src} alt={alt} className="avatar-img" />
+          )
+        ) : (
+          <div className="avatar-fallback">
+            <Icon name="anonymous" className="avatar-fallback-icon" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
