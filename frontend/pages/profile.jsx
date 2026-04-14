@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import Navbar from "../components/navbar.jsx";
 
 import { profileValidation } from "../hooks/profileValidation.js";
 
 import { useUser } from "../context/userContext.jsx";
 
+import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
 import RadarChart from "../components/radarChart.jsx";
