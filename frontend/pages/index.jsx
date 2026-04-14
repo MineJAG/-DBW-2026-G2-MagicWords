@@ -1,26 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { useUser } from "../context/userContext.jsx";
+
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
-import Image from "../components/images.jsx";
+import { AvatarPreview } from "../components/avatar.jsx";
 import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
 import "../styles/index.css";
 
 export default function Index() {
-  const [showCodeModal, setShowCodeModal] = useState(false);
-  const [roomCode, setRoomCode] = useState("");
-  const navigate = useNavigate();
-
-  const handleJoinRoom = () => {
-    if (roomCode.trim()) {
-      navigate(`/room/${roomCode.trim()}`);
-      setShowCodeModal(false);
-      setRoomCode("");
-    }
-  };
-
+  const { user } = useUser();
   return (
     <div className="home-page">
       <Navbar />
@@ -33,21 +25,21 @@ export default function Index() {
           <ContentBoxBig
             content1={
               <>
-                <h3>Welcome back PLACEHOLDER.</h3>
+                <h3>Welcome back {user?.name}.</h3>
                 <p>
                   Check your progress, challenge other players, and improve your
                   score with every match.
                 </p>
                 <h4>Stats:</h4>
                 <ul>
-                  <li>Total Score:</li>
-                  <li>Words Found:</li>
-                  <li>Games Played:</li>
-                  <li>Longest Word:</li>
+                  <li>Highest Score: {user?.stats.highestScore}</li>
+                  <li>Words Found: {user?.stats.totalWordsFound}</li>
+                  <li>Games Played: {user?.stats.gamesPlayed}</li>
+                  <li>Longest Word: {user?.stats.longestWordFound}</li>
                 </ul>
               </>
             }
-            content2={<Image name="placeholder" />}
+            content2={ <><AvatarPreview src={user?.picture} /></>}
           />
         </div>
 
@@ -73,13 +65,12 @@ export default function Index() {
                   <span className="mode-label">Create Room</span>
                 </div>
               </Link>
-              <div
-                className="mode-circle mode-circle-sm"
-                onClick={() => setShowCodeModal(true)}
-              >
-                <Icon className="mode-icon-box" name="code" />
-                <span className="mode-label">Enter Code</span>
-              </div>
+              <Link to="/">
+                <div className="mode-circle mode-circle-sm">
+                  <Icon className="mode-icon-box" name="code" />
+                  <span className="mode-label">Enter Code</span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -218,26 +209,6 @@ export default function Index() {
           </div>
         </div>
       </div>
-
-      {showCodeModal && (
-        <div className="code-modal-overlay" onClick={() => { setShowCodeModal(false); setRoomCode(""); }}>
-          <div className="code-modal" onClick={(e) => e.stopPropagation()}>
-            <h4>Enter Room Code</h4>
-            <input
-              type="text"
-              value={roomCode}
-              onChange={(e) => setRoomCode(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleJoinRoom()}
-              placeholder="ABC123"
-              autoFocus
-            />
-            <div className="code-modal-buttons">
-              <button onClick={() => { setShowCodeModal(false); setRoomCode(""); }}>Cancel</button>
-              <button onClick={handleJoinRoom} disabled={!roomCode.trim()}>Join</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
