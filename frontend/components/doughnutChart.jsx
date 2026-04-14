@@ -37,7 +37,7 @@ export default function DoughnutChart({ stats }) {
   const data = {
     labels: ['Won', 'Lost'],
     datasets: [{
-      data: [stats.gamesWon, stats.gamesLost],
+      data: [stats?.gamesWon, stats?.gamesLost],
       backgroundColor: ['#7c83ff', '#c678dd'],
       borderWidth: 2,
       hoverOffset: 10,

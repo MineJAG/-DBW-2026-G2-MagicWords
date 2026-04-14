@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+import { useUser } from "../context/userContext.jsx";
+
 import { Icon } from "./icons.jsx";
 import Button from "./button.jsx";
 import Image from "./images.jsx";
@@ -8,8 +11,9 @@ import "../styles/variable.css";
 import "../styles/main.css";
 
 export default function Navbar() {
+  const { user } = useUser();
   const [isDark, setIsDark] = useState(
-    () => localStorage.getItem("theme") === "dark"
+    () => localStorage.getItem("theme") === "dark",
   );
 
   useEffect(() => {
@@ -24,15 +28,9 @@ export default function Navbar() {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
 
-  const [user, setUser] = useState({
-    name: "John Doe",
-    picture: <Image name="placeholder" />
-  });
-
   return (
     <nav>
       <div className="navbar-inner">
-
         <div className="navbar-start">
           <Image className="logo-dark" name="logoDark" />
           <Image className="logo-light" name="logoLight" />
@@ -43,7 +41,7 @@ export default function Navbar() {
           {/* Theme Toggle Switch */}
           <div
             className={`theme-toggle ${isDark ? "toggle-dark" : "toggle-light"}`}
-            onClick={() => setIsDark(prev => !prev)}
+            onClick={() => setIsDark((prev) => !prev)}
             title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             <div className="toggle-track">
@@ -53,9 +51,9 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <p className="navbar-username">{user.name}</p>
+              <p className="navbar-username">{user?.name}</p>
               <Link to="/profile">
-                {user.picture ? user.picture : <Icon name="anonymous" />}
+                {user?.picture ? user?.picture : <Icon name="anonymous" />}
               </Link>
             </>
           ) : (
@@ -65,7 +63,6 @@ export default function Navbar() {
             </>
           )}
         </div>
-
       </div>
     </nav>
   );

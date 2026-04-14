@@ -1,32 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/navbar.jsx";
+
+import { profileValidation } from "../hooks/profileValidation.js";
+
+import { useUser } from "../context/userContext.jsx";
+
 import { ContentBoxBig } from "../components/contentBox.jsx";
 import DoughnutChart from "../components/doughnutChart.jsx";
 import RadarChart from "../components/radarChart.jsx";
 import { Avatar } from "../components/avatar.jsx";
-import { profileValidation } from "../hooks/profileValidation.js";
+import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
 import "../styles/profile.css";
-import { Icon } from "../components/icons.jsx";
 
 export default function Profile() {
-  const [user, setUser] = useState({
-    name: "John Doe",
-    picture: null,
-    stats: {
-      gamesPlayed: 100,
-      highestScore: 5000,
-      gamesWon: 175,
-      gamesLost: 50,
-      winRate: 50,
-      totalWordsFound: 1200,
-      longestWordFound: "Chipingongo",
-      averageWordLength: 6.5,
-      mostWordsInOneMatch: 15,
-      longestStreak: 10,
-    },
-  });
+  const { user } = useUser();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const inputRef = useRef(null);
@@ -37,7 +26,7 @@ export default function Profile() {
     errors,
     handleSubmit: validateName,
     resetValidation,
-  } = profileValidation(user.name);
+  } = profileValidation(user?.name);
 
   useEffect(() => {
     if (isEditingName && inputRef.current) {
@@ -50,12 +39,12 @@ export default function Profile() {
     const isValid = validateName();
     if (!isValid) return;
 
-    setUser((prev) => ({ ...prev, name: editName.trim() }));
+    
     setIsEditingName(false);
   }
 
   function handleCancel() {
-    resetValidation(user.name);
+    resetValidation(user?.name);
     setIsEditingName(false);
   }
 
@@ -99,11 +88,11 @@ export default function Profile() {
                     </div>
                   ) : (
                     <div className="display-name-container">
-                      <p className="fw-medium display-name-text">{user.name}</p>
+                      <p className="fw-medium display-name-text">{user?.name}</p>
                       <span
                         className="edit-trigger-btn"
                         onClick={() => {
-                          resetValidation(user.name);
+                          resetValidation(user?.name);
                           setIsEditingName(true);
                         }}
                       >
@@ -115,8 +104,8 @@ export default function Profile() {
               </div>
               <div className="col-lg-6 col-auto d-flex align-items-center justify-content-center">
                 <Avatar
-                  src={user.picture}
-                  alt={`${user.name}'s profile picture`}
+                  src={user?.picture}
+                  alt={`${user?.name}'s profile picture`}
                 />
               </div>
             </div>
@@ -142,29 +131,29 @@ export default function Profile() {
                       <tbody>
                         <tr>
                           <td>Games Played</td>
-                          <td>{user.stats.gamesPlayed}</td>
+                          <td>{user?.stats.gamesPlayed}</td>
                         </tr>
                         <tr>
                           <td>Highest Score</td>
-                          <td>{user.stats.highestScore}</td>
+                          <td>{user?.stats.highestScore}</td>
                         </tr>
                         <tr>
                           <td>Games Won</td>
-                          <td>{user.stats.gamesWon}</td>
+                          <td>{user?.stats.gamesWon}</td>
                         </tr>
                         <tr>
                           <td>Games Lost</td>
-                          <td>{user.stats.gamesLost}</td>
+                          <td>{user?.stats.gamesLost}</td>
                         </tr>
                         <tr>
                           <td>Win Rate</td>
-                          <td>{user.stats.winRate}%</td>
+                          <td>{user?.stats.winRate}%</td>
                         </tr>
                       </tbody>
                     </table>
                   </>
                 }
-                content2={<DoughnutChart stats={user.stats} />}
+                content2={<DoughnutChart stats={user?.stats} />}
                 size="text-container-profile-size"
               />
             </div>
@@ -190,29 +179,29 @@ export default function Profile() {
                       <tbody>
                         <tr>
                           <td>Total Words Found</td>
-                          <td>{user.stats.totalWordsFound}</td>
+                          <td>{user?.stats.totalWordsFound}</td>
                         </tr>
                         <tr>
                           <td>Longest Word Found</td>
-                          <td>{user.stats.longestWordFound}</td>
+                          <td>{user?.stats.longestWordFound}</td>
                         </tr>
                         <tr>
                           <td>Average Word Length</td>
-                          <td>{user.stats.averageWordLength}</td>
+                          <td>{user?.stats.averageWordLength}</td>
                         </tr>
                         <tr>
                           <td>Most Words in One Match</td>
-                          <td>{user.stats.mostWordsInOneMatch}</td>
+                          <td>{user?.stats.mostWordsInOneMatch}</td>
                         </tr>
                         <tr>
                           <td>Longest Streak</td>
-                          <td>{user.stats.longestStreak}</td>
+                          <td>{user?.stats.longestStreak}</td>
                         </tr>
                       </tbody>
                     </table>
                   </>
                 }
-                content2={<RadarChart stats={user.stats} />}
+                content2={<RadarChart stats={user?.stats} />}
                 size="text-container-profile-size"
               />
             </div>

@@ -50,9 +50,9 @@ export default function RadarChart({ stats }) {
     datasets: [{
       label: 'Word Mastery',
       data: [
-        stats.mostWordsInOneMatch,
-        stats.averageWordLength,
-        stats.longestStreak,
+        stats?.mostWordsInOneMatch,
+        stats?.averageWordLength,
+        stats?.longestStreak,
       ],
       backgroundColor: '#7c83ff33',
       borderColor: '#7c83ff',
