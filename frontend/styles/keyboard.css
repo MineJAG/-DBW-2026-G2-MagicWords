@@ -6,15 +6,24 @@
   .kb-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: fit-content;
+    gap: 8px;
+    width: 100%;
     margin: 20px auto;
   }
 
-  .kb-row {
+  .kb-wrapper .row {
     display: flex;
-    gap: 10px;
+    flex-wrap: nowrap;
+    gap: 6px;
     justify-content: center;
+    margin: 0;
+    width: 100%;
+  }
+
+  .kb-wrapper .col-1 {
+    padding: 0;
+    width: auto;
+    flex: none;
   }
 
   .kb-key {
@@ -30,6 +39,9 @@
     font-size: 14px;
     border: 1px var(--border-type) var(--shadow-grey);
     box-shadow: 0 4px 0 var(--space-indigo);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.05s, box-shadow 0.05s;
   }
 
   .kb-keyactive {
