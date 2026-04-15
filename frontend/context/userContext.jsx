@@ -10,7 +10,7 @@ export function UserProvider({ children }) {
     //function from backend is called here
     setUser({
       name: "John Doe",
-      picture: null,
+      picture: "https://i.pravatar.cc/150?u=2",
       stats: {
         gamesPlayed: 100,
         highestScore: 5000,

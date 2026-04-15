@@ -37,7 +37,7 @@ export default function Navbar() {
             <>
               <p className="navbar-username">{user?.name}</p>
               <Link to="/profile">
-                {user?.picture ? user?.picture : <Icon name="anonymous" />}
+                {user?.picture ? <img src={user?.picture} alt="Profile picture" /> : <Icon name="anonymous" />}
               </Link>
             </>
           ) : (

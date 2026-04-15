@@ -6,7 +6,7 @@ export function Avatar({ src, alt = "Profile picture" }) {
   const { picture, inputRef, handleFileChange, openFilePicker } = useAvatar(src);
 
   return (
-    <div className="avatar-wrapper">
+    <div className="avatar-profile-size avatar-wrapper">
       <div className="avatar-circle" onClick={openFilePicker}>
         {picture ? (
           <img src={picture} alt={alt} className="avatar-img" />
@@ -34,7 +34,7 @@ export function AvatarPreview({ src, alt = "Profile picture" }) {
   const isElement = typeof src === "object" && src !== null;
 
   return (
-    <div className="avatar-wrapper">
+    <div className="avatar-container-size avatar-wrapper">
       <div className="avatar-circle">
         {src ? (
           isElement ? (

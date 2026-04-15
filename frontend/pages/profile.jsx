@@ -39,7 +39,6 @@ export default function Profile() {
     const isValid = validateName();
     if (!isValid) return;
 
-    
     setIsEditingName(false);
   }
 
@@ -88,7 +87,9 @@ export default function Profile() {
                     </div>
                   ) : (
                     <div className="display-name-container">
-                      <p className="fw-medium display-name-text">{user?.name}</p>
+                      <p className="fw-medium display-name-text">
+                        {user?.name}
+                      </p>
                       <span
                         className="edit-trigger-btn"
                         onClick={() => {
@@ -103,10 +104,7 @@ export default function Profile() {
                 </div>
               </div>
               <div className="col-lg-6 col-auto d-flex align-items-center justify-content-center">
-                <Avatar
-                  src={user?.picture}
-                  alt={`${user?.name}'s profile picture`}
-                />
+                <Avatar src={user?.picture} />
               </div>
             </div>
           </div>
