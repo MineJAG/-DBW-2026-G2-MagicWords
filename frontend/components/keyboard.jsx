@@ -16,12 +16,14 @@ export default function Keyboard() {
   return (
     <div className="kb-wrapper"> 
       {ROWS.map((row) => (
-        <div className="kb-row">
+        <div className="row">
           {row.map((letter) => (
+            <div className="col-1">
             <Key
               letter={letter}
               active={isActive(letter)}
             />
+            </div>
           ))}
         </div>
       ))}
