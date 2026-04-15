@@ -4,91 +4,144 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  flex-direction: column;
 }
 
-.multiplayer-container {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
+.multiplayer-shell {
+  padding: 1rem;
 }
 
-.multiplayer-content {
-  flex: 1;
+.multiplayer-layout {
+  align-items: stretch;
+}
+
+.multiplayer-stage {
+  min-height: calc(100vh - 108px);
+  padding: 1.25rem;
+}
+
+.multiplayer-status {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 700px;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.multiplayer-status-mode {
+  color: var(--light-purple);
+  font-size: 1.8rem;
+}
+
+.multiplayer-status-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--light-gray);
+  font-size: 1.8rem;
+}
+
+.multiplayer-status-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.multiplayer-center {
+  padding: 2rem 0 0.5rem;
   text-align: center;
 }
 
-.multiplayer-content-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px;
+.multiplayer-word {
+  margin: 0;
+  color: var(--light-gray);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+
+  letter-spacing: 0.06em;
 }
 
-.multiplayer-content-header-mode {
+.multiplayer-helper {
+  margin: 0.75rem 0 0;
+  color: var(--light-gray);
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.multiplayer-written-box {
+  padding: 1rem;
+  border-radius: 14px;
+}
+
+.multiplayer-written-title {
+  margin: 0 0 0.75rem;
   color: var(--light-purple);
+  font-size: 1rem;
 }
 
-.multiplayer-content-header-timer {
-  color: var(--light-gray);
-}
-
-.multiplayer-content-word {
-  font-size: 60px;
-  color: var(--light-gray);
-}
-
-.multiplayer-content-helper {
-  font-size: 18px;
-  color: var(--light-gray);
-  margin-bottom: 28px;
-  min-height: 40px;
-}
-
-.multiplayer-content-input {
-  width: 90%;
-  height: 46px;
-  background: var(--ink-black);
-  border: 1px var(--border-type) var(--light-purple);
-  border-radius: 10px;
-  color: var(--light-gray);
+.multiplayer-written-list {
   display: flex;
-  font-size: 24px;
-  align-items: center;
-  padding: 0 14px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.multiplayer-content-keyboard {
-  display: flex;
-  justify-content: center;
+.multiplayer-written-chip {
+  font-size: 0.95rem;
+}
+
+.multiplayer-input {
   width: 100%;
+  min-height: 3.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px var(--border-type) var(--light-purple);
+  border-radius: 12px;
+  background: var(--ink-black);
+  color: var(--light-gray);
+  font-size: 1.1rem;
 }
 
-@media (max-width: 600px) {
-  .multiplayer-container {
-    flex-direction: column;
+.multiplayer-input::placeholder {
+  color: var(--light-gray);
+}
+
+.multiplayer-input:focus {
+  outline: none;
+  box-shadow: var(--shadow);
+}
+
+.multiplayer-keyboard {
+  overflow-x: auto;
+}
+
+@media (max-width: 991px) {
+  .multiplayer-shell {
+    padding: 0.75rem;
   }
 
-  .scoreboard-panel {
-    width: 100%;
-    max-height: 40vh;
-    overflow-y: auto;
-    border-right: none;
-    border-bottom: 1px var(--border-type) var(--light-purple);
+  .multiplayer-stage {
+    min-height: auto;
+    padding: 1rem;
   }
 
-  .multiplayer-content {
-    padding: 16px 12px;
+  .multiplayer-center {
+    padding-top: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .multiplayer-status-mode,
+  .multiplayer-status-time {
+    font-size: 1.4rem;
   }
 
-  .multiplayer-content-helper {
-    margin-bottom: 16px;
+  .multiplayer-status-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .multiplayer-written-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .multiplayer-written-chip {
+    white-space: nowrap;
   }
 }
