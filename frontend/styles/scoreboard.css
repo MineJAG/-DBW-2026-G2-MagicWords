@@ -1,36 +1,86 @@
 .scoreboard {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  background: #1e1e2f;
+  padding: 1rem;
+  border-radius: 18px;
+  background: var(--ink-black);
+}
+
+.scoreboard-title {
+  margin-bottom: 0.9rem;
+  color: var(--light-purple);
+  font-size: 1.4rem;
+  text-align: center;
 }
 
 .scoreboard-list {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
 }
 
-.scoreboard-row {
-  display: flex;
+.scoreboard-player-card {
+  display: grid;
+  grid-template-columns: 64px 48px 1fr;
   align-items: center;
-  padding: 10px;
+  column-gap: 0.85rem;
+  width: 100%;
+  padding: 0.85rem;
 }
 
 .scoreboard-score {
-  font-size: 20px;
-  text-align: right;
+  color: var(--light-gray);
+  font-size: 1rem;
 }
 
-.scoreboard-avatar Icon{
-  width: 24px;
-  height: 24px;
+.scoreboard-avatar {
+  display: grid;
+  place-items: center;
+}
+
+.scoreboard-avatar-icon,
+.scoreboard-avatar img {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--light-gray);
 }
 
 .scoreboard-avatar img {
-  width: 24px;
-  height: 24px;
+  object-fit: cover;
+  border-radius: var(--border-circle);
 }
 
 .scoreboard-name {
-  flex: 1;
+  color: var(--light-gray);
+  font-size: 1rem;
+  
+  min-width: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+  .scoreboard-list {
+    flex-direction: row;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.35rem;
+  }
+
+  .scoreboard-player-card {
+    min-width: 220px;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .scoreboard {
+    padding: 0.85rem;
+  }
+
+  .scoreboard-title {
+    font-size: 1.2rem;
+  }
 }
