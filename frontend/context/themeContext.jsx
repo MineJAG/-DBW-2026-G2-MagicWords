@@ -1,20 +1,25 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const themeContext = createContext(null);
+const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-    const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "dark";
+  });
 
-    useEffect(() => {
-        document.documentElement.className = theme;
-    }, [theme]);
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
-    return (
-        <themeContext.Provider value={{ theme, setTheme }}>
-            {children}
-        </themeContext.Provider>
-    );
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
+
 export function useTheme() {
-    return useContext(themeContext);
+  return useContext(ThemeContext);
 }

@@ -1,53 +1,43 @@
-import { useState, useEffect } from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+import { useTheme } from "../context/themeContext.jsx";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DoughnutChart({ stats }) {
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.classList.contains("dark")
-  );
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const options = {
-    cutout: '65%',
+    cutout: "65%",
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'bottom',
+        position: "bottom",
         labels: {
-          color: isDark ? '#e2e2e2' : '#11111b',
+          color: isDark ? "#e2e2e2" : "#11111b",
         },
       },
     },
   };
 
   const data = {
-    labels: ['Won', 'Lost'],
-    datasets: [{
-      data: [stats?.gamesWon, stats?.gamesLost],
-      backgroundColor: ['#7c83ff', '#c678dd'],
-      borderWidth: 2,
-      hoverOffset: 10,
-      borderColor: isDark ? '#313244' : '#ffffff',
-    }],
+    labels: ["Won", "Lost"],
+    datasets: [
+      {
+        data: [stats?.gamesWon ?? 0, stats?.gamesLost ?? 0],
+        backgroundColor: ["#7c83ff", "#c678dd"],
+        borderWidth: 2,
+        hoverOffset: 10,
+        borderColor: isDark ? "#313244" : "#ffffff",
+      },
+    ],
   };
 
   return (
     <div style={{ height: 300 }}>
-      <Doughnut data={data} options={{ ...options, maintainAspectRatio: false }} />
+      <Doughnut data={data} options={options} />
     </div>
   );
 }
