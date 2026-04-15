@@ -22,19 +22,25 @@ export default function Multiplayer() {
   return (
     <div className="multiplayer-page">
       <Navbar />
-      <div className="layout">
-        <div><ScoreBoard players={players} /></div>
-        <div className="main">
-          <div className="info">
-            <div className="header">
-              <div className="mode"> Multiplayer </div>
-              <Icon name="Timer" />
-              <div className="timer"> {timer} </div>
-            </div>
-            <h1 className="word">{word} </h1>
-            <div className="usedWords">{helperText} </div>
-            <div className="input-box">{input} </div>
-            <div className="keyboard">
+      <div className="container-fluid multiplayer-container">
+        <div className="row multiplayer-layout g-4">
+          <div className="col-12 col-lg-3 col-xl-2">
+            <ScoreBoard players={players} />
+          </div>
+          <div className="col-12 col-lg-9 col-xl-10">
+            <section className="multiplayer-content">
+              <div className="multiplayer-content-header">
+                <div className="multiplayer-content-header-mode">
+                  Multiplayer
+                </div>
+                <Icon className="multiplayer-content-header-icon" name="timer" />
+                <div className="multiplayer-content-header-timer">{timer}</div>
+              </div>
+              <div className="multiplayer-content-word">{word}</div>
+              <div className="multiplayer-content-helper">{helperText}</div>
+              <inpit className="multiplayer-content-input">{input}</inpit>
+            </section>
+            <div className="multiplayer-content-keyboard">
               <Keyboard />
             </div>
           </div>

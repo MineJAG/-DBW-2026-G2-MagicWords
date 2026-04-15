@@ -1,5 +1,5 @@
 .multiplayer-page {
-  min-height: 800px;
+  min-height: 100vh;
   background-image: url("../assets/images/game-background.png");
   background-size: cover;
   background-position: center;
@@ -8,28 +8,23 @@
   flex-direction: column;
 }
 
-.layout {
+.multiplayer-container {
   display: flex;
   flex-direction: row;
   flex: 1;
 }
 
-.main {
+.multiplayer-content {
   flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.info {
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
 }
 
-.header {
+.multiplayer-content-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,27 +32,27 @@
   font-size: 20px;
 }
 
-.mode {
+.multiplayer-content-header-mode {
   color: var(--light-purple);
 }
 
-.timer {
+.multiplayer-content-header-timer {
   color: var(--light-gray);
 }
 
-.word {
+.multiplayer-content-word {
   font-size: 60px;
   color: var(--light-gray);
 }
 
-.usedWords {
+.multiplayer-content-helper {
   font-size: 18px;
   color: var(--light-gray);
   margin-bottom: 28px;
   min-height: 40px;
 }
 
-.input-box {
+.multiplayer-content-input {
   width: 90%;
   height: 46px;
   background: var(--ink-black);
@@ -70,14 +65,14 @@
   padding: 0 14px;
 }
 
-.keyboard {
+.multiplayer-content-keyboard {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
 @media (max-width: 600px) {
-  .layout {
+  .multiplayer-container {
     flex-direction: column;
   }
 
@@ -89,11 +84,11 @@
     border-bottom: 1px var(--border-type) var(--light-purple);
   }
 
-  .main {
+  .multiplayer-content {
     padding: 16px 12px;
   }
 
-  .usedWords {
+  .multiplayer-content-helper {
     margin-bottom: 16px;
   }
 }
