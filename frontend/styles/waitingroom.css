@@ -9,7 +9,9 @@
   display: flex;
   flex-direction: column;
 }
-
+:root.light .waiting-room-page{
+  background: url("../assets/images/game-background-light.png");
+}
 .header {
   padding: 24px 0 32px;
   color: var(--light-gray);
