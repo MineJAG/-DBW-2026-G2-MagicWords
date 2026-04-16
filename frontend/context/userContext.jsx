@@ -12,6 +12,7 @@ export function UserProvider({ children }) {
       name: "John Doe",
       picture: null,
       stats: {
+        currentScore: 5000,
         gamesPlayed: 100,
         highestScore: 5000,
         gamesWon: 175,
