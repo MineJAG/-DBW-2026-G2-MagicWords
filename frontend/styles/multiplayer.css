@@ -5,6 +5,9 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+:root.light .multiplayer-page {
+  background-image: url("../assets/images/game-background-light.png");
+}
 
 .multiplayer-shell {
   padding: 1rem;
