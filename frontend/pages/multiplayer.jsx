@@ -2,26 +2,34 @@ import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
 import Keyboard from "../components/keyboard.jsx";
 import { Icon } from "../components/icons.jsx";
+import { useGame } from "../context/gameContext.jsx";
 
 import "../styles/variable.css";
 import "../styles/scoreBoard.css";
 import "../styles/multiplayer.css";
 
-const players = [
-  { id: 1, name: "player1", score: 1234, avatar: null },
-  { id: 2, name: "player2", score: 1180, avatar: null },
-  { id: 3, name: "player3", score: 1102, avatar: null },
-  { id: 4, name: "player4", score: 945, avatar: null },
-  { id: 5, name: "player5", score: 880, avatar: null },
-  { id: 6, name: "player6", score: 810, avatar: null },
-];
-
 export default function Multiplayer() {
-  const gameMode = "Normal";
+  const players = [
+    { id: 1, name: "player1", score: 1234, avatar: null },
+    { id: 2, name: "player2", score: 1180, avatar: null },
+    { id: 3, name: "player3", score: 1102, avatar: null },
+    { id: 4, name: "player4", score: 945, avatar: null },
+    { id: 5, name: "player5", score: 880, avatar: null },
+    { id: 6, name: "player6", score: 810, avatar: null },
+  ];
+
+  const gameMode = "Multiplayer";
   const timer = "10:00";
-  const word = "WORD";
-  const writtenWords = ["forest", "magic", "storm", "planet", "shadow"];
-  const input = "";
+
+  const {
+    activeMasterWord,
+    submittedWords,
+    input,
+    setWord,
+    errors,
+    handleSubmit,
+    onValid,
+  } = useGame();
 
   return (
     <div className="multiplayer-page">
@@ -47,30 +55,43 @@ export default function Multiplayer() {
 
                 <div className="col-12">
                   <div className="multiplayer-center">
-                    <h1 className="multiplayer-word">{word}</h1>
+                    <h1 className="multiplayer-word">{activeMasterWord}</h1>
                   </div>
                 </div>
 
                 <div className="col-12">
                   <div className="multiplayer-written-box">
-                    <p className="multiplayer-written-title">Words already used</p>
+                    <p className="multiplayer-written-title">
+                      Words already used
+                    </p>
                     <div className="multiplayer-written-list">
-                      {writtenWords.map((writtenWord) => (
-                        <span key={writtenWord} className="multiplayer-written-chip">
-                          {writtenWord}
-                        </span>
-                      ))}
+                      {submittedWords.length === 0 ? (
+                        <span className="multiplayer-written-chip">—</span>
+                      ) : (
+                        submittedWords.map((writtenWord) => (
+                          <span
+                            key={writtenWord}
+                            className="multiplayer-written-chip"
+                          >
+                            {writtenWord}
+                          </span>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <div className="col-12">
-                  <input
-                    className="multiplayer-input"
-                    type="text"
-                    defaultValue={input}
-                    placeholder="Type your word here"
-                  />
+                  <form onSubmit={(e) => handleSubmit(e, onValid)}>
+                    <input
+                      className="multiplayer-input"
+                      type="text"
+                      value={input}
+                      onChange={(e) => setWord(e.target.value)}
+                      placeholder="Type your word here"
+                    />
+                    <div className="error multiplayer-error">{errors.word}</div>
+                  </form>
                 </div>
 
                 <div className="col-12">
