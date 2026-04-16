@@ -1,10 +1,16 @@
 import { UserProvider } from "./userContext.jsx";
 import { ThemeProvider } from "./themeContext.jsx";
+import { GameProvider } from "./gameContext.jsx";
+import { RoomProvider } from "./roomContext.jsx";
 
 export default function ContextProvider({ children }) {
   return (
-    <ThemeProvider>
-      <UserProvider>{children}</UserProvider>
-    </ThemeProvider>
+    <RoomProvider>
+    <GameProvider>
+      <ThemeProvider>
+        <UserProvider>{children}</UserProvider>
+      </ThemeProvider>
+    </GameProvider>
+    </RoomProvider>
   );
 }
