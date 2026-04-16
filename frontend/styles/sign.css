@@ -1,7 +1,6 @@
 .sign-page {
   background-color: var(--shadow-grey);
   height: 100vh;
-  overflow: hidden;
 }
 
 .sign-container {
@@ -67,13 +66,21 @@
   .signin-content-col {
     padding: 10px;
   }
+  .form-container {
+    padding: 10px;
+  }
+  .sign-content-col {
+    padding: 20px;
+  }
+
+
 }
 
 /*TODO: form style */
 
 .form-container {
   background: var(--space-indigo);
-  padding: 25px;
+  padding: 20px;
   border-radius: 20px;
   border: var(--border-type);
   border-color: var(--light-purple);

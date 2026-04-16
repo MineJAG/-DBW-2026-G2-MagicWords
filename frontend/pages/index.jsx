@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
+
+import { useUser } from "../context/userContext.jsx";
+
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
-import Image from "../components/images.jsx";
+import { AvatarPreview } from "../components/avatar.jsx";
 import { Icon } from "../components/icons.jsx";
 
 import "../styles/variable.css";
 import "../styles/index.css";
 
 export default function Index() {
+  const { user } = useUser();
   return (
     <div className="home-page">
       <Navbar />
@@ -20,21 +24,21 @@ export default function Index() {
           <ContentBoxBig
             content1={
               <>
-                <h3>Welcome back PLACEHOLDER.</h3>
+                <h3>Welcome back {user?.name}.</h3>
                 <p>
                   Check your progress, challenge other players, and improve your
                   score with every match.
                 </p>
                 <h4>Stats:</h4>
                 <ul>
-                  <li>Total Score:</li>
-                  <li>Words Found:</li>
-                  <li>Games Played:</li>
-                  <li>Longest Word:</li>
+                  <li>Highest Score: {user?.stats.highestScore}</li>
+                  <li>Words Found: {user?.stats.totalWordsFound}</li>
+                  <li>Games Played: {user?.stats.gamesPlayed}</li>
+                  <li>Longest Word: {user?.stats.longestWordFound}</li>
                 </ul>
               </>
             }
-            content2={<Image name="placeholder" />}
+            content2={ <><AvatarPreview src={user?.picture} /></>}
           />
         </div>
 

@@ -1,35 +1,22 @@
-import { useRef, useState } from "react";
+import useAvatar from "../hooks/changeAvatar.js";
 import { UploadButton } from "./button.jsx";
 import { Icon } from "./icons.jsx";
 
-export default function Avatar({ src, alt = "Profile picture" }) {
-  const [imgSrc, setImgSrc] = useState(src || null);
-  const [fileName, setFileName] = useState("");
-  const inputRef = useRef(null);
-
-  function handleFileChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setImgSrc(ev.target.result);
-      setFileName(file.name);
-    };
-    reader.readAsDataURL(file);
-  }
+export function Avatar({ src, alt = "Profile picture" }) {
+  const { picture, inputRef, handleFileChange, openFilePicker } = useAvatar(src);
 
   return (
-    <div className="avatar-wrapper">
-      <div className="avatar-circle" onClick={() => inputRef.current.click()}>
-        {imgSrc ? (
-          <img src={imgSrc} alt={alt} className="avatar-img" />
+    <div className="avatar-profile-size avatar-wrapper">
+      <div className="avatar-circle" onClick={openFilePicker}>
+        {picture ? (
+          <img src={picture} alt={alt} className="avatar-img" />
         ) : (
           <div className="avatar-fallback">
             <Icon name="anonymous" className="avatar-fallback-icon" />
           </div>
         )}
 
-        <UploadButton onClick={() => inputRef.current.click()} />
+        <UploadButton onClick={openFilePicker} />
       </div>
 
       <input
@@ -39,6 +26,28 @@ export default function Avatar({ src, alt = "Profile picture" }) {
         className="avatar-input"
         onChange={handleFileChange}
       />
+    </div>
+  );
+}
+
+export function AvatarPreview({ src, alt = "Profile picture" }) {
+  const isElement = typeof src === "object" && src !== null;
+
+  return (
+    <div className="avatar-container-size avatar-wrapper">
+      <div className="avatar-circle">
+        {src ? (
+          isElement ? (
+            src
+          ) : (
+            <img src={src} alt={alt} className="avatar-img" />
+          )
+        ) : (
+          <div className="avatar-fallback">
+            <Icon name="anonymous" className="avatar-fallback-icon" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -19,3 +19,10 @@ contains styles for the navbar
 images.jsx:
 is where we'll be putting every image for easier calling
 
+----
+imports
+1º packages
+2º hooks
+3º context
+4º components
+5º styles

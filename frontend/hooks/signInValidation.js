@@ -15,6 +15,8 @@ export function signInFormValidation() {
       newErrors.username = "Username is required.";
     } else if (username.length < 5 || username.length > 20) {
       newErrors.username = "Username must be between 5 and 20 characters.";
+    } else if (/[^a-zA-Z0-9]/.test(username)) {
+      newErrors.username = "Username cannot contain special characters.";
     }
 
     if (!email.trim()) {
@@ -44,10 +46,6 @@ export function signInFormValidation() {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted:", { username, email, password });
-    }
   }
 
   return {
