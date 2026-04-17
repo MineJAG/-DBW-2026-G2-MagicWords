@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./icons.jsx";
-import { formatTimeLeft } from "./timer.js";
+import { formatTimeLeft } from "../hooks/timer.js";
 
 export default function Timer({
   timeLeft,
