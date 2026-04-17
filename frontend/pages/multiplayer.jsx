@@ -1,8 +1,13 @@
+import { useEffect } from "react";
+
+import { useTimer } from "../hooks/useTimer.js";
+import { useGame } from "../context/gameContext.jsx";
+
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
 import Keyboard from "../components/keyboard.jsx";
-import { Icon } from "../components/icons.jsx";
-import { useGame } from "../context/gameContext.jsx";
+import Timer from "../components/timer.jsx";
+
 
 import "../styles/variable.css";
 import "../styles/scoreBoard.css";
@@ -19,10 +24,11 @@ export default function Multiplayer() {
   ];
 
   const gameMode = "Multiplayer";
-  const timer = "10:00";
 
   const {
     activeMasterWord,
+    timeLeft,
+    setTimeLeft,
     submittedWords,
     input,
     setWord,
@@ -46,10 +52,11 @@ export default function Multiplayer() {
                 <div className="col-12">
                   <div className="multiplayer-status">
                     <span className="multiplayer-status-mode">{gameMode}</span>
-                    <span className="multiplayer-status-time">
-                      <Icon className="multiplayer-status-icon" name="timer" />
-                      <span>{timer}</span>
-                    </span>
+                    <Timer
+                      className="multiplayer-status-time"
+                      iconClassName="multiplayer-status-icon"
+                      timeLeft={timeLeft}
+                    />
                   </div>
                 </div>
 
