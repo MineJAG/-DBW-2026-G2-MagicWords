@@ -1,15 +1,13 @@
 import { createContext, useContext, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
 import { useWordValidation } from "../hooks/wordValidation.js";
+import { useRoom } from "./roomContext.jsx";
 
 const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
-  const { roomCode } = useParams();
-
-  const [players, setPlayers] = useState([]);
+  const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
-  const [timeLeft, setTimeLeft] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(6000);
   const [gameStatus, setGameStatus] = useState("waiting"); // waiting, playing, finished
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
