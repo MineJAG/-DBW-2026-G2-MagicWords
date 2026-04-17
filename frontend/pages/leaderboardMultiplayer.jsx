@@ -11,11 +11,8 @@ export default function LeaderboardMultiplayer() {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-6 leaderboard-content-col">
             <div className="leaderboard-content">
-            <Leaderboard players = {[]}/>
-            <div className="leaderboard-content-text">
-              Placeholder
-              </div>
-           </div>
+              <Leaderboard />
+            </div>
           </div>
         </div>
       </div>
