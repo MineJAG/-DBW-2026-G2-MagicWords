@@ -1,28 +1,22 @@
+import { useGame } from "../context/gameContext.jsx";
+
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
 import Keyboard from "../components/keyboard.jsx";
-import { Icon } from "../components/icons.jsx";
-import { useGame } from "../context/gameContext.jsx";
+import Timer from "../components/timer.jsx";
+
 
 import "../styles/variable.css";
 import "../styles/scoreBoard.css";
 import "../styles/multiplayer.css";
 
 export default function Multiplayer() {
-  const players = [
-    { id: 1, name: "player1", score: 1234, avatar: null },
-    { id: 2, name: "player2", score: 1180, avatar: null },
-    { id: 3, name: "player3", score: 1102, avatar: null },
-    { id: 4, name: "player4", score: 945, avatar: null },
-    { id: 5, name: "player5", score: 880, avatar: null },
-    { id: 6, name: "player6", score: 810, avatar: null },
-  ];
-
-  const gameMode = "Multiplayer";
-  const timer = "10:00";
 
   const {
+    players,
     activeMasterWord,
+    timeLeft,
+    setTimeLeft,
     submittedWords,
     input,
     setWord,
@@ -45,11 +39,14 @@ export default function Multiplayer() {
               <div className="row g-3">
                 <div className="col-12">
                   <div className="multiplayer-status">
-                    <span className="multiplayer-status-mode">{gameMode}</span>
-                    <span className="multiplayer-status-time">
-                      <Icon className="multiplayer-status-icon" name="timer" />
-                      <span>{timer}</span>
-                    </span>
+                    <div className="multiplayer-status-mode">Multiplayer</div>
+                    <Timer
+                      className="multiplayer-status-time"
+                      iconClassName="multiplayer-status-icon"
+                      timeLeft={timeLeft}
+                      setTimeLeft={setTimeLeft}
+                      link="/leaderboard-multiplayer"
+                    />
                   </div>
                 </div>
 
@@ -66,15 +63,15 @@ export default function Multiplayer() {
                     </p>
                     <div className="multiplayer-written-list">
                       {submittedWords.length === 0 ? (
-                        <span className="multiplayer-written-chip">—</span>
+                        <div className="multiplayer-written-chip">_</div>
                       ) : (
                         submittedWords.map((writtenWord) => (
-                          <span
+                          <div
                             key={writtenWord}
                             className="multiplayer-written-chip"
                           >
                             {writtenWord}
-                          </span>
+                          </div>
                         ))
                       )}
                     </div>

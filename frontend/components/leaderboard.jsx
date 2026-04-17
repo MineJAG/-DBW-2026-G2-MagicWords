@@ -4,7 +4,16 @@ import { Icon } from "./icons.jsx";
 import "../styles/variable.css";
 import "../styles/leaderboard.css";
 
-export default function Leaderboard(players = []) {
+export default function Leaderboard({ players = [] }) {
+  const sortedPlayers = [...players].sort(
+    (firstPlayer, secondPlayer) =>
+      (secondPlayer.score ?? 0) - (firstPlayer.score ?? 0)
+  );
+
+  const second = sortedPlayers[1] ?? null;
+  const first = sortedPlayers[0] ?? null;
+  const third = sortedPlayers[2] ?? null;
+
   return (
     <div className="Leaderboard-box">
       <div className="row">
@@ -21,52 +30,52 @@ export default function Leaderboard(players = []) {
                   <div className="col-4 leaderboard-box-content-body-left">
                     <div className="leaderboard-box-content-body-left-player">
                       <div className="leaderboard-box-content-body-left-player-avatar">
-                        {players[0]?.avatar ? (
-                          <AvatarPreview src={players[0]?.avatar} />
+                        {second?.avatar ? (
+                          <AvatarPreview src={second.avatar} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-left-player-name">
-                        {players[0]?.name || "Player 1"}
+                        {second?.name || "Player 2"}
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-left-graybox">
-                      2ยบ
+                      2º
                     </div>
                   </div>
                   <div className="col-4 leaderboard-box-content-body-center">
                     <div className="leaderboard-box-content-body-center-player">
                       <div className="leaderboard-box-content-body-center-player-avatar">
-                        {players[1]?.avatar ? (
-                          <AvatarPreview src={players[1]?.avatar} />
+                        {first.avatar ? (
+                          <AvatarPreview src={first.avatar} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-center-player-name">
-                        {players[1]?.name || "Player 2"}
+                        {first.name || "Player 1"}
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-center-yellowbox">
-                      1ยบ
+                      1º
                     </div>
                   </div>
                   <div className="col-4 leaderboard-box-content-body-right">
                     <div className="leaderboard-box-content-body-right-player">
                       <div className="leaderboard-box-content-body-right-player-avatar">
-                        {players[2]?.avatar ? (
-                          <AvatarPreview src={players[2]?.avatar} />
+                        {third.avatar ? (
+                          <AvatarPreview src={third.avatar} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-right-player-name">
-                        {players[2]?.name || "Player 3"}
+                        {third.name || "Player 3"}
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-right-brownbox">
-                      3ยบ
+                      3º
                     </div>
                   </div>
                 </div>
