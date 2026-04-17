@@ -44,6 +44,8 @@ export default function Multiplayer() {
                       className="multiplayer-status-time"
                       iconClassName="multiplayer-status-icon"
                       timeLeft={timeLeft}
+                      setTimeLeft={setTimeLeft}
+                      link="/leaderboard-multiplayer"
                     />
                   </div>
                 </div>
