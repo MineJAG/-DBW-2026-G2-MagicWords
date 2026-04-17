@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import { useWordValidation } from "../hooks/wordValidation.js";
+import { calculateWordScore } from "../hooks/scoring.js";
 import { useRoom } from "./roomContext.jsx";
 
 const GameContext = createContext(null);
@@ -22,12 +23,27 @@ export function GameProvider({ children }) {
     const normalized = word.trim().toUpperCase();
     if (!normalized) return;
 
-    // TODO: backend goes here
+    // Skip duplicates without awarding points
+    let isDuplicate = false;
+    setSubmittedWords((prev) => {
+      if (prev.includes(normalized)) {
+        isDuplicate = true;
+        return prev;
+      }
+      return [...prev, normalized];
+    });
+    if (isDuplicate) return;
 
-    setSubmittedWords((prev) =>
-      prev.includes(normalized) ? prev : [...prev, normalized]
+    const points = calculateWordScore(normalized, timeLeft);
+
+    setPlayers((prev) =>
+      prev.map((player) =>
+        player.isHost
+          ? { ...player, score: (player.score ?? 0) + points }
+          : player
+      )
     );
-  }, []);
+  }, [timeLeft, setPlayers]);
 
   const onValid = useCallback((validWord) => {
     submitWord(validWord);
