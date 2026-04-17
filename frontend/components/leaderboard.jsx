@@ -32,7 +32,7 @@ export default function Leaderboard(players = []) {
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-left-graybox">
-                      2ยบ
+                      2º
                     </div>
                   </div>
                   <div className="col-4 leaderboard-box-content-body-center">
@@ -49,7 +49,7 @@ export default function Leaderboard(players = []) {
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-center-yellowbox">
-                      1ยบ
+                      1º
                     </div>
                   </div>
                   <div className="col-4 leaderboard-box-content-body-right">
@@ -66,7 +66,7 @@ export default function Leaderboard(players = []) {
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-right-brownbox">
-                      3ยบ
+                      3º
                     </div>
                   </div>
                 </div>
