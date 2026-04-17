@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useRoom } from "../context/roomContext.jsx";
 import { AvatarPreview } from "../components/avatar.jsx";
+import { useGame } from "../context/gameContext.jsx";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -12,6 +14,8 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const { room, roomPlayers } = useRoom();
+  const { setTimeLeft } = useGame();
+  const [minutes, setMinutes] = useState("10");
 
   return (
     <div className="waiting-room-page">
@@ -59,7 +63,25 @@ export default function WaitingRoom() {
                   </div>
                 ))}
                 <div className="col-12 timer">
-                  <input type="text" placeholder="10"/>
+                  <div className="timer-input-row">
+                    <input
+                      className="timer-input"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="10"
+                      value={minutes}
+                      onChange={(e) => setMinutes(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="timer-set-button"
+                      onClick={
+                      !minutes ? setTimeLeft(10 * 60) : setTimeLeft(Number(minutes) * 60)
+                      }
+                    >
+                      Set
+                    </button>
+                  </div>
                 </div>
                 <div className="col-12 startButton">
                   <Button link="/multiplayer" text="Create" onClick={() => {}} />
