@@ -1,3 +1,6 @@
+import { useRoom } from "../context/roomContext.jsx";
+import { AvatarPreview } from "../components/avatar.jsx";
+
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
 import Button from "../components/button.jsx";
@@ -5,24 +8,10 @@ import Button from "../components/button.jsx";
 import "../styles/variable.css";
 import "../styles/waitingroom.css";
 
-import { useState } from "react";
-import { AvatarPreview } from "../components/avatar.jsx";
+
 
 export default function WaitingRoom() {
-  const [roomCode] = useState("1234");
-
-  const [players] = useState([
-    {
-      name: "Player 1",
-      avatar: null,
-      isHost: true,
-    },
-    {
-      name: "Player 2",
-      avatar: null,
-      isHost: false,
-    },
-  ]);
+  const { room, roomPlayers } = useRoom();
 
   return (
     <div className="waiting-room-page">
@@ -30,12 +19,12 @@ export default function WaitingRoom() {
       <div className="container-fluid">
       <div className="row justify-content-center">
         <div className="col-12">
-          <h1 className="header">Waiting Room - {roomCode}</h1>
+          <h1 className="header">Waiting Room - {room} </h1>
 
           <div className="row justify-content-center">
             <div className="col-12 col-lg-6">
               <div className="player-list">
-                {players.map((player) => (
+                {roomPlayers.map((player) => (
                   <div key={player.name} className="player">
                     <div className="row align-items-center w-100">
                       <div className="col-3 col-md-2">
@@ -69,9 +58,11 @@ export default function WaitingRoom() {
                     </div>
                   </div>
                 ))}
-
+                <div className="col-12 timer">
+                  <input type="text" placeholder="10"/>
+                </div>
                 <div className="col-12 startButton">
-                  <Button link="/Multiplayer" text="Create" />
+                  <Button link="/multiplayer" text="Create" onClick={() => {}} />
                 </div>
               </div>
               </div>
