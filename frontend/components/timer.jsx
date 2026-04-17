@@ -1,14 +1,30 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "./icons.jsx";
+import { formatTimeLeft } from "./timer.js";
 
-function formatTimeLeft(timeLeft) {
-  const time = Math.max(0, Math.floor(Number(timeLeft) || 0));
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
+export default function Timer({
+  timeLeft,
+  setTimeLeft,
+  link = "/home",
+  className,
+  iconClassName,
+}) {
+  const navigate = useNavigate();
 
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-}
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      navigate(link, { replace: true });
+      return;
+    }
 
-export default function Timer({ timeLeft, className, iconClassName }) {
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft, navigate, setTimeLeft, link]);
+
   return (
     <div className={className}>
       <Icon className={iconClassName} name="timer" />
