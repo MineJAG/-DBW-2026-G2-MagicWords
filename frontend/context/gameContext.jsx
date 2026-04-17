@@ -7,7 +7,7 @@ const GameContext = createContext(null);
 export function GameProvider({ children }) {
   const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
-  const [timeLeft, setTimeLeft] = useState(6000);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [gameStatus, setGameStatus] = useState("waiting"); // waiting, playing, finished
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
