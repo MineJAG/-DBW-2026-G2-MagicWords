@@ -3,6 +3,7 @@ import Leaderboard from "../components/leaderboard.jsx";
 import "../styles/variable.css";
 import "../styles/leaderboardmultiplayer.css";
 import { useGame } from "../context/gameContext.jsx";
+import { Button } from "../components/button.jsx";
 
 
 export default function LeaderboardMultiplayer() {
@@ -19,6 +20,7 @@ export default function LeaderboardMultiplayer() {
             <div className="leaderboard-content">
               <Leaderboard players={players} />
             </div>
+              <Button link="/waitingroom" text="return to room" />
           </div>
         </div>
       </div>
