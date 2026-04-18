@@ -1,11 +1,13 @@
 @import "../styles/variable.css";
 
 .waiting-room-page{
-  height: 100vh;
+  min-height: 100vh;
   font-family: var(--font);
   color: var(--light-gray);
   background: url("../assets/images/game-background.png");
-  background-size: cover;
+    background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
 }
