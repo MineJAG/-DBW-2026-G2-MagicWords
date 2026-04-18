@@ -118,6 +118,11 @@
   font-size: 1.05rem;
 }
 
+.timer-set-button:hover {
+  background: yellowgreen;
+  color: black;
+}
+
 .player-not-host {
   color: red;
   cursor: pointer;
@@ -126,6 +131,13 @@
 .startButton {
   display: flex;
   justify-content: center;
+}
+
+.startButton a{
+  text-decoration: none;
+  color:  yellowgreen;
+  padding: 10px 28px;
+  font-size: 1.1rem;
 }
 .startButton button {
   text-decoration: none;
@@ -136,11 +148,18 @@
   padding: 10px 28px;
   font-size: 1.1rem;
 }
-
-
-.startButton a{
+.startButton button:hover{
   text-decoration: none;
-  color:  yellowgreen;
+  color:  black;
+  background: yellowgreen;
+  border: 1.5px var(--border-type) yellowgreen;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+}
+
+.startButton a:hover{
+  text-decoration: none;
+  color:  black;
   padding: 10px 28px;
   font-size: 1.1rem;
 }
