@@ -1,35 +1,22 @@
-import { useRef, useState } from "react";
+import useAvatar from "../hooks/changeAvatar.js";
 import { UploadButton } from "./button.jsx";
 import { Icon } from "./icons.jsx";
 
 export function Avatar({ src, alt = "Profile picture" }) {
-  const [user, setUser] = useState({ picture: src || null });
-  const [fileName, setFileName] = useState("");
-  const inputRef = useRef(null);
-
-  function handleFileChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setUser((prev) => ({ ...prev, picture: ev.target.result }));
-      setFileName(file.name);
-    };
-    reader.readAsDataURL(file);
-  }
+  const { picture, inputRef, handleFileChange, openFilePicker } = useAvatar(src);
 
   return (
-    <div className="avatar-wrapper">
-      <div className="avatar-circle" onClick={() => inputRef.current.click()}>
-        {user.picture ? (
-          <img src={user.picture} alt={alt} className="avatar-img" />
+    <div className="avatar-profile-size avatar-wrapper">
+      <div className="avatar-circle" onClick={openFilePicker}>
+        {picture ? (
+          <img src={picture} alt={alt} className="avatar-img" />
         ) : (
           <div className="avatar-fallback">
             <Icon name="anonymous" className="avatar-fallback-icon" />
           </div>
         )}
 
-        <UploadButton onClick={() => inputRef.current.click()} />
+        <UploadButton onClick={openFilePicker} />
       </div>
 
       <input
@@ -47,7 +34,7 @@ export function AvatarPreview({ src, alt = "Profile picture" }) {
   const isElement = typeof src === "object" && src !== null;
 
   return (
-    <div className="avatar-wrapper">
+    <div className="avatar-container-size avatar-wrapper">
       <div className="avatar-circle">
         {src ? (
           isElement ? (

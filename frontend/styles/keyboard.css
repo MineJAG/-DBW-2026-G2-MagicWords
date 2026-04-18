@@ -1,0 +1,53 @@
+.kb-wrapper {
+  display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  .kb-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin: 20px auto;
+  }
+
+  .kb-wrapper .row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+  }
+
+  .kb-wrapper .col-1 {
+    padding: 0;
+    width: auto;
+    flex: none;
+  }
+
+  .kb-key {
+    min-width: 55px;
+    height: 55px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--ink-black);
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 1px var(--border-type) var(--shadow-grey);
+    box-shadow: 0 4px 0 var(--space-indigo);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.05s, box-shadow 0.05s;
+  }
+
+  .kb-keyactive {
+    background: var(--light-purple);
+    color: var(--ink-black);
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--shadow-grey);
+  }
+}
