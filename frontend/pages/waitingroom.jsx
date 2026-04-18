@@ -14,8 +14,8 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const { room, roomPlayers } = useRoom();
-  const { setTimeLeft } = useGame();
-  const [minutes, setMinutes] = useState("10");
+  const { timeLeft, setTimeLeft } = useGame();
+  const [minutes, setMinutes] = useState(Math.round(timeLeft/60));
 
   return (
     <div className="waiting-room-page">
@@ -64,11 +64,12 @@ export default function WaitingRoom() {
                 ))}
                 <div className="col-12 timer">
                   <div className="timer-input-row">
+                    <div className="timer-label">Time(min):</div>
                     <input
                       className="timer-input"
                       type="text"
                       inputMode="numeric"
-                      placeholder="10"
+                      placeholder={timeLeft}
                       value={minutes}
                       onChange={(e) => setMinutes(e.target.value)}
                     />
@@ -84,7 +85,7 @@ export default function WaitingRoom() {
                   </div>
                 </div>
                 <div className="col-12 startButton">
-                  <Button link="/multiplayer" text="Create" onClick={() => {}} />
+                  <Button link="/multiplayer" text="Create" />
                 </div>
               </div>
               </div>
