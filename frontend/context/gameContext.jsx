@@ -8,6 +8,7 @@ const GameContext = createContext(null);
 export function GameProvider({ children }) {
   const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
+  const [timeMax, setTimeMax] = useState(600);
   const [timeLeft, setTimeLeft] = useState(600);
   const [gameStatus, setGameStatus] = useState("waiting"); // waiting, playing, finished
   const [winner, setWinner] = useState(null);
@@ -59,6 +60,8 @@ export function GameProvider({ children }) {
         masterWord,
         setMasterWord,
         activeMasterWord,
+        timeMax,
+        setTimeMax,
         timeLeft,
         setTimeLeft,
         gameStatus,
