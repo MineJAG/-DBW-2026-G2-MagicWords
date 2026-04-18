@@ -4,6 +4,7 @@ import { useGame } from "../context/gameContext.jsx";
 import Navbar from "../components/navbar.jsx";
 import { AvatarPreview } from "../components/avatar.jsx";
 import { Icon } from "../components/icons.jsx";
+import { Button } from "../components/button.jsx";
 
 import "../styles/variable.css";
 import "../styles/leaderboardSingleplayer.css";
@@ -54,6 +55,7 @@ export default function LeaderboardSinglePlayer() {
               ))}
             </div>
           </div>
+          <Button link="/home" text="return" />
         </div>
       </div>
     </div>
