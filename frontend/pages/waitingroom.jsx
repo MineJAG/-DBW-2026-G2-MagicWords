@@ -21,6 +21,7 @@ export default function WaitingRoom() {
     setTimeMax,
   } = useGame();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
+  const [timerError, setTimerError] = useState("");
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
@@ -81,23 +82,31 @@ export default function WaitingRoom() {
                       inputMode="numeric"
                       placeholder={String(timeMax / 60)}
                       value={minutes}
-                      onChange={(e) => setMinutes(e.target.value.replace(/\D/g, ""))}
+                      onChange={(e) => {
+                        setMinutes(e.target.value.replace(/\D/g, ""));
+                        setTimerError("");
+                      }}
                     />
                     <button
                       type="button"
                       className="timer-set-button"
-                      onClick={() =>
-                        setWaitingRoomTimer({
+                      onClick={() => {
+                        const error = setWaitingRoomTimer({
                           minutes,
                           setMinutes,
                           setTimeMax,
                           setTimeLeft,
-                        })
-                      }
+                        });
+
+                        setTimerError(error);
+                      }}
                     >
                       Set
                     </button>
                   </div>
+                  {timerError ? (
+                    <div className="text-danger mt-2">{timerError}</div>
+                  ) : null}
                 </div>
                 <div className="col-12 startButton">
                   <Button link="/multiplayer" text="Create" />
