@@ -3,7 +3,7 @@ import Leaderboard from "../components/leaderboard.jsx";
 import "../styles/variable.css";
 import "../styles/leaderboardmultiplayer.css";
 import { useGame } from "../context/gameContext.jsx";
-import { Button } from "../components/button.jsx";
+import Button from "../components/button.jsx";
 
 
 export default function LeaderboardMultiplayer() {
