@@ -54,9 +54,9 @@ export default function LeaderboardSinglePlayer() {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="col-12 return">
-            <Button link="/home" text="return" />
+            <div className="return">
+              <Button link="/home" text="return" />
+            </div>
           </div>
         </div>
       </div>
