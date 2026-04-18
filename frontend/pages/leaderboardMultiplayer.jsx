@@ -20,7 +20,9 @@ export default function LeaderboardMultiplayer() {
             <div className="leaderboard-content">
               <Leaderboard players={players} />
             </div>
+            <div className="return">
               <Button link="/waitingroom" text="return to room" />
+            </div>
           </div>
         </div>
       </div>
