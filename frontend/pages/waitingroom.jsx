@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRoom } from "../context/roomContext.jsx";
 import { AvatarPreview } from "../components/avatar.jsx";
 import { useGame } from "../context/gameContext.jsx";
+import { setWaitingRoomTimer } from "../hooks/timeSetter.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -14,8 +15,17 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const { room, roomPlayers } = useRoom();
-  const { timeLeft, setTimeLeft } = useGame();
-  const [minutes, setMinutes] = useState(Math.round(timeLeft/60));
+  const {
+    setTimeLeft,
+    timeMax,
+    setTimeMax,
+  } = useGame();
+  const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
+
+  useEffect(() => {
+    setMinutes(String(Math.round(timeMax / 60)));
+    setTimeLeft(timeMax);
+  }, [setTimeLeft, timeMax]);
 
   return (
     <div className="waiting-room-page">
@@ -69,15 +79,20 @@ export default function WaitingRoom() {
                       className="timer-input"
                       type="text"
                       inputMode="numeric"
-                      placeholder={timeLeft}
+                      placeholder={String(timeMax / 60)}
                       value={minutes}
-                      onChange={(e) => setMinutes(e.target.value)}
+                      onChange={(e) => setMinutes(e.target.value.replace(/\D/g, ""))}
                     />
                     <button
                       type="button"
                       className="timer-set-button"
-                      onClick={
-                      !minutes ? setTimeLeft(10 * 60) : setTimeLeft(Number(minutes) * 60)
+                      onClick={() =>
+                        setWaitingRoomTimer({
+                          minutes,
+                          setMinutes,
+                          setTimeMax,
+                          setTimeLeft,
+                        })
                       }
                     >
                       Set
