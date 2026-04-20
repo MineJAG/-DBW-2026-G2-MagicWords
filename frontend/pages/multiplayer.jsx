@@ -15,8 +15,7 @@ export default function Multiplayer() {
   const {
     players,
     activeMasterWord,
-    timeLeft,
-    setTimeLeft,
+    timerEnd,
     submittedWords,
     input,
     setWord,
@@ -43,8 +42,7 @@ export default function Multiplayer() {
                     <Timer
                       className="multiplayer-status-time"
                       iconClassName="multiplayer-status-icon"
-                      timeLeft={timeLeft}
-                      setTimeLeft={setTimeLeft}
+                      timerEnd={timerEnd}
                       link="/leaderboard-multiplayer"
                     />
                   </div>
