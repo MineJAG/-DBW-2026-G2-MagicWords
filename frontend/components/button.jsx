@@ -9,6 +9,25 @@ export default function Button({ link, text }) {
   );
 }
 
+export function ClickableButton({
+  onClick,
+  text,
+  type = "button",
+  className,
+  disabled = false,
+}) {
+  return (
+    <button
+      type={type}
+      className={className}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {text}
+    </button>
+  );
+}
+
 export function UploadButton({ onClick }) {
   return (
     /* stopPropagation so to not escape to the parents */
