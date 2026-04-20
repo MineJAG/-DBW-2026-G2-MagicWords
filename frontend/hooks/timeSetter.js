@@ -1,8 +1,8 @@
 export function validateWaitingRoomTimer(minutes) {
   const parsedMinutes = Number(minutes);
 
-  if (!Number.isFinite(parsedMinutes) || parsedMinutes <= 1) {
-    return "Enter a number greater than 1.";
+  if (!Number.isFinite(parsedMinutes) || parsedMinutes < 1) {
+    return "Enter a number equal to or greater than 1.";
   }
 
   return "";
@@ -12,7 +12,6 @@ export function setWaitingRoomTimer({
   minutes,
   setMinutes,
   setTimeMax,
-  setTimeLeft,
 }) {
   const validationError = validateWaitingRoomTimer(minutes);
   if (validationError) {
@@ -24,7 +23,6 @@ export function setWaitingRoomTimer({
 
   setMinutes(String(nextMinutes));
   setTimeMax(nextTime);
-  setTimeLeft(nextTime);
 
   return "";
 }
