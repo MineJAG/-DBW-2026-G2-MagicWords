@@ -1,3 +1,5 @@
+"use strict";
+
 export function validateWaitingRoomTimer(minutes) {
   const parsedMinutes = Number(minutes);
 

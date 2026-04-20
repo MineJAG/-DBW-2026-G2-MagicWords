@@ -1,3 +1,5 @@
+"use strict";
+
 import { useState, useRef, useEffect } from "react";
 import { profileValidation } from "./profileValidation.js";
 

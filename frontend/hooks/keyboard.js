@@ -1,3 +1,5 @@
+"use strict";
+
 import { useState, useEffect } from "react";
 
 const Mapping = { //TODO: i think i can make this better in the future

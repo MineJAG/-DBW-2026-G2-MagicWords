@@ -1,3 +1,5 @@
+"use strict";
+
 import { useEffect, useState } from "react";
 
 export function formatTimeLeft(timeLeft) {
