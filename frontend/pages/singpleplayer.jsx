@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGame } from "../context/gameContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 
@@ -15,8 +16,8 @@ export default function Singleplayer() {
   const {
     players,
     activeMasterWord,
-    timeLeft,
-    setTimeLeft,
+    timerEnd,
+    resetTimer,
     submittedWords,
     input,
     setWord,
@@ -25,6 +26,12 @@ export default function Singleplayer() {
     onValid,
   } = useGame();
   const { user } = useUser();
+
+  useEffect(() => {
+    return () => {
+      resetTimer();
+    };
+  }, []);
 
   const activePlayer = players.find((player) => player.isHost) ?? players[0];
   const singleplayerScoreboard = [
@@ -54,8 +61,7 @@ export default function Singleplayer() {
                     <Timer
                       className="multiplayer-status-time"
                       iconClassName="multiplayer-status-icon"
-                      timeLeft={timeLeft}
-                      setTimeLeft={setTimeLeft}
+                      timerEnd={timerEnd}
                       link="/leaderboard-singleplayer"
                     />
                   </div>
