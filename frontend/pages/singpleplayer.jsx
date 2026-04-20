@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGame } from "../context/gameContext.jsx";
 import { useUser } from "../context/userContext.jsx";
+import { resetChangeCount, startWordChangeInterval }  from "../hooks/wordChange.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -15,9 +16,11 @@ export default function Singleplayer() {
     //TODO: placeholders to reutilize placeholder code, change later
   const {
     players,
-    activeMasterWord,
+    masterWord,
     timerEnd,
+    timeMax,
     resetTimer,
+    changeWord,
     submittedWords,
     input,
     setWord,
@@ -26,6 +29,26 @@ export default function Singleplayer() {
     onValid,
   } = useGame();
   const { user } = useUser();
+  const changeCount = useRef(0);
+
+  useEffect(() => {
+    if (timerEnd == null) {
+      resetChangeCount(changeCount);
+      return undefined;
+    }
+
+    const wordChangeInterval = startWordChangeInterval({
+      timerEnd,
+      timeMax,
+      changeCount,
+      changeWord,
+    });
+
+    return () => {
+      clearInterval(wordChangeInterval);
+      resetChangeCount(changeCount);
+    };
+  }, [timerEnd, timeMax]);
 
   useEffect(() => {
     return () => {
@@ -69,7 +92,7 @@ export default function Singleplayer() {
 
                 <div className="col-12">
                   <div className="multiplayer-center">
-                    <h1 className="multiplayer-word">{activeMasterWord}</h1>
+                    <h1 className="multiplayer-word">{masterWord}</h1>
                   </div>
                 </div>
 
