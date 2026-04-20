@@ -17,9 +17,7 @@ export function GameProvider({ children }) {
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
   const [submittedWords, setSubmittedWords] = useState([]);
 
-  const activeMasterWord = "WORD";
-
-  const { word: input, setWord, errors, handleSubmit } = useWordValidation(activeMasterWord);
+  const { word: input, setWord, errors, handleSubmit } = useWordValidation(masterWord);
 
   const submitWord = useCallback((word) => {
     if (!word) return;
@@ -68,6 +66,17 @@ export function GameProvider({ children }) {
   function resetTimer() {
     setTimeStarted(null);
     setTimerEnd(null);
+    setMasterWord("");
+  }
+
+  function changeWord(changeCount = 0) {
+    if (changeCount <= 0) {
+      setMasterWord("");
+      return;
+    }
+
+    // TODO: check this later
+    setMasterWord(`WORD${changeCount}`);
   }
 
   return (
@@ -77,8 +86,6 @@ export function GameProvider({ children }) {
         players,
         setPlayers,
         masterWord,
-        setMasterWord,
-        activeMasterWord,
         timeMax,
         setTimeMax,
         timeStarted,
@@ -87,6 +94,7 @@ export function GameProvider({ children }) {
         setTimerEnd,
         startTimer,
         resetTimer,
+        changeWord,
         gameStatus,
         setGameStatus,
         winner,
