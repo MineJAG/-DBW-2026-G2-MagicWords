@@ -1,3 +1,5 @@
+"use strict";
+
 const THEME_KEY = "theme";
 
 export default function initializeTheme() {

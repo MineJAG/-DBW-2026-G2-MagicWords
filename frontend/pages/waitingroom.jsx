@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
 import { AvatarPreview } from "../components/avatar.jsx";
 import { useGame } from "../context/gameContext.jsx";
@@ -6,7 +7,7 @@ import { setWaitingRoomTimer } from "../hooks/timeSetter.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
-import Button from "../components/button.jsx";
+import { ClickableButton } from "../components/button.jsx";
 
 import "../styles/variable.css";
 import "../styles/waitingroom.css";
@@ -14,19 +15,24 @@ import "../styles/waitingroom.css";
 
 
 export default function WaitingRoom() {
+  const navigate = useNavigate();
   const { room, roomPlayers } = useRoom();
   const {
-    setTimeLeft,
     timeMax,
     setTimeMax,
+    resetTimer,
+    startTimer,
   } = useGame();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
-    setTimeLeft(timeMax);
-  }, [setTimeLeft, timeMax]);
+  }, [timeMax]);
+
+  useEffect(() => {
+    resetTimer();
+  }, []);
 
   return (
     <div className="waiting-room-page">
@@ -95,7 +101,6 @@ export default function WaitingRoom() {
                           minutes,
                           setMinutes,
                           setTimeMax,
-                          setTimeLeft,
                         });
 
                         setTimerError(error);
@@ -109,7 +114,15 @@ export default function WaitingRoom() {
                   ) : null}
                 </div>
                 <div className="col-12 startButton">
-                  <Button link="/multiplayer" text="Create" />
+                  <ClickableButton
+                    onClick={() => {
+                      setTimerError("");
+                      resetTimer();
+                      startTimer();
+                      navigate("/multiplayer");
+                    }}
+                    text="Create"
+                  />
                 </div>
               </div>
               </div>

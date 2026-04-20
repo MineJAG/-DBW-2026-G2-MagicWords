@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+import { useGame } from "../context/gameContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 
 import Navbar from "../components/navbar.jsx";
@@ -14,12 +15,20 @@ import "../styles/index.css";
 
 export default function Index() {
   const { user } = useUser();
+  const { resetTimer, setTimeMax, startTimer } = useGame();
   const [showCodeModal, setShowCodeModal] = useState(false);
   const navigate = useNavigate();
 
   function handleCodeSuccess(code) {
     setShowCodeModal(false);
     navigate("/waitingroom");
+  }
+
+  function handleSingleplayerStart() {
+    setTimeMax(600);
+    resetTimer();
+    startTimer(600);
+    navigate("/singleplayer");
   }
 
   return (
@@ -68,12 +77,21 @@ export default function Index() {
             </Link>
 
             <div className="mode-cluster">
-              <Link to="/SinglePlayer">
-                <div className="mode-circle mode-circle-sm">
-                  <Icon className="mode-icon-box" name="singleplayer" />
-                  <span className="mode-label">Singleplayer</span>
-                </div>
-              </Link>
+              <div
+                className="mode-circle mode-circle-sm"
+                onClick={handleSingleplayerStart}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleSingleplayerStart();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <Icon className="mode-icon-box" name="singleplayer" />
+                <span className="mode-label">Singleplayer</span>
+              </div>
               <Link to="/WaitingRoom">
                 <div className="mode-circle mode-circle-sm mode-cluster-middle">
                   <Icon className="mode-icon-box" name="home" />
@@ -144,7 +162,7 @@ export default function Index() {
                   <ul>
                     <li>Letters must exist in the word.</li>
                     <li>Words must exist in the dictionary.</li>
-                    <li>There is no time limit.</li>
+                    <li>There is a 10-minute time limit.</li>
                     <li>Longer words give more points.</li>
                   </ul>
                   <h4>Objective</h4>

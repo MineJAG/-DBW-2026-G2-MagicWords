@@ -1,3 +1,5 @@
+"use strict";
+
 import { useRef, useState } from "react";
 
 export default function useAvatar(initialSrc = null) {

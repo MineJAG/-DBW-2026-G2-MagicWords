@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import { useWordValidation } from "../hooks/wordValidation.js";
 import { calculateWordScore } from "../hooks/scoring.js";
+import { getTimeLeft, getTimerEnd } from "../hooks/timer.js";
 import { useRoom } from "./roomContext.jsx";
 
 const GameContext = createContext(null);
@@ -9,15 +10,14 @@ export function GameProvider({ children }) {
   const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
   const [timeMax, setTimeMax] = useState(600);
-  const [timeLeft, setTimeLeft] = useState(600);
+  const [timeStarted, setTimeStarted] = useState(null);
+  const [timerEnd, setTimerEnd] = useState(null);
   const [gameStatus, setGameStatus] = useState("waiting"); // waiting, playing, finished
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
   const [submittedWords, setSubmittedWords] = useState([]);
 
-  const activeMasterWord = "WORD";
-
-  const { word: input, setWord, errors, handleSubmit } = useWordValidation(activeMasterWord);
+  const { word: input, setWord, errors, handleSubmit } = useWordValidation(masterWord);
 
   const submitWord = useCallback((word) => {
     if (!word) return;
@@ -35,7 +35,11 @@ export function GameProvider({ children }) {
     });
     if (isDuplicate) return;
 
-    const points = calculateWordScore(normalized, timeLeft);
+    const points = calculateWordScore(
+      normalized,
+      getTimeLeft(timerEnd),
+      { totalTime: timeMax }
+    );
 
     setPlayers((prev) =>
       prev.map((player) =>
@@ -44,12 +48,36 @@ export function GameProvider({ children }) {
           : player
       )
     );
-  }, [timeLeft, setPlayers]);
+  }, [timeMax, timerEnd, setPlayers]);
 
   const onValid = useCallback((validWord) => {
     submitWord(validWord);
     setWord("");
   }, [submitWord, setWord]);
+
+  function startTimer(duration = timeMax) {
+    const nextTimeStarted = Date.now();
+    const nextTimerEnd = getTimerEnd(nextTimeStarted, duration);
+
+    setTimeStarted(nextTimeStarted);
+    setTimerEnd(nextTimerEnd);
+  }
+
+  function resetTimer() {
+    setTimeStarted(null);
+    setTimerEnd(null);
+    setMasterWord("");
+  }
+
+  function changeWord(changeCount = 0) {
+    if (changeCount <= 0) {
+      setMasterWord("");
+      return;
+    }
+
+    // TODO: check this later
+    setMasterWord(`WORD${changeCount}`);
+  }
 
   return (
     <GameContext.Provider
@@ -58,12 +86,15 @@ export function GameProvider({ children }) {
         players,
         setPlayers,
         masterWord,
-        setMasterWord,
-        activeMasterWord,
         timeMax,
         setTimeMax,
-        timeLeft,
-        setTimeLeft,
+        timeStarted,
+        setTimeStarted,
+        timerEnd,
+        setTimerEnd,
+        startTimer,
+        resetTimer,
+        changeWord,
         gameStatus,
         setGameStatus,
         winner,

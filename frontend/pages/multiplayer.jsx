@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { useGame } from "../context/gameContext.jsx";
+import { resetChangeCount, startWordChangeInterval } from "../hooks/wordChange.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -14,9 +16,10 @@ export default function Multiplayer() {
 
   const {
     players,
-    activeMasterWord,
-    timeLeft,
-    setTimeLeft,
+    masterWord,
+    timerEnd,
+    timeMax,
+    changeWord,
     submittedWords,
     input,
     setWord,
@@ -24,6 +27,26 @@ export default function Multiplayer() {
     handleSubmit,
     onValid,
   } = useGame();
+  const changeCount = useRef(0);
+
+  useEffect(() => {
+    if (timerEnd == null) {
+      resetChangeCount(changeCount);
+      return undefined;
+    }
+
+    const wordChangeInterval = startWordChangeInterval({
+      timerEnd,
+      timeMax,
+      changeCount,
+      changeWord,
+    });
+
+    return () => {
+      clearInterval(wordChangeInterval);
+      resetChangeCount(changeCount);
+    };
+  }, [timerEnd, timeMax]);
 
   return (
     <div className="multiplayer-page">
@@ -43,8 +66,7 @@ export default function Multiplayer() {
                     <Timer
                       className="multiplayer-status-time"
                       iconClassName="multiplayer-status-icon"
-                      timeLeft={timeLeft}
-                      setTimeLeft={setTimeLeft}
+                      timerEnd={timerEnd}
                       link="/leaderboard-multiplayer"
                     />
                   </div>
@@ -52,7 +74,7 @@ export default function Multiplayer() {
 
                 <div className="col-12">
                   <div className="multiplayer-center">
-                    <h1 className="multiplayer-word">{activeMasterWord}</h1>
+                    <h1 className="multiplayer-word">{masterWord}</h1>
                   </div>
                 </div>
 

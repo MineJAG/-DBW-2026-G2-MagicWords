@@ -1,29 +1,22 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./icons.jsx";
-import { formatTimeLeft } from "../hooks/timer.js";
+import { countdown, formatTimeLeft } from "../hooks/timer.js";
 
 export default function Timer({
-  timeLeft,
-  setTimeLeft,
+  timerEnd,
   link = "/home",
   className,
   iconClassName,
 }) {
   const navigate = useNavigate();
+  const timeLeft = countdown({ timerEnd });
 
   useEffect(() => {
-    if (timeLeft <= 0) {
+    if (timerEnd && timeLeft === 0) {
       navigate(link, { replace: true });
-      return;
     }
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => Math.max(0, prev - 1));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timeLeft, navigate, setTimeLeft, link]);
+  }, [timerEnd, timeLeft, navigate, link]);
 
   return (
     <div className={className}>
