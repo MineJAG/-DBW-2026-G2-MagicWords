@@ -22,6 +22,7 @@ export default function Singleplayer() {
     resetTimer,
     changeWord,
     submittedWords,
+    word,
     input,
     setWord,
     errors,
@@ -30,6 +31,10 @@ export default function Singleplayer() {
   } = useGame();
   const { user } = useUser();
   const changeCount = useRef(0);
+
+  useEffect(() => {
+    input.current?.focus();
+  }, [input]);
 
   useEffect(() => {
     if (timerEnd == null) {
@@ -121,9 +126,11 @@ export default function Singleplayer() {
                 <div className="col-12">
                   <form onSubmit={(e) => handleSubmit(e, onValid)}>
                     <input
+                      ref={input}
+                      autoFocus
                       className="multiplayer-input"
                       type="text"
-                      value={input}
+                      value={word}
                       onChange={(e) => setWord(e.target.value)}
                       placeholder="Type your word here"
                     />
