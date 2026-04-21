@@ -1,6 +1,7 @@
 "use strict";
 
 import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 async function connectDB() {
     const uri = process.env.MONGODB_URI;
