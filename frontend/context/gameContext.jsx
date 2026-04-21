@@ -69,14 +69,9 @@ export function GameProvider({ children }) {
     setMasterWord("");
   }
 
-  function changeWord(changeCount = 0) {
-    if (changeCount <= 0) {
-      setMasterWord("");
-      return;
-    }
-
-    // TODO: check this later
-    setMasterWord(`WORD${changeCount}`);
+  function changeWord(changeCount = 1) {
+    const nextWordNumber = Math.max(1, changeCount);
+    setMasterWord(`WORD${nextWordNumber}`);
   }
 
   return (
