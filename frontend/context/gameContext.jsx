@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useRef } from "react";
 import { useWordValidation } from "../hooks/wordValidation.js";
 import { calculateWordScore } from "../hooks/scoring.js";
 import { getTimeLeft, getTimerEnd } from "../hooks/timer.js";
@@ -16,8 +16,9 @@ export function GameProvider({ children }) {
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
   const [submittedWords, setSubmittedWords] = useState([]);
+  const input = useRef(null);
 
-  const { word: input, setWord, errors, handleSubmit } = useWordValidation(masterWord);
+  const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord);
 
   const submitWord = useCallback((word) => {
     if (!word) return;
@@ -99,6 +100,7 @@ export function GameProvider({ children }) {
         submittedWords,
         setSubmittedWords,
         submitWord,
+        word,
         input,
         setWord,
         errors,
