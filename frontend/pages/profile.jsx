@@ -175,6 +175,11 @@ export default function Profile() {
               />
             </div>
           </div>
+          <div className="m-top text-center pb-5">
+            <button className="logout-btn">
+              Log Out
+            </button>
+          </div>
         </div>
       </div>
     </>
