@@ -1,7 +1,12 @@
 "use strict";
+
+import { api } from "../lib/api.js";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function signInFormValidation() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,12 +47,26 @@ export function signInFormValidation() {
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const validationErrors = validate();
     setErrors(validationErrors);
-  }
 
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      const data = await api.register({ username, email, password });
+      navigate("/");
+    } catch (e) {
+      if (e.status === 409) {
+        setErrors(e.errors);
+      } else {
+        //setErrors({ form: "Something went wrong. Try again." });
+      }
+
+    }
+  }
   return {
     username, setUsername,
     email, setEmail,

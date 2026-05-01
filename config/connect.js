@@ -1,28 +1,11 @@
 "use strict";
 
-import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
 
 async function connectDB() {
-    const uri = process.env.MONGODB_URI;
-    const client = new MongoClient(uri);
-    try {
-        await client.connect();
-        await dblist(client);
-        console.log("Connected to MongoDB");
-    } catch (e) {
-        console.error(e);
-    } finally {
-        await client.close();
-    }
-}
-
-async function dblist(client) {
-    const list = await client.db().admin().listDatabases();
-    console.log("databases:");
-    list.databases.forEach(db => {
-        console.log(`- ${db.name}`);
-    });
+  const uri = process.env.MONGODB_URI;
+  await mongoose.connect(uri);
+  console.log("Connected to MongoDB");
 }
 
 export default connectDB;
