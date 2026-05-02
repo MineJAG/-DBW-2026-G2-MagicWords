@@ -1,7 +1,14 @@
 "use strict";
+
+import { api } from "../lib/api.js";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/userContext.jsx";
 
 export function signUpFormValidation() {
+  const navigate = useNavigate();
+  const { setUser } = useUser();
+
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -18,16 +25,31 @@ export function signUpFormValidation() {
     } else if (usernameOrEmail.length < 5 || usernameOrEmail.length > 20) {
       newErrors.usernameOrEmail = "Username must be between 5 and 20 characters.";
     }
+
     if (!password) {
       newErrors.password = "Password is required.";
     }
 
     return newErrors;
   }
-  function handleSubmit(e) {
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    const validateErrors = validate();
-    setErrors(validateErrors);
+
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      const data = await api.login({ usernameOrEmail, password });
+      setUser(data);
+      navigate("/home", { replace: true });
+    } catch (e) {
+      if (e.status === 401 || e.status === 400) {
+        setErrors(e.errors);
+      }
+    }
   }
 
   return {

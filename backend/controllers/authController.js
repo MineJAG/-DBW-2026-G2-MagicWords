@@ -67,6 +67,53 @@ export async function register(req, res) {
   }
 }
 
+export async function login(req, res) {
+  const usernameOrEmail = String(req.body.usernameOrEmail ?? "").trim();
+  const password = String(req.body.password ?? "");
+
+  if (!usernameOrEmail) {
+    return res
+      .status(400)
+      .json({ errors: { usernameOrEmail: "Username or email is required." } });
+  }
+
+  if (!password) {
+    return res.status(400).json({ errors: { password: "Password is required." } });
+  }
+
+  try {
+    const isEmail = usernameOrEmail.includes("@");
+    const query = isEmail
+      ? { email: usernameOrEmail.toLowerCase() }
+      : { username: usernameOrEmail };
+
+    const user = await User.findOne(query);
+    if (!user) {
+      return res
+        .status(401)
+        .json({ errors: { usernameOrEmail: "Invalid username/email or password." } });
+    }
+
+    const ok = await bcrypt.compare(password, user.passwordHash);
+    if (!ok) {
+      return res
+        .status(401)
+        .json({ errors: { usernameOrEmail: "Invalid username/email or password." } });
+    }
+
+    setAuthCookie(res, user._id);
+
+    res.status(200).json({
+      name: user.username,
+      picture: user.picture,
+      stats: user.stats,
+    });
+  } catch (e) {
+    console.error("Login error:", e);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
 export async function logout(req, res) {
   clearAuthCookie(res);
   res.status(200).json({ ok: true });
