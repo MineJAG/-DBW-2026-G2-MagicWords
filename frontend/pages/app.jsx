@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import ContextProvider from "../context/contextProvider.jsx";
 import ProtectedRoute from "./protectedRoute.jsx";
+import PublicOnlyRoute from "./publicOnlyRoutes.jsx";
 
 import Index from "./index.jsx";
 import Signup from "./signup.jsx";
@@ -20,28 +21,72 @@ export default function App() {
         {/* public */}
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Index />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route
+          path="/signup"
+          element={
+            <PublicOnlyRoute>
+              <Signup />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <PublicOnlyRoute>
+              <Signin />
+            </PublicOnlyRoute>
+          }
+        />
 
         {/* protected — need to be logged in */}
-        <Route path="/waitingroom" element={
-          <ProtectedRoute><WaitingRoom /></ProtectedRoute>
-        } />
-        <Route path="/multiplayer" element={
-          <ProtectedRoute><Multiplayer /></ProtectedRoute>
-        } />
-        <Route path="/singleplayer" element={
-          <ProtectedRoute><Singleplayer /></ProtectedRoute>
-        } />
-        <Route path="/profile" element={
-          <ProtectedRoute><Profile /></ProtectedRoute>
-        } />
-        <Route path="/leaderboard-multiplayer" element={
-          <ProtectedRoute><LeaderboardMultiplayer /></ProtectedRoute>
-        } />
-        <Route path="/leaderboard-singleplayer" element={
-          <ProtectedRoute><LeaderboardSingleplayer /></ProtectedRoute>
-        } />
+        <Route
+          path="/waitingroom"
+          element={
+            <ProtectedRoute>
+              <WaitingRoom />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/multiplayer"
+          element={
+            <ProtectedRoute>
+              <Multiplayer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/singleplayer"
+          element={
+            <ProtectedRoute>
+              <Singleplayer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leaderboard-multiplayer"
+          element={
+            <ProtectedRoute>
+              <LeaderboardMultiplayer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leaderboard-singleplayer"
+          element={
+            <ProtectedRoute>
+              <LeaderboardSingleplayer />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </ContextProvider>
   );
