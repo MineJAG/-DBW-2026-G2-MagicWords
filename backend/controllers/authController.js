@@ -10,34 +10,38 @@ export async function register(req, res) {
   const password = String(req.body.password ?? "");
 
   if (!username) {
-    return res.status(400).json({ error: "Username is required" });
+    return res
+      .status(400)
+      .json({ errors: { username: "Username is required." } });
   } else if (username.length < 5 || username.length > 20) {
     return res.status(400).json({
-      error: "Username must be between 5 and 20 characters.",
+      errors: { username: "Username must be between 5 and 20 characters." },
     });
   } else if (/[^a-zA-Z0-9]/.test(username)) {
     return res.status(400).json({
-      error: "Username cannot contain special characters.",
+      errors: { username: "Username cannot contain special characters." },
     });
   }
 
   if (!email) {
-    return res.status(400).json({ error: "Email is required." });
+    return res.status(400).json({ errors: { email: "Email is required." } });
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res
       .status(400)
-      .json({ error: "Please enter a valid email address." });
+      .json({ errors: { email: "Please enter a valid email address." } });
   }
 
   if (!password) {
-    return res.status(400).json({ error: "Password is required." });
+    return res
+      .status(400)
+      .json({ errors: { password: "Password is required." } });
   } else if (password.length < 6 || password.length > 12) {
     return res.status(400).json({
-      error: "Password must be between 6 and 12 characters.",
+      errors: { password: "Password must be between 6 and 12 characters." },
     });
   } else if (!/\d/.test(password)) {
     return res.status(400).json({
-      error: "Password must include at least one number.",
+      errors: { password: "Password must include at least one number." },
     });
   }
 
@@ -75,6 +79,16 @@ export async function login(req, res) {
     return res
       .status(400)
       .json({ errors: { usernameOrEmail: "Username or email is required." } });
+  } else if (usernameOrEmail.includes("@")) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail)) {
+      return res
+        .status(400)
+        .json({ errors: { usernameOrEmail: "Please enter a valid email address." } });
+    }
+  } else if (usernameOrEmail.length < 5 || usernameOrEmail.length > 20) {
+    return res
+      .status(400)
+      .json({ errors: { usernameOrEmail: "Username must be between 5 and 20 characters." } });
   }
 
   if (!password) {
@@ -89,16 +103,15 @@ export async function login(req, res) {
 
     const user = await User.findOne(query);
     if (!user) {
-      return res
-        .status(401)
-        .json({ errors: { usernameOrEmail: "Invalid username/email or password." } });
+      const message = isEmail ? "Email not found." : "Username not found.";
+      return res.status(401).json({ errors: { usernameOrEmail: message } });
     }
 
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) {
       return res
         .status(401)
-        .json({ errors: { usernameOrEmail: "Invalid username/email or password." } });
+        .json({ errors: { password: "Password does not match." } });
     }
 
     setAuthCookie(res, user._id);
@@ -137,8 +150,18 @@ export async function updateUsername(req, res) {
   }
 
   try {
+    const current = await User.findById(userId);
+    if (!current) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    if (current.username === username) {
+      return res.status(400).json({
+        errors: { username: "New username must be different from current." },
+      });
+    }
+
     const existing = await User.findOne({ username });
-    if (existing && existing._id.toString() !== userId) {
+    if (existing) {
       return res
         .status(409)
         .json({ errors: { username: "Username already taken." } });

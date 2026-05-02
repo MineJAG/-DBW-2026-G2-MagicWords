@@ -62,7 +62,7 @@ export function signUpFormValidation() {
       setUser(data);
       navigate("/home", { replace: true });
     } catch (e) {
-      if (e.status === 409) {
+      if (e.status === 409 || e.status === 400) {
         setErrors(e.errors);
       }
     }
