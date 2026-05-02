@@ -2,7 +2,7 @@
 
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
-import { readAuthCookie, setAuthCookie } from "../utils/authCookies.js";
+import { clearAuthCookie, readAuthCookie, setAuthCookie } from "../utils/authCookies.js";
 
 export async function register(req, res) {
   const username = String(req.body.username ?? "").trim();
@@ -65,6 +65,11 @@ export async function register(req, res) {
     console.error("Register error:", e);
     res.status(500).json({ error: "Server error" });
   }
+}
+
+export async function logout(req, res) {
+  clearAuthCookie(res);
+  res.status(200).json({ ok: true });
 }
 
 export async function me(req, res) {

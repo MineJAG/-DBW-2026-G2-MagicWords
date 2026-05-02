@@ -1,4 +1,5 @@
 import { changeUsername } from "../hooks/changeUsername.js";
+import { useLogout } from "../hooks/logout.js";
 
 import { useUser } from "../context/userContext.jsx";
 
@@ -14,6 +15,7 @@ import "../styles/profile.css";
 
 export default function Profile() {
   const { user } = useUser();
+  const { handleLogout } = useLogout();
 
   const {
     isEditingName,
@@ -176,7 +178,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="m-top text-center pb-5">
-            <button className="logout-btn">
+            <button className="logout-btn" onClick={handleLogout}>
               Log Out
             </button>
           </div>

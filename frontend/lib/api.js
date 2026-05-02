@@ -27,4 +27,6 @@ export const api = {
     request("/auth/register", { method: "POST", body: payload }),
   me: () =>
     request("/auth/me"),
+  logout: () =>
+    request("/auth/logout", { method: "POST" }),
 };
