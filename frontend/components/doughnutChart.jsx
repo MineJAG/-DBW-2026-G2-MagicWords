@@ -9,6 +9,10 @@ export default function DoughnutChart({ stats }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
+  const won = stats?.gamesWon ?? 0;
+  const lost = stats?.gamesLost ?? 0;
+  const hasData = won + lost > 0;
+
   const options = {
     cutout: "65%",
     maintainAspectRatio: false,
@@ -19,17 +23,22 @@ export default function DoughnutChart({ stats }) {
           color: isDark ? "#e2e2e2" : "#11111b",
         },
       },
+      tooltip: {
+        enabled: hasData,
+      },
     },
   };
 
   const data = {
-    labels: ["Won", "Lost"],
+    labels: hasData ? ["Won", "Lost"] : ["No games yet"],
     datasets: [
       {
-        data: [stats?.gamesWon ?? 0, stats?.gamesLost ?? 0],
-        backgroundColor: ["#7c83ff", "#c678dd"],
+        data: hasData ? [won, lost] : [1],
+        backgroundColor: hasData
+          ? ["#7c83ff", "#c678dd"]
+          : [isDark ? "#45475a" : "#d8d8d8"],
         borderWidth: 2,
-        hoverOffset: 10,
+        hoverOffset: hasData ? 10 : 0,
         borderColor: isDark ? "#313244" : "#ffffff",
       },
     ],

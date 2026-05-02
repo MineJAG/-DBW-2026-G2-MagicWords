@@ -27,6 +27,11 @@ export default function RadarChart({ stats }) {
   const textColor = isDark ? "#e2e2e2" : "#11111b";
   const gridColor = isDark ? "#313244" : "#c8c8c8";
 
+  const mostWords = stats?.mostWordsInOneMatch ?? 0;
+  const avgLen = stats?.averageWordLength ?? 0;
+  const longest = stats?.longestStreak ?? 0;
+  const hasData = mostWords + avgLen + longest > 0;
+
   const options = {
     maintainAspectRatio: false,
     plugins: {
@@ -34,9 +39,14 @@ export default function RadarChart({ stats }) {
         position: "bottom",
         labels: { color: textColor },
       },
+      tooltip: {
+        enabled: hasData,
+      },
     },
     scales: {
       r: {
+        suggestedMin: 0,
+        suggestedMax: hasData ? undefined : 5,
         ticks: {
           color: textColor,
           backdropColor: "transparent",
@@ -52,15 +62,11 @@ export default function RadarChart({ stats }) {
     labels: ["Most Words in One Match", "Avg Word Length", "Longest Streak"],
     datasets: [
       {
-        label: "Word Mastery",
-        data: [
-          stats?.mostWordsInOneMatch ?? 0,
-          stats?.averageWordLength ?? 0,
-          stats?.longestStreak ?? 0,
-        ],
-        backgroundColor: "#7c83ff33",
-        borderColor: "#7c83ff",
-        pointBackgroundColor: "#c678dd",
+        label: hasData ? "Word Mastery" : "No data yet",
+        data: [mostWords, avgLen, longest],
+        backgroundColor: hasData ? "#7c83ff33" : "transparent",
+        borderColor: hasData ? "#7c83ff" : (isDark ? "#45475a" : "#d8d8d8"),
+        pointBackgroundColor: hasData ? "#c678dd" : (isDark ? "#45475a" : "#d8d8d8"),
         pointBorderColor: isDark ? "#313244" : "#ffffff",
         borderWidth: 2,
       },
