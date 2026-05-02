@@ -34,7 +34,7 @@ export function profileValidation(currentName) {
 
   return {
     username, setUsername,
-    errors,
+    errors, setErrors,
     handleSubmit,
     resetValidation,
   };

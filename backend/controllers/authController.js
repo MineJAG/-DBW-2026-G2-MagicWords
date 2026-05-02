@@ -114,6 +114,56 @@ export async function login(req, res) {
   }
 }
 
+export async function updateUsername(req, res) {
+  const userId = readAuthCookie(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  const username = String(req.body.username ?? "").trim();
+
+  if (!username) {
+    return res
+      .status(400)
+      .json({ errors: { username: "Username is required." } });
+  } else if (username.length < 5 || username.length > 20) {
+    return res.status(400).json({
+      errors: { username: "Username must be between 5 and 20 characters." },
+    });
+  } else if (/[^a-zA-Z0-9]/.test(username)) {
+    return res.status(400).json({
+      errors: { username: "Username cannot contain special characters." },
+    });
+  }
+
+  try {
+    const existing = await User.findOne({ username });
+    if (existing && existing._id.toString() !== userId) {
+      return res
+        .status(409)
+        .json({ errors: { username: "Username already taken." } });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { username },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    res.status(200).json({
+      name: user.username,
+      picture: user.picture,
+      stats: user.stats,
+    });
+  } catch (e) {
+    console.error("Update username error:", e);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
 export async function logout(req, res) {
   clearAuthCookie(res);
   res.status(200).json({ ok: true });
