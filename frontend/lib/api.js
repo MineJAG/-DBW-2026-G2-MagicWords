@@ -33,4 +33,6 @@ export const api = {
     request("/auth/logout", { method: "POST" }),
   updateUsername: (payload) =>
     request("/auth/username", { method: "PATCH", body: payload }),
+  updatePicture: (payload) =>
+    request("/auth/picture", { method: "PATCH", body: payload }),
 };

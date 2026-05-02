@@ -1,32 +1,52 @@
 "use strict";
 
 import { useRef, useState } from "react";
+import { useUser } from "../context/userContext.jsx";
+import { api } from "../lib/api.js";
 
 export default function useAvatar(initialSrc = null) {
+  const { setUser } = useUser();
   const [picture, setPicture] = useState(initialSrc);
+  const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
   function handleFileChange(e) {
-    //this is what handles the image change
-    const file = e.target.files[0]; //the selected files are stored in a list so we take the first one
-    if (!file) return; //if no file is selected, return
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const reader = new FileReader(); //file reader is a converter
+    if (!file.type.startsWith("image/")) {
+      setError("File must be an image.");
+      return;
+    }
 
-    reader.onload = (event) => {
-      setPicture(event.target.result);
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      const dataUrl = event.target.result;
+      const previous = picture;
+
+      setError(null);
+      setPicture(dataUrl);
+
+      try {
+        const data = await api.updatePicture({ picture: dataUrl });
+        setUser(data);
+      } catch (err) {
+        setPicture(previous);
+        setError(err.errors?.picture || "Could not save picture.");
+      }
     };
 
     reader.readAsDataURL(file);
   }
 
   function openFilePicker() {
-    //this serves to open the folders so u can select the image
     inputRef.current.click();
   }
 
   return {
     picture,
+    error,
     inputRef,
     handleFileChange,
     openFilePicker,

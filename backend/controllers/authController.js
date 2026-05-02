@@ -164,6 +164,54 @@ export async function updateUsername(req, res) {
   }
 }
 
+export async function updatePicture(req, res) {
+  const userId = readAuthCookie(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  const picture = req.body.picture;
+
+  if (picture !== null && typeof picture !== "string") {
+    return res
+      .status(400)
+      .json({ errors: { picture: "Invalid picture format." } });
+  }
+
+  if (typeof picture === "string") {
+    if (!/^data:image\/(png|jpeg|jpg|gif|webp);base64,/.test(picture)) {
+      return res
+        .status(400)
+        .json({ errors: { picture: "Picture must be an image file." } });
+    }
+    if (picture.length > 5 * 1024 * 1024) {
+      return res
+        .status(413)
+        .json({ errors: { picture: "Image is too large (max ~5MB)." } });
+    }
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { picture },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    res.status(200).json({
+      name: user.username,
+      picture: user.picture,
+      stats: user.stats,
+    });
+  } catch (e) {
+    console.error("Update picture error:", e);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
 export async function logout(req, res) {
   clearAuthCookie(res);
   res.status(200).json({ ok: true });
