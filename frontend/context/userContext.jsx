@@ -1,34 +1,21 @@
-// need the import from backend here
 import { createContext, useContext, useState, useEffect } from "react";
+import { api } from "../lib/api.js";
 
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    //function from backend is called here
-    setUser({
-      name: "John Doe",
-      picture: null,
-      stats: {
-        currentScore: 5000,
-        gamesPlayed: 100,
-        highestScore: 5000,
-        gamesWon: 175,
-        gamesLost: 50,
-        winRate: 50,
-        totalWordsFound: 1200,
-        longestWordFound: "Chipingongo",
-        averageWordLength: 6.5,
-        mostWordsInOneMatch: 15,
-        longestStreak: 10,
-      },
-    });
+    api.me()
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, loading }}>
       {children}
     </UserContext.Provider>
   );

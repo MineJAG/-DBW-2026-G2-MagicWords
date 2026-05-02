@@ -57,6 +57,7 @@ export function signInFormValidation() {
 
     try {
       const data = await api.register({ username, email, password });
+      setUser(user);
       navigate("/");
     } catch (e) {
       if (e.status === 409) {

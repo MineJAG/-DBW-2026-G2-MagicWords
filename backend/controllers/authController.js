@@ -2,6 +2,7 @@
 
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import { readAuthCookie, setAuthCookie } from "../utils/authCookies.js";
 
 export async function register(req, res) {
   const username = String(req.body.username ?? "").trim();
@@ -53,14 +54,38 @@ export async function register(req, res) {
     const passwordHash = await bcrypt.hash(password, 10); // 10 is the number of salt rounds (Encriptation stuff)
     const user = await User.create({ username, email, passwordHash });
 
+    setAuthCookie(res, user._id);
+
     res.status(201).json({
-      //if all goes well
-      id: user._id,
-      username: user.username,
-      email: user.email,
+      name: user.username,
+      picture: user.picture,
+      stats: user.stats,
     });
   } catch (e) {
     console.error("Register error:", e);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+export async function me(req, res) {
+  const userId = readAuthCookie(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    res.status(200).json({
+      name: user.username,
+      picture: user.picture,
+      stats: user.stats,
+    });
+  } catch (e) {
+    console.error("Me error:", e);
     res.status(500).json({ error: "Server error" });
   }
 }
