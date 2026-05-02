@@ -3,9 +3,11 @@
 import { api } from "../lib/api.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/userContext.jsx";
 
 export function signInFormValidation() {
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -57,8 +59,8 @@ export function signInFormValidation() {
 
     try {
       const data = await api.register({ username, email, password });
-      setUser(user);
-      navigate("/");
+      setUser(data);
+      navigate("/home", { replace: true }); //para nao voltar a pagina anterior
     } catch (e) {
       if (e.status === 409) {
         setErrors(e.errors);
