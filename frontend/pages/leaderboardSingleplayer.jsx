@@ -11,9 +11,8 @@ import "../styles/leaderboardSingleplayer.css";
 
 export default function LeaderboardSinglePlayer() {
   const { user } = useUser();
-  const { players } = useGame();
-  const activePlayer = players.find((player) => player.isHost) ?? players[0];
-  const currentScore = activePlayer?.score ?? user?.stats?.currentScore ?? 0;
+  const { playerScore } = useGame();
+  const currentScore = playerScore ?? 0;
   const userStats = user?.stats ?? {};
 
   return (
