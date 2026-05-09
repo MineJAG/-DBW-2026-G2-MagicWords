@@ -1,7 +1,6 @@
 "use strict";
 
-import bcrypt from "bcrypt";
-import User from "../models/User.js";
+import * as User from "../models/User.js";
 import { clearAuthCookie, readAuthCookie, setAuthCookie } from "../utils/authCookies.js";
 
 export async function register(req, res) {
@@ -46,7 +45,7 @@ export async function register(req, res) {
   }
 
   try {
-    const existing = await User.findOne({ $or: [{ username }, { email }] });
+    const existing = await User.findByUsernameOrEmail({ username, email });
     if (existing) {
       const errors = {};
       if (existing.username === username)
@@ -55,8 +54,7 @@ export async function register(req, res) {
       return res.status(409).json({ errors });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10); // 10 is the number of salt rounds (Encriptation stuff)
-    const user = await User.create({ username, email, passwordHash });
+    const user = await User.createUser({ username, email, password });
 
     setAuthCookie(res, user._id);
 
@@ -97,17 +95,13 @@ export async function login(req, res) {
 
   try {
     const isEmail = usernameOrEmail.includes("@");
-    const query = isEmail
-      ? { email: usernameOrEmail.toLowerCase() }
-      : { username: usernameOrEmail };
-
-    const user = await User.findOne(query);
+    const user = await User.findByLogin(usernameOrEmail);
     if (!user) {
       const message = isEmail ? "Email not found." : "Username not found.";
       return res.status(401).json({ errors: { usernameOrEmail: message } });
     }
 
-    const ok = await bcrypt.compare(password, user.passwordHash);
+    const ok = await User.verifyPassword(user, password);
     if (!ok) {
       return res
         .status(401)
@@ -160,18 +154,14 @@ export async function updateUsername(req, res) {
       });
     }
 
-    const existing = await User.findOne({ username });
+    const existing = await User.findByUsername(username);
     if (existing) {
       return res
         .status(409)
         .json({ errors: { username: "Username already taken." } });
     }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { username },
-      { new: true }
-    );
+    const user = await User.updateUsername(userId, username);
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
@@ -215,11 +205,7 @@ export async function updatePicture(req, res) {
   }
 
   try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { picture },
-      { new: true }
-    );
+    const user = await User.updatePicture(userId, picture);
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }

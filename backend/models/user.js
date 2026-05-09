@@ -1,5 +1,6 @@
 "use strict";
 
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -27,4 +28,43 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export async function findByUsernameOrEmail({ username, email }) {
+  return User.findOne({ $or: [{ username }, { email }] });
+}
+
+export async function findByLogin(usernameOrEmail) {
+  const isEmail = usernameOrEmail.includes("@");
+  const query = isEmail
+    ? { email: usernameOrEmail.toLowerCase() }
+    : { username: usernameOrEmail };
+  return User.findOne(query);
+}
+
+export async function findById(id) {
+  return User.findById(id);
+}
+
+export async function findByUsername(username) {
+  return User.findOne({ username });
+}
+
+export async function createUser({ username, email, password }) {
+  const passwordHash = await bcrypt.hash(password, 10);
+  return User.create({ username, email, passwordHash });
+}
+
+export async function verifyPassword(user, password) {
+  return bcrypt.compare(password, user.passwordHash);
+}
+
+export async function updateUsername(id, username) {
+  return User.findByIdAndUpdate(id, { username }, { new: true });
+}
+
+export async function updatePicture(id, picture) {
+  return User.findByIdAndUpdate(id, { picture }, { new: true });
+}
+
+export default User;
