@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useUser } from "../context/userContext.jsx";
 import { api } from "../lib/api.js";
 
-export default function useAvatar(initialSrc = null) {
+export function useAvatar(initialSrc = null) {
   const { setUser } = useUser();
   const [picture, setPicture] = useState(initialSrc);
   const [error, setError] = useState(null);

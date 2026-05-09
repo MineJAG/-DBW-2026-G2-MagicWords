@@ -1,13 +1,11 @@
 import { createContext, useContext, useState, useCallback, useRef } from "react";
-import { useWordValidation } from "../hooks/wordValidation.js";
-import { calculateWordScore } from "../hooks/scoring.js";
-import { getTimeLeft, getTimerEnd } from "../hooks/timer.js";
-import { useRoom } from "./roomContext.jsx";
+import { useWordValidation } from "../hooks/useWordValidation.js";
+import { calculateWordScore } from "../lib/scoring.js";
+import { getTimeLeft, getTimerEnd } from "../lib/timeUtils.js";
 
 const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
-  const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
   const [timeMax, setTimeMax] = useState(600);
   const [timeStarted, setTimeStarted] = useState(null);
@@ -16,25 +14,16 @@ export function GameProvider({ children }) {
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
   const [submittedWords, setSubmittedWords] = useState([]);
+  const [playerScore, setPlayerScore] = useState(0);
   const input = useRef(null);
 
   const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord, submittedWords);
 
-  const submitWord = useCallback((word) => {
-    if (!word) return;
-    const normalized = word.trim().toUpperCase();
-    if (!normalized) return;
+  const submitWord = useCallback((value) => {
+    if (!value) return;
+    const normalized = value.trim().toUpperCase();
 
-    // Skip duplicates without awarding points
-    let isDuplicate = false;
-    setSubmittedWords((prev) => {
-      if (prev.includes(normalized)) {
-        isDuplicate = true;
-        return prev;
-      }
-      return [...prev, normalized];
-    });
-    if (isDuplicate) return;
+    setSubmittedWords((prev) => [...prev, normalized]);
 
     const points = calculateWordScore(
       normalized,
@@ -42,14 +31,8 @@ export function GameProvider({ children }) {
       { totalTime: timeMax }
     );
 
-    setPlayers((prev) =>
-      prev.map((player) =>
-        player.isHost
-          ? { ...player, score: (player.score ?? 0) + points }
-          : player
-      )
-    );
-  }, [timeMax, timerEnd, setPlayers]);
+    setPlayerScore((prev) => prev + points);
+  }, [timeMax, timerEnd]);
 
   const onValid = useCallback((validWord) => {
     submitWord(validWord);
@@ -68,6 +51,8 @@ export function GameProvider({ children }) {
     setTimeStarted(null);
     setTimerEnd(null);
     setMasterWord("");
+    setSubmittedWords([]);
+    setPlayerScore(0);
   }
 
   function changeWord(changeCount = 1) {
@@ -78,9 +63,6 @@ export function GameProvider({ children }) {
   return (
     <GameContext.Provider
       value={{
-        roomCode,
-        players,
-        setPlayers,
         masterWord,
         timeMax,
         setTimeMax,
@@ -99,6 +81,8 @@ export function GameProvider({ children }) {
         setIsPublic,
         submittedWords,
         setSubmittedWords,
+        playerScore,
+        setPlayerScore,
         submitWord,
         word,
         input,

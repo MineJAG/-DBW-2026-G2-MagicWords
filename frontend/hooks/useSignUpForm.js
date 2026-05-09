@@ -1,11 +1,11 @@
 "use strict";
 
-import { api } from "../lib/api.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api.js";
 import { useUser } from "../context/userContext.jsx";
 
-export function signUpFormValidation() {
+export function useSignUpForm() {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
@@ -54,7 +54,6 @@ export function signUpFormValidation() {
 
     const validationErrors = validate();
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) return;
 
     try {

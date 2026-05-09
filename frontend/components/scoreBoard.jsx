@@ -1,8 +1,8 @@
 import { Icon } from "./icons.jsx";
-import sortScore from "../hooks/sortScoreboard.js";
+import { useSortedScore } from "../hooks/useSortedScore.js";
 
 export default function ScoreBoard({ players }) {
-  const sortedPlayers = sortScore(players);
+  const sortedPlayers = useSortedScore(players);
 
   return (
     <aside className="scoreboard">

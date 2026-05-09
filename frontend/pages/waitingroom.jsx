@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
 import { AvatarPreview } from "../components/avatar.jsx";
 import { useGame } from "../context/gameContext.jsx";
-import { setWaitingRoomTimer } from "../hooks/timeSetter.js";
+import { setWaitingRoomTimer } from "../lib/timeSetter.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";

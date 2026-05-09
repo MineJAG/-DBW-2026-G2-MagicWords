@@ -1,5 +1,5 @@
-import { changeUsername } from "../hooks/changeUsername.js";
-import { useLogout } from "../hooks/logout.js";
+import { useChangeUsername } from "../hooks/useChangeUsername.js";
+import { useLogout } from "../hooks/useLogout.js";
 
 import { useUser } from "../context/userContext.jsx";
 
@@ -26,7 +26,7 @@ export default function Profile() {
     handleConfirm,
     handleCancel,
     handleStartEditing,
-  } = changeUsername(user?.name);
+  } = useChangeUsername(user?.name);
 
   return (
     <>

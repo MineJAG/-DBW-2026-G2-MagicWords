@@ -1,13 +1,13 @@
 "use strict";
+
 import { useState } from "react";
 
-export function codeValidation(onSuccess) {
+export function useCodeForm(onSuccess) {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
   function handleChange(e) {
     const value = e.target.value;
-    // numbers only
     if (value === "" || /^[0-9]+$/.test(value)) {
       setCode(value);
       setError("");

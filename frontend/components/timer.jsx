@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./icons.jsx";
-import { countdown, formatTimeLeft } from "../hooks/timer.js";
+import { useCountdown } from "../hooks/useCountdown.js";
+import { formatTimeLeft } from "../lib/timeUtils.js";
 
 export default function Timer({
   timerEnd,
@@ -10,7 +11,7 @@ export default function Timer({
   iconClassName,
 }) {
   const navigate = useNavigate();
-  const timeLeft = countdown({ timerEnd });
+  const timeLeft = useCountdown(timerEnd);
 
   useEffect(() => {
     if (timerEnd && timeLeft === 0) {

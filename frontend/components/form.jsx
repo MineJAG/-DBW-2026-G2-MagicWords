@@ -1,5 +1,5 @@
-import { signInFormValidation } from "../hooks/signInValidation";
-import { signUpFormValidation } from "../hooks/signUpValidation";
+import { useSignInForm } from "../hooks/useSignInForm.js";
+import { useSignUpForm } from "../hooks/useSignUpForm.js";
 
 export function SigninForm() {
   const {
@@ -7,7 +7,7 @@ export function SigninForm() {
     setPassword,
     errors,
     handleSubmit,
-  } = signInFormValidation();
+  } = useSignInForm();
   return (
     <div className="form-container">
       <h4>Sign In</h4>
@@ -49,7 +49,7 @@ export function SignupForm() {
     setPasswordVerification,
     errors,
     handleSubmit,
-  } = signUpFormValidation();
+  } = useSignUpForm();
 
   return (
     <div className="form-container">

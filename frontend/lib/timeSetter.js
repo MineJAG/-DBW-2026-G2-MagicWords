@@ -10,15 +10,9 @@ export function validateWaitingRoomTimer(minutes) {
   return "";
 }
 
-export function setWaitingRoomTimer({
-  minutes,
-  setMinutes,
-  setTimeMax,
-}) {
+export function setWaitingRoomTimer({ minutes, setMinutes, setTimeMax }) {
   const validationError = validateWaitingRoomTimer(minutes);
-  if (validationError) {
-    return validationError;
-  }
+  if (validationError) return validationError;
 
   const nextMinutes = Number(minutes);
   const nextTime = nextMinutes * 60;

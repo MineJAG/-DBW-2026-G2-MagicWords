@@ -1,7 +1,8 @@
 "use strict";
+
 import { useState } from "react";
 
-export function profileValidation(currentName) {
+export function useProfileValidation(currentName) {
   const [username, setUsername] = useState(currentName);
   const [errors, setErrors] = useState({});
 

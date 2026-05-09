@@ -1,26 +1,25 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useGame } from "../context/gameContext.jsx";
-import { resetChangeCount, startWordChangeInterval } from "../hooks/wordChange.js";
+import { useRoom } from "../context/roomContext.jsx";
+import { useWordRotation } from "../hooks/useWordRotation.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
 import Keyboard from "../components/keyboard.jsx";
 import Timer from "../components/timer.jsx";
 
-
 import "../styles/variable.css";
 import "../styles/scoreBoard.css";
 import "../styles/multiplayer.css";
 
 export default function Multiplayer() {
-
   const {
-    players,
     masterWord,
     timerEnd,
     timeMax,
     changeWord,
     submittedWords,
+    playerScore,
     word,
     input,
     setWord,
@@ -28,30 +27,21 @@ export default function Multiplayer() {
     handleSubmit,
     onValid,
   } = useGame();
-  const changeCount = useRef(0);
+  const { roomPlayers } = useRoom();
+
+  useWordRotation({ timerEnd, timeMax, changeWord });
 
   useEffect(() => {
     input.current?.focus();
   }, [input]);
 
-  useEffect(() => {
-    if (timerEnd == null) {
-      resetChangeCount(changeCount);
-      return undefined;
-    }
-
-    const wordChangeInterval = startWordChangeInterval({
-      timerEnd,
-      timeMax,
-      changeCount,
-      changeWord,
-    });
-
-    return () => {
-      clearInterval(wordChangeInterval);
-      resetChangeCount(changeCount);
-    };
-  }, [timerEnd, timeMax]);
+  const players = useMemo(
+    () =>
+      roomPlayers.map((player) =>
+        player.isHost ? { ...player, score: playerScore } : player
+      ),
+    [roomPlayers, playerScore]
+  );
 
   return (
     <div className="multiplayer-page">

@@ -1,6 +1,6 @@
 "use strict";
 
-import { getTimeLeft } from "./timer.js";
+import { getTimeLeft } from "./timeUtils.js";
 
 const CHANGE_SECONDS = 120;
 
@@ -8,12 +8,7 @@ export function resetChangeCount(changeCount) {
   changeCount.current = 0;
 }
 
-function syncWordChanges({
-  timerEnd,
-  timeMax,
-  changeCount,
-  changeWord,
-}) {
+function syncWordChanges({ timerEnd, timeMax, changeCount, changeWord }) {
   const elapsedTime = Math.max(0, timeMax - getTimeLeft(timerEnd, Date.now()));
   const expectedChanges = Math.floor(elapsedTime / CHANGE_SECONDS) + 1;
 
@@ -23,25 +18,10 @@ function syncWordChanges({
   }
 }
 
-export function startWordChangeInterval({
-  timerEnd,
-  timeMax,
-  changeCount,
-  changeWord,
-}) {
-  syncWordChanges({
-    timerEnd,
-    timeMax,
-    changeCount,
-    changeWord,
-  });
+export function startWordChangeInterval({ timerEnd, timeMax, changeCount, changeWord }) {
+  syncWordChanges({ timerEnd, timeMax, changeCount, changeWord });
 
   return setInterval(() => {
-    syncWordChanges({
-      timerEnd,
-      timeMax,
-      changeCount,
-      changeWord,
-    });
+    syncWordChanges({ timerEnd, timeMax, changeCount, changeWord });
   }, 1000);
 }

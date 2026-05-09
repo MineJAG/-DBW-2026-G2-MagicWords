@@ -1,4 +1,5 @@
 "use strict";
+
 import { useState } from "react";
 import { api } from "../lib/api.js";
 
@@ -6,12 +7,10 @@ export function useWordValidation(masterWord, submittedWords = []) {
   const [word, setWord] = useState("");
   const [errors, setErrors] = useState({});
 
-  function hasValidLetters(word, master) {
-    const w = word.toUpperCase().split("");
-    const m = master.toUpperCase();
-
-    for (const letter of w) {
-      if (!m.includes(letter)) return false;
+  function hasValidLetters(value, master) {
+    const upperMaster = master.toUpperCase();
+    for (const letter of value.toUpperCase()) {
+      if (!upperMaster.includes(letter)) return false;
     }
     return true;
   }
@@ -43,10 +42,7 @@ export function useWordValidation(masterWord, submittedWords = []) {
     if (Object.keys(validationErrors).length > 0) return;
 
     try {
-      const data = await api.validateWord({
-        word: word.trim(),
-        masterWord,
-      });
+      const data = await api.validateWord({ word: word.trim(), masterWord });
       setErrors({});
       if (onValid) onValid(data.word);
     } catch (err) {
@@ -58,11 +54,5 @@ export function useWordValidation(masterWord, submittedWords = []) {
     }
   }
 
-  return {
-    word,
-    setWord,
-    errors,
-    validate,
-    handleSubmit,
-  };
+  return { word, setWord, errors, validate, handleSubmit };
 }

@@ -1,11 +1,11 @@
 "use strict";
 
-import { useState, useRef, useEffect } from "react";
-import { profileValidation } from "./profileValidation.js";
+import { useRef, useEffect, useState } from "react";
+import { useProfileValidation } from "./useProfileValidation.js";
 import { useUser } from "../context/userContext.jsx";
 import { api } from "../lib/api.js";
 
-export function changeUsername(username) {
+export function useChangeUsername(username) {
   const { setUser } = useUser();
   const [isEditingName, setIsEditingName] = useState(false);
   const inputRef = useRef(null);
@@ -17,12 +17,12 @@ export function changeUsername(username) {
     setErrors,
     handleSubmit: validateName,
     resetValidation,
-  } = profileValidation(username);
+  } = useProfileValidation(username);
 
   useEffect(() => {
     if (isEditingName && inputRef.current) {
-      inputRef.current.focus(); //this moves the mouse automatically into the input
-      inputRef.current.select(); //select hihlights the text
+      inputRef.current.focus();
+      inputRef.current.select();
     }
   }, [isEditingName]);
 
