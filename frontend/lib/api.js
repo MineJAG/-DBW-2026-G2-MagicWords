@@ -35,4 +35,6 @@ export const api = {
     request("/auth/username", { method: "PATCH", body: payload }),
   updatePicture: (payload) =>
     request("/auth/picture", { method: "PATCH", body: payload }),
+  validateWord: (payload) =>
+    request("/words/validate", { method: "POST", body: payload }),
 };

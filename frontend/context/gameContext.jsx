@@ -18,7 +18,7 @@ export function GameProvider({ children }) {
   const [submittedWords, setSubmittedWords] = useState([]);
   const input = useRef(null);
 
-  const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord);
+  const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord, submittedWords);
 
   const submitWord = useCallback((word) => {
     if (!word) return;

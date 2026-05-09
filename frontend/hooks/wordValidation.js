@@ -1,7 +1,8 @@
 "use strict";
 import { useState } from "react";
+import { api } from "../lib/api.js";
 
-export function useWordValidation(masterWord) {
+export function useWordValidation(masterWord, submittedWords = []) {
   const [word, setWord] = useState("");
   const [errors, setErrors] = useState({});
 
@@ -27,18 +28,33 @@ export function useWordValidation(masterWord) {
       newErrors.word = "Word can only contain letters.";
     } else if (!hasValidLetters(trimmed, masterWord)) {
       newErrors.word = "Your word contains letters that are not in the master word.";
+    } else if (submittedWords.includes(trimmed.toUpperCase())) {
+      newErrors.word = "Word already submitted.";
     }
 
     return newErrors;
   }
 
-  function handleSubmit(e, onValid) {
+  async function handleSubmit(e, onValid) {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0 && onValid) {
-      onValid(word.trim().toUpperCase());
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      const data = await api.validateWord({
+        word: word.trim(),
+        masterWord,
+      });
+      setErrors({});
+      if (onValid) onValid(data.word);
+    } catch (err) {
+      if (err.status === 400 && err.errors) {
+        setErrors(err.errors);
+      } else {
+        setErrors({ word: "Could not validate word. Try again." });
+      }
     }
   }
 
