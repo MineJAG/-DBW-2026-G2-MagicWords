@@ -1,9 +1,19 @@
 "use strict";
 
 import { Server } from "socket.io";
-import { createRoom } from "../services/roomService.js";
+import {
+  createRoom,
+  joinRoom,
+  leaveRoom,
+  findRoomBySocketId,
+} from "../services/roomService.js";
+import { getPictureByUsername } from "../services/userService.js";
 
 let io = null;
+
+function reply(ack, payload) {
+  if (typeof ack === "function") ack(payload);
+}
 
 export function initSocket(httpServer) {
   io = new Server(httpServer, {
@@ -16,8 +26,51 @@ export function initSocket(httpServer) {
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
+    socket.on("room:create", async (payload = {}, ack) => {
+      try {
+        const name = payload.name;
+        const picture = await getPictureByUsername(name);
+        const room = createRoom({ socketId: socket.id, name, picture });
+        socket.join(room.code);
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
+    });
+
+    socket.on("room:join", async (payload = {}, ack) => {
+      try {
+        const name = payload.name;
+        const picture = await getPictureByUsername(name);
+        const room = joinRoom({
+          code: payload.code,
+          socketId: socket.id,
+          name,
+          picture,
+        });
+        socket.join(room.code);
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
+    });
+
+    socket.on("room:leave", (payload = {}, ack) => {
+      const code = String(payload.code ?? "").trim();
+      const room = leaveRoom({ code, socketId: socket.id });
+      if (code) socket.leave(code);
+      reply(ack, { ok: true });
+      if (room) io.to(room.code).emit("room:update", room);
+    });
+
     socket.on("disconnect", (reason) => {
       console.log(`Socket disconnected: ${socket.id} (${reason})`);
+      const current = findRoomBySocketId(socket.id);
+      if (!current) return;
+      const updated = leaveRoom({ code: current.code, socketId: socket.id });
+      if (updated) io.to(updated.code).emit("room:update", updated);
     });
   });
 

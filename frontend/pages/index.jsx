@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { useGame } from "../context/gameContext.jsx";
 import { useUser } from "../context/userContext.jsx";
+import { useRoomActions } from "../hooks/useRoomActions.js";
 
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
@@ -16,12 +17,13 @@ import "../styles/index.css";
 export default function Index() {
   const { user } = useUser();
   const { resetTimer, setTimeMax, startTimer } = useGame();
+  const { createRoom, joinRoom } = useRoomActions();
   const [showCodeModal, setShowCodeModal] = useState(false);
   const navigate = useNavigate();
 
   function handleCodeSuccess(code) {
     setShowCodeModal(false);
-    navigate("/waitingroom");
+    joinRoom(code);
   }
 
   function handleSingleplayerStart() {
@@ -69,12 +71,21 @@ export default function Index() {
 
         <div className="row my-5">
           <div className="mode-selector">
-            <Link to="/WaitingRoom">
-              <div className="mode-circle mode-circle-big">
-                <Icon className="mode-icon-box" name="multiplayer" />
-                <span className="mode-label">Multiplayer</span>
-              </div>
-            </Link>
+            <div
+              className="mode-circle mode-circle-big"
+              onClick={createRoom}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  createRoom();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              <Icon className="mode-icon-box" name="multiplayer" />
+              <span className="mode-label">Multiplayer</span>
+            </div>
 
             <div className="mode-cluster">
               <div
@@ -92,12 +103,21 @@ export default function Index() {
                 <Icon className="mode-icon-box" name="singleplayer" />
                 <span className="mode-label">Singleplayer</span>
               </div>
-              <Link to="/WaitingRoom">
-                <div className="mode-circle mode-circle-sm mode-cluster-middle">
-                  <Icon className="mode-icon-box" name="home" />
-                  <span className="mode-label">Create Room</span>
-                </div>
-              </Link>
+              <div
+                className="mode-circle mode-circle-sm mode-cluster-middle"
+                onClick={createRoom}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    createRoom();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                <Icon className="mode-icon-box" name="home" />
+                <span className="mode-label">Create Room</span>
+              </div>
               {/* Enter Code — now opens the modal */}
               <div
                 className="mode-circle mode-circle-sm"

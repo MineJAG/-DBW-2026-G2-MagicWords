@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
-import { AvatarPreview } from "../components/avatar.jsx";
 import { useGame } from "../context/gameContext.jsx";
 import { setWaitingRoomTimer } from "../lib/timeSetter.js";
 
@@ -50,9 +49,9 @@ export default function WaitingRoom() {
                     <div className="row align-items-center w-100">
                       <div className="col-3 col-md-2">
                         <div className="player-avatar">
-                          {player.avatar ? (
-                            <AvatarPreview
-                              src={player.avatar}
+                          {player.picture ? (
+                            <img
+                              src={player.picture}
                               alt={`${player.name} avatar`}
                             />
                           ) : (

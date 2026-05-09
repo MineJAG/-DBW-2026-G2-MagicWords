@@ -141,6 +141,12 @@ export async function changeUsername(userId, username) {
   return publicView(user);
 }
 
+export async function getPictureByUsername(username) {
+  if (!username) return null;
+  const user = await User.findByUsername(username);
+  return user?.picture ?? null;
+}
+
 export async function changePicture(userId, picture) {
   const user = await User.updatePicture(userId, picture);
   if (!user) {
