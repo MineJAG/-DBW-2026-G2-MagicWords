@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
 import { useGame } from "../context/gameContext.jsx";
 import { setWaitingRoomTimer } from "../lib/timeSetter.js";
+import { socket } from "../lib/socket.js";
+import { useRoomActions } from "../hooks/useRoomActions.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -15,7 +17,8 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const navigate = useNavigate();
-  const { room, roomData, roomPlayers } = useRoom();
+  const { room, roomData, roomPlayers, loading, error: roomError } = useRoom();
+  const { startRoom } = useRoomActions();
   const {
     timeMax,
     setTimeMax,
@@ -25,6 +28,7 @@ export default function WaitingRoom() {
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
   const hostSocketId = roomData?.host?.socketId;
+  const currentSocketIsHost = hostSocketId === socket.id;
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
@@ -34,6 +38,23 @@ export default function WaitingRoom() {
     resetTimer();
   }, []);
 
+  useEffect(() => {
+    function handleRoomStarted(nextRoom) {
+      const nextTimeMax = nextRoom?.timeLimit ?? timeMax;
+
+      setTimeMax(nextTimeMax);
+      resetTimer();
+      startTimer(nextTimeMax);
+      navigate("/multiplayer");
+    }
+
+    socket.on("room:started", handleRoomStarted);
+
+    return () => {
+      socket.off("room:started", handleRoomStarted);
+    };
+  }, [timeMax, navigate, setTimeMax, resetTimer, startTimer]);
+
   return (
     <div className="waiting-room-page">
       <Navbar />
@@ -41,6 +62,7 @@ export default function WaitingRoom() {
       <div className="row justify-content-center">
         <div className="col-12">
           <h1 className="header">Waiting Room - {room} </h1>
+          {roomError ? <div className="text-danger text-center mb-3">{roomError}</div> : null}
 
           <div className="row justify-content-center">
             <div className="col-12 col-lg-6">
@@ -71,60 +93,72 @@ export default function WaitingRoom() {
                             <Icon name="star" />
                           </div>
                         ) : (
-                          <div className="player-not-host">
-                            <Icon name="close" onClick={() => {}} />
-                          </div>
+                          <div className="player-not-host" />
                         )}
                       </div>
                     </div>
                   </div>
                 ))}
-                <div className="col-12 timer">
-                  <div className="timer-input-row">
-                    <div className="timer-label">Time(min):</div>
-                    <input
-                      className="timer-input"
-                      type="text"
-                      inputMode="numeric"
-                      placeholder={String(timeMax / 60)}
-                      value={minutes}
-                      onChange={(e) => {
-                        setMinutes(e.target.value.replace(/\D/g, ""));
-                        setTimerError("");
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="timer-set-button"
-                      onClick={() => {
-                        const error = setWaitingRoomTimer({
-                          minutes,
-                          setMinutes,
-                          setTimeMax,
-                        });
+                {currentSocketIsHost ? (
+                  <>
+                    <div className="col-12 timer">
+                      <div className="timer-input-row">
+                        <div className="timer-label">Time(min):</div>
+                        <input
+                          className="timer-input"
+                          type="text"
+                          inputMode="numeric"
+                          placeholder={String(timeMax / 60)}
+                          value={minutes}
+                          onChange={(e) => {
+                            setMinutes(e.target.value.replace(/\D/g, ""));
+                            setTimerError("");
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="timer-set-button"
+                          onClick={() => {
+                            const error = setWaitingRoomTimer({
+                              minutes,
+                              setMinutes,
+                              setTimeMax,
+                            });
 
-                        setTimerError(error);
-                      }}
-                    >
-                      Set
-                    </button>
+                            setTimerError(error);
+                          }}
+                        >
+                          Set
+                        </button>
+                      </div>
+                      {timerError ? (
+                        <div className="text-danger mt-2">{timerError}</div>
+                      ) : null}
+                    </div>
+                    <div className="col-12 startButton">
+                      <ClickableButton
+                        disabled={loading}
+                        onClick={() => {
+                          setTimerError("");
+                          const error = setWaitingRoomTimer({
+                            minutes,
+                            setMinutes,
+                            setTimeMax,
+                          });
+
+                          if (error) {
+                            setTimerError(error);
+                            return;
+                          }
+
+                          startRoom({ timeLimit: Number(minutes) * 60 });
+                        }}
+                        text="Start"
+                      />
+                    </div>
+                  </>
+                ) : null}
                   </div>
-                  {timerError ? (
-                    <div className="text-danger mt-2">{timerError}</div>
-                  ) : null}
-                </div>
-                <div className="col-12 startButton">
-                  <ClickableButton
-                    onClick={() => {
-                      setTimerError("");
-                      resetTimer();
-                      startTimer();
-                      navigate("/multiplayer");
-                    }}
-                    text="Create"
-                  />
-                </div>
-              </div>
               </div>
             </div>
           </div>

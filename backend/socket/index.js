@@ -6,6 +6,7 @@ import {
   joinRoom,
   leaveRoom,
   findRoomBySocketId,
+  startRoom,
 } from "../services/roomService.js";
 import { getPictureByUsername } from "../services/userService.js";
 
@@ -63,6 +64,21 @@ export function initSocket(httpServer) {
       if (code) socket.leave(code);
       reply(ack, { ok: true });
       if (room) io.to(room.code).emit("room:update", room);
+    });
+
+    socket.on("room:start", (payload = {}, ack) => {
+      try {
+        const room = startRoom({
+          code: payload.code,
+          socketId: socket.id,
+          timeLimit: payload.timeLimit,
+        });
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+        io.to(room.code).emit("room:started", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
     });
 
     socket.on("disconnect", (reason) => {

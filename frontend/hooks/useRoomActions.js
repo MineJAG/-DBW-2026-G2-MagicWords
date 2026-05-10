@@ -73,5 +73,23 @@ export function useRoomActions() {
     });
   }, [room, setRoom, setRoomData, setRoomPlayers]);
 
-  return { createRoom, joinRoom, leaveRoom };
+  const startRoom = useCallback(({ timeLimit } = {}) => {
+    if (!room) {
+      setError("Create or join a room before starting.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    socket.emit("room:start", { code: room, timeLimit }, (res) => {
+      setLoading(false);
+      if (res?.ok) {
+        setRoomData(res.room);
+      } else {
+        setError(res?.error || "Could not start room.");
+      }
+    });
+  }, [room, setRoomData, setLoading, setError]);
+
+  return { createRoom, joinRoom, leaveRoom, startRoom };
 }
