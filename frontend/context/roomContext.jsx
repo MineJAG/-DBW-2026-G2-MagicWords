@@ -5,17 +5,20 @@ const RoomContext = createContext(null);
 
 export function RoomProvider({ children }) {
   const [room, setRoom] = useState(null);
+  const [roomData, setRoomData] = useState(null);
   const [roomPlayers, setRoomPlayers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useRoomSync({ setRoom, setRoomPlayers });
+  useRoomSync({ setRoom, setRoomData, setRoomPlayers });
 
   return (
     <RoomContext.Provider
       value={{
         room,
         setRoom,
+        roomData,
+        setRoomData,
         roomPlayers,
         setRoomPlayers,
         loading,

@@ -3,12 +3,13 @@
 import { useEffect } from "react";
 import { socket } from "../lib/socket.js";
 
-export function useRoomSync({ setRoom, setRoomPlayers }) {
+export function useRoomSync({ setRoom, setRoomData, setRoomPlayers }) {
   useEffect(() => {
     if (!socket.connected) socket.connect();
 
     function handleUpdate(room) {
       setRoom(room.code);
+      setRoomData(room);
       setRoomPlayers(room.players);
     }
 
@@ -17,5 +18,5 @@ export function useRoomSync({ setRoom, setRoomPlayers }) {
     return () => {
       socket.off("room:update", handleUpdate);
     };
-  }, [setRoom, setRoomPlayers]);
+  }, [setRoom, setRoomData, setRoomPlayers]);
 }

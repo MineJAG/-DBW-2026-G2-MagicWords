@@ -15,7 +15,7 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const navigate = useNavigate();
-  const { room, roomPlayers } = useRoom();
+  const { room, roomData, roomPlayers } = useRoom();
   const {
     timeMax,
     setTimeMax,
@@ -24,6 +24,7 @@ export default function WaitingRoom() {
   } = useGame();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
+  const hostSocketId = roomData?.host?.socketId;
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
@@ -45,7 +46,7 @@ export default function WaitingRoom() {
             <div className="col-12 col-lg-6">
               <div className="player-list">
                 {roomPlayers.map((player) => (
-                  <div key={player.name} className="player">
+                  <div key={player.socketId ?? player.name} className="player">
                     <div className="row align-items-center w-100">
                       <div className="col-3 col-md-2">
                         <div className="player-avatar">
@@ -65,7 +66,7 @@ export default function WaitingRoom() {
                       </div>
 
                       <div className="col-2 text-center">
-                        {player.isHost ? (
+                        {player.socketId === hostSocketId ? (
                           <div className="player-host">
                             <Icon name="star" />
                           </div>

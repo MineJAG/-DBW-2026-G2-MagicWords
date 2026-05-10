@@ -16,14 +16,22 @@ function generateRoomCode() {
   throw err;
 }
 
-function buildPlayer({ socketId, name, picture, isHost }) {
+function buildPlayer({ socketId, name, picture }) {
   return {
     id: socketId,
     socketId,
     name,
     picture: picture ?? null,
     score: 0,
-    isHost: !!isHost,
+  };
+}
+
+function buildHost(player) {
+  return {
+    id: player.id,
+    socketId: player.socketId,
+    name: player.name,
+    picture: player.picture ?? null,
   };
 }
 
@@ -43,10 +51,11 @@ function requirePlayerInfo({ socketId, name }) {
 export function createRoom({ socketId, name, picture }) {
   requirePlayerInfo({ socketId, name });
   const code = generateRoomCode();
+  const hostPlayer = buildPlayer({ socketId, name, picture });
   const room = {
     code,
-    hostSocketId: socketId,
-    players: [buildPlayer({ socketId, name, picture, isHost: true })],
+    host: buildHost(hostPlayer),
+    players: [hostPlayer],
     createdAt: Date.now(),
   };
   rooms.set(code, room);
@@ -63,7 +72,7 @@ export function joinRoom({ code, socketId, name, picture }) {
     throw err;
   }
   if (room.players.some((p) => p.socketId === socketId)) return room;
-  room.players.push(buildPlayer({ socketId, name, picture, isHost: false }));
+  room.players.push(buildPlayer({ socketId, name, picture }));
   return room;
 }
 
@@ -77,9 +86,8 @@ export function leaveRoom({ code, socketId }) {
     rooms.delete(normalizedCode);
     return null;
   }
-  if (room.hostSocketId === socketId) {
-    room.hostSocketId = room.players[0].socketId;
-    room.players[0].isHost = true;
+  if (room.host?.socketId === socketId) {
+    room.host = buildHost(room.players[0]);
   }
   return room;
 }

@@ -11,7 +11,7 @@ function ensureConnected() {
 }
 
 export function useRoomActions() {
-  const { room, setRoom, setRoomPlayers, setLoading, setError } = useRoom();
+  const { room, setRoom, setRoomData, setRoomPlayers, setLoading, setError } = useRoom();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -26,12 +26,15 @@ export function useRoomActions() {
     socket.emit("room:create", { name: user.name }, (res) => {
       setLoading(false);
       if (res?.ok) {
+        setRoom(res.room.code);
+        setRoomData(res.room);
+        setRoomPlayers(res.room.players ?? []);
         navigate("/waitingroom");
       } else {
         setError(res?.error || "Could not create room.");
       }
     });
-  }, [user, navigate, setLoading, setError]);
+  }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
 
   const joinRoom = useCallback(
     (code) => {
@@ -48,6 +51,9 @@ export function useRoomActions() {
         (res) => {
           setLoading(false);
           if (res?.ok) {
+            setRoom(res.room.code);
+            setRoomData(res.room);
+            setRoomPlayers(res.room.players ?? []);
             navigate("/waitingroom");
           } else {
             setError(res?.error || "Could not join room.");
@@ -55,16 +61,17 @@ export function useRoomActions() {
         }
       );
     },
-    [user, navigate, setLoading, setError]
+    [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]
   );
 
   const leaveRoom = useCallback(() => {
     if (!room) return;
     socket.emit("room:leave", { code: room }, () => {
       setRoom(null);
+      setRoomData(null);
       setRoomPlayers([]);
     });
-  }, [room, setRoom, setRoomPlayers]);
+  }, [room, setRoom, setRoomData, setRoomPlayers]);
 
   return { createRoom, joinRoom, leaveRoom };
 }
