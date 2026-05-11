@@ -118,7 +118,7 @@ export default function Profile() {
                       </tr>
                       <tr>
                         <td>Games Lost</td>
-                        <td>{user?.stats.gamesLost}</td>
+                        <td>{(user?.stats.gamesPlayed ?? 0) - (user?.stats.gamesWon ?? 0)}</td>
                       </tr>
                       <tr>
                         <td>Win Rate</td>
