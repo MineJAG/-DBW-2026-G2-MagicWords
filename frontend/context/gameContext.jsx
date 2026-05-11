@@ -46,15 +46,11 @@ export function GameProvider({ children }) {
     setPlayerScore(0);
   }
 
-  function changeWord(changeCount = 1) {
-    const nextWordNumber = Math.max(1, changeCount);
-    setMasterWord(`WORD${nextWordNumber}`);
-  }
-
   return (
     <GameContext.Provider
       value={{
         masterWord,
+        setMasterWord,
         timeMax,
         setTimeMax,
         timeStarted,
@@ -63,7 +59,6 @@ export function GameProvider({ children }) {
         setTimerEnd,
         startTimer,
         resetTimer,
-        changeWord,
         gameStatus,
         setGameStatus,
         winner,

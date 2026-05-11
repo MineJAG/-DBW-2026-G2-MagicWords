@@ -1,5 +1,7 @@
 "use strict";
 
+import { CHANGE_TIME, generateMasterWord } from "./masterWordService.js";
+
 const rooms = new Map();
 const ROOM_CODE_LENGTH = 4;
 const MAX_GENERATION_ATTEMPTS = 1000;
@@ -66,6 +68,9 @@ export function createRoom({ socketId, name, picture }) {
     timeLimit: DEFAULT_TIME_LIMIT,
     startedAt: null,
     timerEnd: null,
+    masterWord: null,
+    wordStartedAt: null,
+    nextWordAt: null,
     players: [hostPlayer],
     createdAt: Date.now(),
   };
@@ -159,6 +164,9 @@ export function startRoom({ code, socketId, timeLimit }) {
   room.status = ROOM_STATUS.PLAYING;
   room.startedAt = startedAt;
   room.timerEnd = startedAt + room.timeLimit * 1000;
+  room.masterWord = generateMasterWord();
+  room.wordStartedAt = startedAt;
+  room.nextWordAt = startedAt + CHANGE_TIME;
   return room;
 }
 
@@ -170,6 +178,21 @@ export function finishRoom({ code, timerEnd }) {
   if (timerEnd && room.timerEnd !== timerEnd) return null;
 
   room.status = ROOM_STATUS.FINISHED;
+  return room;
+}
+
+export function changeRoomWord({ code, nextWordAt }) {
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) return null;
+  if (room.status !== ROOM_STATUS.PLAYING) return null;
+  if (nextWordAt && room.nextWordAt !== nextWordAt) return null;
+  if (room.timerEnd && Date.now() >= room.timerEnd) return null;
+
+  const wordStartedAt = Date.now();
+  room.masterWord = generateMasterWord();
+  room.wordStartedAt = wordStartedAt;
+  room.nextWordAt = wordStartedAt + CHANGE_TIME;
   return room;
 }
 

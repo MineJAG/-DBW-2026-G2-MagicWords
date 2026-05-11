@@ -9,7 +9,9 @@ import {
   findRoomBySocketId,
   startRoom,
   finishRoom,
+  changeRoomWord,
 } from "../services/roomService.js";
+import { CHANGE_TIME, generateMasterWord } from "../services/masterWordService.js";
 import { getPictureByUsername } from "../services/userService.js";
 
 let io = null;
@@ -28,6 +30,53 @@ function scheduleRoomFinish(room) {
 
     io.to(finishedRoom.code).emit("room:update", finishedRoom);
     io.to(finishedRoom.code).emit("room:finished", finishedRoom);
+  }, delay);
+}
+
+function emitWord(room) {
+  io.to(room.code).emit("room:word", {
+    masterWord: room.masterWord,
+    wordStartedAt: room.wordStartedAt,
+    nextWordAt: room.nextWordAt,
+  });
+}
+
+function scheduleRoomWordChange(room) {
+  const { code, nextWordAt, timerEnd } = room;
+  if (!nextWordAt || (timerEnd && nextWordAt >= timerEnd)) return;
+
+  const delay = Math.max(0, Number(nextWordAt) - Date.now());
+  setTimeout(() => {
+    const updatedRoom = changeRoomWord({ code, nextWordAt });
+    if (!updatedRoom) return;
+
+    io.to(updatedRoom.code).emit("room:update", updatedRoom);
+    emitWord(updatedRoom);
+    scheduleRoomWordChange(updatedRoom);
+  }, delay);
+}
+
+function makeWordPayload() {
+  const wordStartedAt = Date.now();
+
+  return {
+    masterWord: generateMasterWord(),
+    wordStartedAt,
+    nextWordAt: wordStartedAt + CHANGE_TIME,
+  };
+}
+
+function scheduleSingleplayerWordChange(socket, sessionId, nextWordAt, timerEnd) {
+  if (!nextWordAt || (timerEnd && nextWordAt >= timerEnd)) return;
+
+  const delay = Math.max(0, Number(nextWordAt) - Date.now());
+  setTimeout(() => {
+    if (socket.data.singleplayerSessionId !== sessionId) return;
+    if (timerEnd && Date.now() >= timerEnd) return;
+
+    const payload = makeWordPayload();
+    socket.emit("singleplayer:word", payload);
+    scheduleSingleplayerWordChange(socket, sessionId, payload.nextWordAt, timerEnd);
   }, delay);
 }
 
@@ -108,12 +157,33 @@ export function initSocket(httpServer) {
           timeLimit: payload.timeLimit,
         });
         scheduleRoomFinish(room);
+        scheduleRoomWordChange(room);
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);
         io.to(room.code).emit("room:started", room);
+        emitWord(room);
       } catch (e) {
         reply(ack, { ok: false, error: e.message });
       }
+    });
+
+    socket.on("singleplayer:start", (payload = {}, ack) => {
+      const sessionId = `${Date.now()}:${Math.random()}`;
+      const timerEnd = Number(payload.timerEnd);
+      const wordPayload = makeWordPayload();
+
+      socket.data.singleplayerSessionId = sessionId;
+      reply(ack, { ok: true, ...wordPayload });
+      scheduleSingleplayerWordChange(
+        socket,
+        sessionId,
+        wordPayload.nextWordAt,
+        Number.isFinite(timerEnd) ? timerEnd : null
+      );
+    });
+
+    socket.on("singleplayer:stop", () => {
+      socket.data.singleplayerSessionId = null;
     });
 
     socket.on("disconnect", (reason) => {
