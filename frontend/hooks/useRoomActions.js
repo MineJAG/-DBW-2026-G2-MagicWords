@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../lib/socket.js";
+import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 
@@ -12,6 +13,7 @@ function ensureConnected() {
 
 export function useRoomActions() {
   const { room, setRoom, setRoomData, setRoomPlayers, setLoading, setError } = useRoom();
+  const { handleSubmit, onValid } = useGame();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -107,5 +109,16 @@ export function useRoomActions() {
     });
   }, [room, setRoomData, setLoading, setError]);
 
-  return { createRoom, joinRoom, leaveRoom, kickPlayer, startRoom };
+  const submitMultiplayerWord = useCallback((event) => {
+    handleSubmit(event, onValid, { room });
+  }, [handleSubmit, onValid, room]);
+
+  return {
+    createRoom,
+    joinRoom,
+    leaveRoom,
+    kickPlayer,
+    startRoom,
+    submitMultiplayerWord,
+  };
 }

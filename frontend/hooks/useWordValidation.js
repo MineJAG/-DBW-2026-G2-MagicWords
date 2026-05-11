@@ -34,7 +34,7 @@ export function useWordValidation(masterWord, submittedWords = []) {
     return newErrors;
   }
 
-  async function handleSubmit(e, onValid) {
+  async function handleSubmit(e, onValid, payload = {}) {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
@@ -42,7 +42,7 @@ export function useWordValidation(masterWord, submittedWords = []) {
     if (Object.keys(validationErrors).length > 0) return;
 
     try {
-      const data = await api.validateWord({ word: word.trim(), masterWord });
+      const data = await api.validateWord({ word: word.trim(), masterWord, ...payload });
       setErrors({});
       if (onValid) onValid(data.word, data.currentScore);
     } catch (err) {

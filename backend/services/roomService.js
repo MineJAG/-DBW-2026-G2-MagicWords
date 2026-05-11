@@ -157,6 +157,31 @@ export function startRoom({ code, socketId, timeLimit }) {
   return room;
 }
 
+export function updatePlayerScore({ code, socketId, name, score }) {
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) {
+    const err = new Error("Room not found.");
+    err.status = 404;
+    throw err;
+  }
+
+  const player = room.players.find((p) => {
+    if (socketId) return p.socketId === socketId;
+    if (name) return p.name === name;
+    return false;
+  });
+  if (!player) {
+    const err = new Error("Player not found in this room.");
+    err.status = 404;
+    throw err;
+  }
+
+  const parsedScore = Number(score);
+  player.score = Number.isFinite(parsedScore) ? parsedScore : 0;
+  return room;
+}
+
 export function getRoom(code) {
   return rooms.get(String(code ?? "").trim()) || null;
 }

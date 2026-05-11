@@ -3,6 +3,7 @@ import { useGame } from "../context/gameContext.jsx";
 import { useWordRotation } from "../hooks/useWordRotation.js";
 import { useAutoFocus } from "../hooks/useAutoFocus.js";
 import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
+import { useRoomActions } from "../hooks/useRoomActions.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -24,14 +25,13 @@ export default function Multiplayer() {
     input,
     setWord,
     errors,
-    handleSubmit,
-    onValid,
   } = useGame();
 
   useWordRotation({ timerEnd, timeMax, changeWord });
   useAutoFocus(input);
 
   const players = useScoredRoomPlayers();
+  const { submitMultiplayerWord } = useRoomActions();
 
   return (
     <div className="multiplayer-page">
@@ -86,7 +86,7 @@ export default function Multiplayer() {
                 </div>
 
                 <div className="col-12">
-                  <form onSubmit={(e) => handleSubmit(e, onValid)}>
+                  <form onSubmit={submitMultiplayerWord}>
                     <input
                       ref={input}
                       autoFocus
