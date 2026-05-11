@@ -1,6 +1,6 @@
 "use strict";
 
-import englishWords from "an-array-of-english-words";
+import englishWords from "an-array-of-english-words" with { type: "json" };
 
 export const englishSet = new Set(englishWords);
 
