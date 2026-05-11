@@ -9,14 +9,15 @@ import {
   updateUsername,
   updatePicture,
 } from "../controllers/authController.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
-router.get("/me", me);
-router.patch("/username", updateUsername);
-router.patch("/picture", updatePicture);
+router.get("/me", requireAuth, me);
+router.patch("/username", requireAuth, updateUsername);
+router.patch("/picture", requireAuth, updatePicture);
 
 export default router;
