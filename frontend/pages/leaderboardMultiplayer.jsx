@@ -5,6 +5,7 @@ import "../styles/variable.css";
 import "../styles/leaderboardmultiplayer.css";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
+import { socket } from "../lib/socket.js";
 import Button from "../components/button.jsx";
 
 
@@ -15,7 +16,7 @@ export default function LeaderboardMultiplayer() {
   const players = useMemo(
     () =>
       roomPlayers.map((player) =>
-        player.isHost ? { ...player, score: playerScore } : player
+        player.socketId === socket.id ? { ...player, score: playerScore } : player
       ),
     [roomPlayers, playerScore]
   );

@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useWordRotation } from "../hooks/useWordRotation.js";
+import { socket } from "../lib/socket.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -38,7 +39,7 @@ export default function Multiplayer() {
   const players = useMemo(
     () =>
       roomPlayers.map((player) =>
-        player.isHost ? { ...player, score: playerScore } : player
+        player.socketId === socket.id ? { ...player, score: playerScore } : player
       ),
     [roomPlayers, playerScore]
   );

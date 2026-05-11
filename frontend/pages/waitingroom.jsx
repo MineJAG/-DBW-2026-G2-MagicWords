@@ -118,6 +118,7 @@ export default function WaitingRoom() {
                         <button
                           type="button"
                           className="timer-set-button"
+                          disabled={!currentSocketIsHost}
                           onClick={() => {
                             const error = setWaitingRoomTimer({
                               minutes,
@@ -137,7 +138,7 @@ export default function WaitingRoom() {
                     </div>
                     <div className="col-12 startButton">
                       <ClickableButton
-                        disabled={loading}
+                        disabled={loading || !currentSocketIsHost}
                         onClick={() => {
                           setTimerError("");
                           const error = setWaitingRoomTimer({
