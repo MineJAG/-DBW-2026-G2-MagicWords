@@ -10,8 +10,9 @@ export default function DoughnutChart({ stats }) {
   const isDark = theme === "dark";
 
   const won = stats?.gamesWon ?? 0;
-  const lost = stats?.gamesLost ?? 0;
-  const hasData = won + lost > 0;
+  const played = stats?.gamesPlayed ?? 0;
+  const lost = Math.max(played - won, 0);
+  const hasData = played > 0;
 
   const options = {
     cutout: "65%",
