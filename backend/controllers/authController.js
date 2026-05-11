@@ -1,7 +1,7 @@
 "use strict";
 
 import * as userService from "../services/userService.js";
-import { clearAuthCookie, readAuthCookie, setAuthCookie } from "../utils/authCookies.js";
+import { issueAuth, revokeAuth } from "./cookieController.js";
 
 function sendError(res, e) {
   if (e.status) {
@@ -33,7 +33,7 @@ export async function register(req, res) {
 
   try {
     const { user, view } = await userService.register({ username, email, password });
-    setAuthCookie(res, user._id);
+    issueAuth(res, user._id);
     res.status(201).json(view);
   } catch (e) {
     sendError(res, e);
@@ -52,7 +52,7 @@ export async function login(req, res) {
 
   try {
     const { user, view } = await userService.login({ usernameOrEmail, password });
-    setAuthCookie(res, user._id);
+    issueAuth(res, user._id);
     res.status(200).json(view);
   } catch (e) {
     sendError(res, e);
@@ -60,16 +60,13 @@ export async function login(req, res) {
 }
 
 export async function updateUsername(req, res) {
-  const userId = readAuthCookie(req);
-  if (!userId) return res.status(401).json({ error: "Not authenticated" });
-
   const username = String(req.body.username ?? "").trim();
 
   const message = userService.validateUsername(username);
   if (message) return res.status(400).json({ errors: { username: message } });
 
   try {
-    const view = await userService.changeUsername(userId, username);
+    const view = await userService.changeUsername(req.userId, username);
     res.status(200).json(view);
   } catch (e) {
     sendError(res, e);
@@ -77,9 +74,6 @@ export async function updateUsername(req, res) {
 }
 
 export async function updatePicture(req, res) {
-  const userId = readAuthCookie(req);
-  if (!userId) return res.status(401).json({ error: "Not authenticated" });
-
   const picture = req.body.picture;
 
   const message = userService.validatePicture(picture);
@@ -89,7 +83,7 @@ export async function updatePicture(req, res) {
   }
 
   try {
-    const view = await userService.changePicture(userId, picture);
+    const view = await userService.changePicture(req.userId, picture);
     res.status(200).json(view);
   } catch (e) {
     sendError(res, e);
@@ -97,16 +91,13 @@ export async function updatePicture(req, res) {
 }
 
 export async function logout(req, res) {
-  clearAuthCookie(res);
+  revokeAuth(res);
   res.status(200).json({ ok: true });
 }
 
 export async function me(req, res) {
-  const userId = readAuthCookie(req);
-  if (!userId) return res.status(401).json({ error: "Not authenticated" });
-
   try {
-    const view = await userService.getProfile(userId);
+    const view = await userService.getProfile(req.userId);
     res.status(200).json(view);
   } catch (e) {
     sendError(res, e);
