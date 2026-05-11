@@ -18,10 +18,13 @@ const userSchema = new mongoose.Schema(
       totalWordsFound: { type: Number, default: 0 },
       averageWordLength: { type: Number, default: 0 },
       longestWordFound: { type: String, default: null },
+      totalCharacterCount: { type: Number, default: 0 },
 
       highestScore: { type: Number, default: 0 },
       mostWordsInOneMatch: { type: Number, default: 0 },
-      longestStreak: { type: Number, default: 0 },
+      streak: { type: Number, default: 0 },
+      currentScore: { type: Number, default: 0 },
+      wordsCurrentMatch: { type: Number, default: 0 },
     },
   },
   { timestamps: true }
@@ -59,11 +62,25 @@ export async function verifyPassword(user, password) {
 }
 
 export async function updateUsername(id, username) {
-  return User.findByIdAndUpdate(id, { username }, { new: true });
+  return User.findByIdAndUpdate(id, { username }, { returnDocument: "after" });
 }
 
 export async function updatePicture(id, picture) {
-  return User.findByIdAndUpdate(id, { picture }, { new: true });
+  return User.findByIdAndUpdate(id, { picture }, { returnDocument: "after" });
+}
+
+export async function getStats(id) {
+  const user = await User.findById(id).select("stats");
+  return user?.stats ?? null;
+}
+
+export async function setStats(id, stats) {
+  const update = {};
+  for (const [key, value] of Object.entries(stats)) {
+    update[`stats.${key}`] = value;
+  }
+  const user = await User.findByIdAndUpdate(id, { $set: update }, { returnDocument: "after" }).select("stats");
+  return user?.stats ?? null;
 }
 
 export default User;

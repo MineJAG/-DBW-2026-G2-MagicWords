@@ -13,6 +13,7 @@ import Singleplayer from "./singpleplayer.jsx";
 import Profile from "./profile.jsx";
 import LeaderboardMultiplayer from "./leaderboardMultiplayer.jsx";
 import LeaderboardSingleplayer from "./leaderboardSingleplayer.jsx";
+import NotFound from "./notFound.jsx";
 
 export default function App() {
   return (
@@ -87,6 +88,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* catch-all 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </ContextProvider>
   );

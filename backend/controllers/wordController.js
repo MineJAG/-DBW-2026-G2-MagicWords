@@ -1,6 +1,8 @@
 "use strict";
 
 import * as wordService from "../services/wordService.js";
+import * as scoreService from "../services/scoreService.js";
+import { getAuthUserId } from "./cookieController.js";
 
 export async function validate(req, res) {
   const word = String(req.body.word ?? "").trim();
@@ -8,7 +10,12 @@ export async function validate(req, res) {
 
   try {
     const result = wordService.submitGuess({ word, masterWord });
-    res.status(200).json(result);
+    const userId = getAuthUserId(req);
+    const score = userId
+      ? await scoreService.submitWord(userId, result.word)
+      : { points: 0, currentScore: 0 };
+
+    res.status(200).json({ ...result, ...score });
   } catch (e) {
     if (e.status) return res.status(e.status).json({ errors: e.errors });
     console.error("Word validate error:", e);

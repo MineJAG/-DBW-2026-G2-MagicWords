@@ -29,8 +29,8 @@ export default function RadarChart({ stats }) {
 
   const mostWords = stats?.mostWordsInOneMatch ?? 0;
   const avgLen = stats?.averageWordLength ?? 0;
-  const longest = stats?.longestStreak ?? 0;
-  const hasData = mostWords + avgLen + longest > 0;
+  const streak = stats?.streak ?? 0;
+  const hasData = mostWords + avgLen + streak > 0;
 
   const options = {
     maintainAspectRatio: false,
@@ -59,11 +59,11 @@ export default function RadarChart({ stats }) {
   };
 
   const data = {
-    labels: ["Most Words in One Match", "Avg Word Length", "Longest Streak"],
+    labels: ["Most Words in One Match", "Avg Word Length", "Streak"],
     datasets: [
       {
         label: hasData ? "Word Mastery" : "No data yet",
-        data: [mostWords, avgLen, longest],
+        data: [mostWords, avgLen, streak],
         backgroundColor: hasData ? "#7c83ff33" : "transparent",
         borderColor: hasData ? "#7c83ff" : (isDark ? "#45475a" : "#d8d8d8"),
         pointBackgroundColor: hasData ? "#c678dd" : (isDark ? "#45475a" : "#d8d8d8"),

@@ -166,8 +166,8 @@ export default function Profile() {
                         <td>{user?.stats.mostWordsInOneMatch}</td>
                       </tr>
                       <tr>
-                        <td>Longest Streak</td>
-                        <td>{user?.stats.longestStreak}</td>
+                        <td>Streak</td>
+                        <td>{user?.stats.streak}</td>
                       </tr>
                     </tbody>
                   </table>
