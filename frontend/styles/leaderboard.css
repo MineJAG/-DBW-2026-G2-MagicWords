@@ -30,6 +30,12 @@
   margin-bottom: 8px;
 }
 
+.leaderboard-player-score {
+  color: var(--light-purple);
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .leaderboard-box-content-body-left-player-avatar,
 .leaderboard-box-content-body-center-player-avatar,
 .leaderboard-box-content-body-right-player-avatar {

@@ -13,6 +13,7 @@ export default function Leaderboard({ players = [] }) {
   const second = sortedPlayers[1] ?? null;
   const first = sortedPlayers[0] ?? null;
   const third = sortedPlayers[2] ?? null;
+  const getAvatar = (player) => player?.picture ?? player?.avatar ?? null;
 
   return (
     <div className="Leaderboard-box">
@@ -30,14 +31,17 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-left">
                     <div className="leaderboard-box-content-body-left-player">
                       <div className="leaderboard-box-content-body-left-player-avatar">
-                        {second?.avatar ? (
-                          <AvatarPreview src={second.avatar} />
+                        {getAvatar(second) ? (
+                          <AvatarPreview src={getAvatar(second)} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-left-player-name">
                         {second?.name || "Player 2"}
+                      </div>
+                      <div className="leaderboard-player-score">
+                        {second?.score ?? 0} pts
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-left-graybox">
@@ -47,14 +51,17 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-center">
                     <div className="leaderboard-box-content-body-center-player">
                       <div className="leaderboard-box-content-body-center-player-avatar">
-                        {first.avatar ? (
-                          <AvatarPreview src={first.avatar} />
+                        {getAvatar(first) ? (
+                          <AvatarPreview src={getAvatar(first)} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-center-player-name">
-                        {first.name || "Player 1"}
+                        {first?.name || "Player 1"}
+                      </div>
+                      <div className="leaderboard-player-score">
+                        {first?.score ?? 0} pts
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-center-yellowbox">
@@ -64,14 +71,17 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-right">
                     <div className="leaderboard-box-content-body-right-player">
                       <div className="leaderboard-box-content-body-right-player-avatar">
-                        {third.avatar ? (
-                          <AvatarPreview src={third.avatar} />
+                        {getAvatar(third) ? (
+                          <AvatarPreview src={getAvatar(third)} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
                       </div>
                       <div className="leaderboard-box-content-body-right-player-name">
-                        {third.name || "Player 3"}
+                        {third?.name || "Player 3"}
+                      </div>
+                      <div className="leaderboard-player-score">
+                        {third?.score ?? 0} pts
                       </div>
                     </div>
                     <div className="leaderboard-box-content-body-right-brownbox">
