@@ -1,6 +1,6 @@
 "use strict";
 
-import * as Word from "../models/word.js";
+import { isEnglishWord } from "../models/word.js";
 
 const MIN_WORD_LENGTH = 2;
 const LETTERS_ONLY = /^[a-zA-ZÀ-ÿ]+$/;
@@ -25,7 +25,7 @@ export function validateGuess({ word, masterWord }) {
   if (!hasValidLetters(word, masterWord)) {
     return { word: "Your word contains letters that are not in the master word." };
   }
-  if (!Word.isEnglishWord(word)) {
+  if (!isEnglishWord(word)) {
     return { word: "Word is not in the English dictionary." };
   }
   return null;
