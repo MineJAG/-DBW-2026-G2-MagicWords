@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useRef } from "react";
 import { useWordValidation } from "../hooks/useWordValidation.js";
-import { calculateWordScore } from "../lib/scoring.js";
-import { getTimeLeft, getTimerEnd } from "../lib/timeUtils.js";
+import { getTimerEnd } from "../lib/timeUtils.js";
 
 const GameContext = createContext(null);
 
@@ -22,20 +21,12 @@ export function GameProvider({ children }) {
   const submitWord = useCallback((value) => {
     if (!value) return;
     const normalized = value.trim().toUpperCase();
-
     setSubmittedWords((prev) => [...prev, normalized]);
+  }, []);
 
-    const points = calculateWordScore(
-      normalized,
-      getTimeLeft(timerEnd),
-      { totalTime: timeMax }
-    );
-
-    setPlayerScore((prev) => prev + points);
-  }, [timeMax, timerEnd]);
-
-  const onValid = useCallback((validWord) => {
+  const onValid = useCallback((validWord, currentScore) => {
     submitWord(validWord);
+    setPlayerScore(currentScore ?? 0);
     setWord("");
   }, [submitWord, setWord]);
 

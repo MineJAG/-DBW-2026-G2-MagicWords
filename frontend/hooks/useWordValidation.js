@@ -44,7 +44,7 @@ export function useWordValidation(masterWord, submittedWords = []) {
     try {
       const data = await api.validateWord({ word: word.trim(), masterWord });
       setErrors({});
-      if (onValid) onValid(data.word);
+      if (onValid) onValid(data.word, data.currentScore);
     } catch (err) {
       if (err.status === 400 && err.errors) {
         setErrors(err.errors);

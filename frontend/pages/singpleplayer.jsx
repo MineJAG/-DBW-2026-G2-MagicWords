@@ -20,6 +20,7 @@ export default function Singleplayer() {
     changeWord,
     submittedWords,
     playerScore,
+    setPlayerScore,
     word,
     input,
     setWord,
@@ -34,6 +35,10 @@ export default function Singleplayer() {
   useEffect(() => {
     input.current?.focus();
   }, [input]);
+
+  useEffect(() => {
+    if (user?.stats) setPlayerScore(user.stats.currentScore);
+  }, [user, setPlayerScore]);
 
   const players = useMemo(
     () => [

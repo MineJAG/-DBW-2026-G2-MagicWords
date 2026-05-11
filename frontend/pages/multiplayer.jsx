@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
+import { useUser } from "../context/userContext.jsx";
 import { useWordRotation } from "../hooks/useWordRotation.js";
 
 import Navbar from "../components/navbar.jsx";
@@ -20,6 +21,7 @@ export default function Multiplayer() {
     changeWord,
     submittedWords,
     playerScore,
+    setPlayerScore,
     word,
     input,
     setWord,
@@ -28,12 +30,17 @@ export default function Multiplayer() {
     onValid,
   } = useGame();
   const { roomPlayers } = useRoom();
+  const { user } = useUser();
 
   useWordRotation({ timerEnd, timeMax, changeWord });
 
   useEffect(() => {
     input.current?.focus();
   }, [input]);
+
+  useEffect(() => {
+    if (user?.stats) setPlayerScore(user.stats.currentScore);
+  }, [user, setPlayerScore]);
 
   const players = useMemo(
     () =>
