@@ -1,8 +1,7 @@
-import { useEffect, useMemo } from "react";
 import { useGame } from "../context/gameContext.jsx";
-import { useRoom } from "../context/roomContext.jsx";
 import { useWordRotation } from "../hooks/useWordRotation.js";
-import { socket } from "../lib/socket.js";
+import { useAutoFocus } from "../hooks/useAutoFocus.js";
+import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -20,7 +19,6 @@ export default function Multiplayer() {
     timeMax,
     changeWord,
     submittedWords,
-    playerScore,
     word,
     input,
     setWord,
@@ -28,21 +26,11 @@ export default function Multiplayer() {
     handleSubmit,
     onValid,
   } = useGame();
-  const { roomPlayers } = useRoom();
 
   useWordRotation({ timerEnd, timeMax, changeWord });
+  useAutoFocus(input);
 
-  useEffect(() => {
-    input.current?.focus();
-  }, [input]);
-
-  const players = useMemo(
-    () =>
-      roomPlayers.map((player) =>
-        player.socketId === socket.id ? { ...player, score: playerScore } : player
-      ),
-    [roomPlayers, playerScore]
-  );
+  const players = useScoredRoomPlayers();
 
   return (
     <div className="multiplayer-page">

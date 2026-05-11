@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
-import { useGame } from "../context/gameContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 import { useRoomActions } from "../hooks/useRoomActions.js";
+import { useHome } from "../hooks/useHome.js";
 
 import Navbar from "../components/navbar.jsx";
 import { ContentBoxBig, ContentBoxMedium } from "../components/contentBox.jsx";
@@ -16,22 +13,14 @@ import "../styles/index.css";
 
 export default function Index() {
   const { user } = useUser();
-  const { resetTimer, setTimeMax, startTimer } = useGame();
-  const { createRoom, joinRoom } = useRoomActions();
-  const [showCodeModal, setShowCodeModal] = useState(false);
-  const navigate = useNavigate();
-
-  function handleCodeSuccess(code) {
-    setShowCodeModal(false);
-    joinRoom(code);
-  }
-
-  function handleSingleplayerStart() {
-    setTimeMax(600);
-    resetTimer();
-    startTimer(600);
-    navigate("/singleplayer");
-  }
+  const { createRoom } = useRoomActions();
+  const {
+    showCodeModal,
+    openCodeModal,
+    closeCodeModal,
+    handleCodeSuccess,
+    handleSingleplayerStart,
+  } = useHome();
 
   return (
     <div className="home-page">
@@ -121,7 +110,7 @@ export default function Index() {
               {/* Enter Code — now opens the modal */}
               <div
                 className="mode-circle mode-circle-sm"
-                onClick={() => setShowCodeModal(true)}
+                onClick={openCodeModal}
                 role="button"
                 tabIndex={0}
               >
@@ -268,7 +257,7 @@ export default function Index() {
 
       <CodeModal
         isOpen={showCodeModal}
-        onClose={() => setShowCodeModal(false)}
+        onClose={closeCodeModal}
         onSuccess={handleCodeSuccess}
       />
     </div>

@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from "react";
 import { useGame } from "../context/gameContext.jsx";
-import { useUser } from "../context/userContext.jsx";
 import { useWordRotation } from "../hooks/useWordRotation.js";
+import { useAutoFocus } from "../hooks/useAutoFocus.js";
+import { useSingleplayerPlayers } from "../hooks/useSingleplayerPlayers.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -19,7 +19,6 @@ export default function Singleplayer() {
     timeMax,
     changeWord,
     submittedWords,
-    playerScore,
     word,
     input,
     setWord,
@@ -27,25 +26,11 @@ export default function Singleplayer() {
     handleSubmit,
     onValid,
   } = useGame();
-  const { user } = useUser();
 
   useWordRotation({ timerEnd, timeMax, changeWord });
+  useAutoFocus(input);
 
-  useEffect(() => {
-    input.current?.focus();
-  }, [input]);
-
-  const players = useMemo(
-    () => [
-      {
-        id: user?.name ?? "singleplayer-player",
-        name: user?.name ?? "You",
-        score: playerScore,
-        avatar: user?.picture ?? null,
-      },
-    ],
-    [user, playerScore]
-  );
+  const players = useSingleplayerPlayers();
 
   return (
     <div className="multiplayer-page">

@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
-import { useGame } from "../context/gameContext.jsx";
 import { setWaitingRoomTimer } from "../lib/timeSetter.js";
-import { socket } from "../lib/socket.js";
 import { useRoomActions } from "../hooks/useRoomActions.js";
+import { useWaitingRoom } from "../hooks/useWaitingRoom.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -16,44 +13,18 @@ import "../styles/waitingroom.css";
 
 
 export default function WaitingRoom() {
-  const navigate = useNavigate();
-  const { room, roomData, roomPlayers, loading, error: roomError } = useRoom();
+  const { room, roomPlayers, loading, error: roomError } = useRoom();
   const { kickPlayer, startRoom } = useRoomActions();
   const {
     timeMax,
     setTimeMax,
-    resetTimer,
-    startTimer,
-  } = useGame();
-  const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
-  const [timerError, setTimerError] = useState("");
-  const hostSocketId = roomData?.host?.socketId;
-  const currentSocketIsHost = hostSocketId === socket.id;
-
-  useEffect(() => {
-    setMinutes(String(Math.round(timeMax / 60)));
-  }, [timeMax]);
-
-  useEffect(() => {
-    resetTimer();
-  }, []);
-
-  useEffect(() => {
-    function handleRoomStarted(nextRoom) {
-      const nextTimeMax = nextRoom?.timeLimit ?? timeMax;
-
-      setTimeMax(nextTimeMax);
-      resetTimer();
-      startTimer(nextTimeMax);
-      navigate("/multiplayer");
-    }
-
-    socket.on("room:started", handleRoomStarted);
-
-    return () => {
-      socket.off("room:started", handleRoomStarted);
-    };
-  }, [timeMax, navigate, setTimeMax, resetTimer, startTimer]);
+    minutes,
+    setMinutes,
+    timerError,
+    setTimerError,
+    hostSocketId,
+    currentSocketIsHost,
+  } = useWaitingRoom();
 
   return (
     <div className="waiting-room-page">
