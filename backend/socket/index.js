@@ -5,6 +5,7 @@ import {
   createRoom,
   joinRoom,
   leaveRoom,
+  kickPlayer,
   findRoomBySocketId,
   startRoom,
 } from "../services/roomService.js";
@@ -64,6 +65,25 @@ export function initSocket(httpServer) {
       if (code) socket.leave(code);
       reply(ack, { ok: true });
       if (room) io.to(room.code).emit("room:update", room);
+    });
+
+    socket.on("room:kick", (payload = {}, ack) => {
+      try {
+        const targetSocketId = String(payload.targetSocketId ?? "").trim();
+        const room = kickPlayer({
+          code: payload.code,
+          hostSocketId: socket.id,
+          targetSocketId,
+        });
+        const targetSocket = io.sockets.sockets.get(targetSocketId);
+
+        targetSocket?.leave(room.code);
+        io.to(targetSocketId).emit("room:kicked", { code: room.code });
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
     });
 
     socket.on("room:start", (payload = {}, ack) => {

@@ -106,6 +106,34 @@ export function leaveRoom({ code, socketId }) {
   return room;
 }
 
+export function kickPlayer({ code, hostSocketId, targetSocketId }) {
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) {
+    const err = new Error("Room not found.");
+    err.status = 404;
+    throw err;
+  }
+  if (room.host?.socketId !== hostSocketId) {
+    const err = new Error("Only the room host can kick players.");
+    err.status = 403;
+    throw err;
+  }
+  if (room.host?.socketId === targetSocketId) {
+    const err = new Error("Host cannot be kicked.");
+    err.status = 400;
+    throw err;
+  }
+  if (!room.players.some((p) => p.socketId === targetSocketId)) {
+    const err = new Error("Player not found in this room.");
+    err.status = 404;
+    throw err;
+  }
+
+  room.players = room.players.filter((p) => p.socketId !== targetSocketId);
+  return room;
+}
+
 export function startRoom({ code, socketId, timeLimit }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);

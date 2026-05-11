@@ -73,6 +73,22 @@ export function useRoomActions() {
     });
   }, [room, setRoom, setRoomData, setRoomPlayers]);
 
+  const kickPlayer = useCallback((targetSocketId) => {
+    if (!room || !targetSocketId) return;
+
+    setLoading(true);
+    setError(null);
+    socket.emit("room:kick", { code: room, targetSocketId }, (res) => {
+      setLoading(false);
+      if (res?.ok) {
+        setRoomData(res.room);
+        setRoomPlayers(res.room.players ?? []);
+      } else {
+        setError(res?.error || "Could not kick player.");
+      }
+    });
+  }, [room, setRoomData, setRoomPlayers, setLoading, setError]);
+
   const startRoom = useCallback(({ timeLimit } = {}) => {
     if (!room) {
       setError("Create or join a room before starting.");
@@ -91,5 +107,5 @@ export function useRoomActions() {
     });
   }, [room, setRoomData, setLoading, setError]);
 
-  return { createRoom, joinRoom, leaveRoom, startRoom };
+  return { createRoom, joinRoom, leaveRoom, kickPlayer, startRoom };
 }

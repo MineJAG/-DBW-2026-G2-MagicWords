@@ -18,7 +18,7 @@ import "../styles/waitingroom.css";
 export default function WaitingRoom() {
   const navigate = useNavigate();
   const { room, roomData, roomPlayers, loading, error: roomError } = useRoom();
-  const { startRoom } = useRoomActions();
+  const { kickPlayer, startRoom } = useRoomActions();
   const {
     timeMax,
     setTimeMax,
@@ -93,7 +93,12 @@ export default function WaitingRoom() {
                             <Icon name="star" />
                           </div>
                         ) : (
-                          <div className="player-not-host" />
+                          <div
+                            className="player-not-host"
+                            onClick={currentSocketIsHost ? () => kickPlayer(player.socketId) : undefined}
+                          >
+                            {currentSocketIsHost ? <Icon name="close" /> : null}
+                          </div>
                         )}
                       </div>
                     </div>
