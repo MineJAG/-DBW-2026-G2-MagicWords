@@ -4,6 +4,7 @@ import { useWordRotation } from "../hooks/useWordRotation.js";
 import { useAutoFocus } from "../hooks/useAutoFocus.js";
 import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
 import { useRoomActions } from "../hooks/useRoomActions.js";
+import { useMultiplayerTimerSync } from "../hooks/useMultiplayerTimerSync.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -28,6 +29,7 @@ export default function Multiplayer() {
   } = useGame();
 
   useWordRotation({ timerEnd, timeMax, changeWord });
+  useMultiplayerTimerSync();
   useAutoFocus(input);
 
   const players = useScoredRoomPlayers();

@@ -8,6 +8,7 @@ import {
   kickPlayer,
   findRoomBySocketId,
   startRoom,
+  finishRoom,
 } from "../services/roomService.js";
 import { getPictureByUsername } from "../services/userService.js";
 
@@ -15,6 +16,19 @@ let io = null;
 
 function reply(ack, payload) {
   if (typeof ack === "function") ack(payload);
+}
+
+function scheduleRoomFinish(room) {
+  const { code, timerEnd } = room;
+
+  const delay = Math.max(0, Number(timerEnd ?? 0) - Date.now());
+  setTimeout(() => {
+    const finishedRoom = finishRoom({ code, timerEnd });
+    if (!finishedRoom) return;
+
+    io.to(finishedRoom.code).emit("room:update", finishedRoom);
+    io.to(finishedRoom.code).emit("room:finished", finishedRoom);
+  }, delay);
 }
 
 export function initSocket(httpServer) {
@@ -93,6 +107,7 @@ export function initSocket(httpServer) {
           socketId: socket.id,
           timeLimit: payload.timeLimit,
         });
+        scheduleRoomFinish(room);
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);
         io.to(room.code).emit("room:started", room);

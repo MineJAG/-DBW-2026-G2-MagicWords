@@ -64,6 +64,8 @@ export function createRoom({ socketId, name, picture }) {
     host: buildHost(hostPlayer),
     status: ROOM_STATUS.WAITING,
     timeLimit: DEFAULT_TIME_LIMIT,
+    startedAt: null,
+    timerEnd: null,
     players: [hostPlayer],
     createdAt: Date.now(),
   };
@@ -153,7 +155,21 @@ export function startRoom({ code, socketId, timeLimit }) {
     room.timeLimit = Math.round(parsedTimeLimit);
   }
 
+  const startedAt = Date.now();
   room.status = ROOM_STATUS.PLAYING;
+  room.startedAt = startedAt;
+  room.timerEnd = startedAt + room.timeLimit * 1000;
+  return room;
+}
+
+export function finishRoom({ code, timerEnd }) {
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) return null;
+  if (room.status !== ROOM_STATUS.PLAYING) return null;
+  if (timerEnd && room.timerEnd !== timerEnd) return null;
+
+  room.status = ROOM_STATUS.FINISHED;
   return room;
 }
 
