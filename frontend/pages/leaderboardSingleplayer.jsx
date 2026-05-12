@@ -2,7 +2,6 @@ import { useUser } from "../context/userContext.jsx";
 import { useGame } from "../context/gameContext.jsx";
 
 import Navbar from "../components/navbar.jsx";
-import { AvatarPreview } from "../components/avatar.jsx";
 import { Icon } from "../components/icons.jsx";
 import Button from "../components/button.jsx";
 
@@ -37,7 +36,7 @@ export default function LeaderboardSinglePlayer() {
             <div className="row">
               <div className="col-6 leaderboard-content-stats-user-Avatar">
                 {user?.picture ? (
-                  <AvatarPreview src={user?.picture} />
+                  <img src={user.picture} alt={`${user.name} avatar`} />
                 ) : (
                   <Icon name="anonymous" />
                 )}
