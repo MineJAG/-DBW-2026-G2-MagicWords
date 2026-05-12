@@ -7,13 +7,25 @@ import { socket } from "../lib/socket.js";
 
 export function useWordSync(mode) {
   const { roomData } = useRoom();
-  const { setMasterWord, timerEnd } = useGame();
+  const {
+    setMasterWord,
+    setTimeMax,
+    setTimeStarted,
+    setTimerEnd,
+    setPlayerScore,
+    timerEnd,
+  } = useGame();
 
   useEffect(() => {
-    if (mode === "multiplayer" && roomData?.masterWord) {
-      setMasterWord(roomData.masterWord);
-    }
-  }, [mode, roomData?.masterWord, setMasterWord]);
+    if (mode !== "multiplayer" || !roomData) return;
+    if (roomData.masterWord) setMasterWord(roomData.masterWord);
+    if (roomData.timeLimit) setTimeMax(roomData.timeLimit);
+    if (roomData.startedAt) setTimeStarted(roomData.startedAt);
+    if (roomData.timerEnd) setTimerEnd(roomData.timerEnd);
+
+    const me = roomData.players?.find((p) => p.socketId === socket.id);
+    if (me && typeof me.score === "number") setPlayerScore(me.score);
+  }, [mode, roomData, setMasterWord, setTimeMax, setTimeStarted, setTimerEnd, setPlayerScore]);
 
   useEffect(() => {
     if (mode !== "multiplayer") return undefined;
