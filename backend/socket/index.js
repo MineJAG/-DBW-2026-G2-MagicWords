@@ -10,11 +10,15 @@ import {
   startRoom,
   finishRoom,
   changeRoomWord,
+  rejoinRoom,
 } from "../services/roomService.js";
 import { CHANGE_TIME, generateMasterWord } from "../services/masterWordService.js";
 import { getPictureByUsername } from "../services/userService.js";
 
 let io = null;
+
+const DISCONNECT_GRACE_MS = 10_000;
+const disconnectTimeouts = new Map();
 
 function reply(ack, payload) {
   if (typeof ack === "function") ack(payload);
@@ -167,6 +171,26 @@ export function initSocket(httpServer) {
       }
     });
 
+    socket.on("room:rejoin", (payload = {}, ack) => {
+      try {
+        const { room, oldSocketId } = rejoinRoom({
+          code: payload.code,
+          name: payload.name,
+          socketId: socket.id,
+        });
+        const pending = disconnectTimeouts.get(oldSocketId);
+        if (pending) {
+          clearTimeout(pending);
+          disconnectTimeouts.delete(oldSocketId);
+        }
+        socket.join(room.code);
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
+    });
+
     socket.on("singleplayer:start", (payload = {}, ack) => {
       const sessionId = `${Date.now()}:${Math.random()}`;
       const timerEnd = Number(payload.timerEnd);
@@ -188,10 +212,15 @@ export function initSocket(httpServer) {
 
     socket.on("disconnect", (reason) => {
       console.log(`Socket disconnected: ${socket.id} (${reason})`);
-      const current = findRoomBySocketId(socket.id);
-      if (!current) return;
-      const updated = leaveRoom({ code: current.code, socketId: socket.id });
-      if (updated) io.to(updated.code).emit("room:update", updated);
+      const socketId = socket.id;
+      const handle = setTimeout(() => {
+        disconnectTimeouts.delete(socketId);
+        const current = findRoomBySocketId(socketId);
+        if (!current) return;
+        const updated = leaveRoom({ code: current.code, socketId });
+        if (updated) io.to(updated.code).emit("room:update", updated);
+      }, DISCONNECT_GRACE_MS);
+      disconnectTimeouts.set(socketId, handle);
     });
   });
 

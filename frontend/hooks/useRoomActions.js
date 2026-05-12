@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../lib/socket.js";
+import { saveRoomSession, clearRoomSession } from "../lib/roomSession.js";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useUser } from "../context/userContext.jsx";
@@ -31,6 +32,7 @@ export function useRoomActions() {
         setRoom(res.room.code);
         setRoomData(res.room);
         setRoomPlayers(res.room.players ?? []);
+        saveRoomSession({ code: res.room.code, name: user.name });
         navigate("/waitingroom");
       } else {
         setError(res?.error || "Could not create room.");
@@ -56,6 +58,7 @@ export function useRoomActions() {
             setRoom(res.room.code);
             setRoomData(res.room);
             setRoomPlayers(res.room.players ?? []);
+            saveRoomSession({ code: res.room.code, name: user.name });
             navigate("/waitingroom");
           } else {
             setError(res?.error || "Could not join room.");
@@ -72,6 +75,7 @@ export function useRoomActions() {
       setRoom(null);
       setRoomData(null);
       setRoomPlayers([]);
+      clearRoomSession();
     });
   }, [room, setRoom, setRoomData, setRoomPlayers]);
 

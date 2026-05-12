@@ -221,6 +221,30 @@ export function updatePlayerScore({ code, socketId, name, score }) {
   return room;
 }
 
+export function rejoinRoom({ code, name, socketId }) {
+  requirePlayerInfo({ socketId, name });
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) {
+    const err = new Error("Room not found.");
+    err.status = 404;
+    throw err;
+  }
+  const player = room.players.find((p) => p.name === name);
+  if (!player) {
+    const err = new Error("Player not in room.");
+    err.status = 404;
+    throw err;
+  }
+  const oldSocketId = player.socketId;
+  player.socketId = socketId;
+  player.id = socketId;
+  if (room.host?.socketId === oldSocketId) {
+    room.host = buildHost(player);
+  }
+  return { room, oldSocketId };
+}
+
 export function getRoom(code) {
   return rooms.get(String(code ?? "").trim()) || null;
 }
