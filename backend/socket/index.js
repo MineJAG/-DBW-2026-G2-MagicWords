@@ -7,6 +7,7 @@ import {
   leaveRoom,
   kickPlayer,
   findRoomBySocketId,
+  findAvailableRoom,
   startRoom,
   finishRoom,
   changeRoomWord,
@@ -115,6 +116,28 @@ export function initSocket(httpServer) {
         const name = payload.name;
         const { userId, picture } = await getRoomIdentityByUsername(name);
         const room = createRoom({ socketId: socket.id, name, picture, userId });
+        socket.join(room.code);
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
+    });
+
+    socket.on("room:joinRandom", async (payload = {}, ack) => {
+      try {
+        const name = payload.name;
+        const { userId, picture } = await getRoomIdentityByUsername(name);
+        const available = findAvailableRoom();
+        const room = available
+          ? joinRoom({
+              code: available.code,
+              socketId: socket.id,
+              name,
+              picture,
+              userId,
+            })
+          : createRoom({ socketId: socket.id, name, picture, userId });
         socket.join(room.code);
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);

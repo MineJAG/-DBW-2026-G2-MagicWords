@@ -54,6 +54,30 @@ export function useRoomActions() {
     });
   }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
 
+  const joinRandomRoom = useCallback(() => {
+    if (!user) {
+      navigate("/signin");
+      return;
+    }
+    if (!lockAction()) return;
+    ensureConnected();
+    setLoading(true);
+    setError(null);
+    socket.emit("room:joinRandom", { name: user.name }, (res) => {
+      unlockAction();
+      setLoading(false);
+      if (res?.ok) {
+        setRoom(res.room.code);
+        setRoomData(res.room);
+        setRoomPlayers(res.room.players ?? []);
+        saveRoomSession({ code: res.room.code, name: user.name });
+        navigate("/waitingroom");
+      } else {
+        setError(res?.error || "Could not join a room.");
+      }
+    });
+  }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
+
   const joinRoom = useCallback(
     (code) => {
       if (!user) {
@@ -174,6 +198,7 @@ export function useRoomActions() {
   return {
     createRoom,
     joinRoom,
+    joinRandomRoom,
     leaveRoom,
     kickPlayer,
     startRoom,

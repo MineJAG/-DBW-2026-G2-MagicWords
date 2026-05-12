@@ -13,7 +13,7 @@ import "../styles/index.css";
 
 export default function Index() {
   const { user } = useUser();
-  const { createRoom } = useRoomActions();
+  const { createRoom, joinRandomRoom } = useRoomActions();
   const {
     showCodeModal,
     openCodeModal,
@@ -62,11 +62,11 @@ export default function Index() {
           <div className="mode-selector">
             <div
               className="mode-circle mode-circle-big"
-              onClick={createRoom}
+              onClick={joinRandomRoom}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  createRoom();
+                  joinRandomRoom();
                 }
               }}
               role="button"

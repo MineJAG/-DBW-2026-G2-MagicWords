@@ -253,6 +253,15 @@ export function getRoom(code) {
   return rooms.get(String(code ?? "").trim()) || null;
 }
 
+export function findAvailableRoom() {
+  const waiting = [];
+  for (const r of rooms.values()) {
+    if (r.status === ROOM_STATUS.WAITING) waiting.push(r);
+  }
+  if (waiting.length === 0) return null;
+  return waiting[Math.floor(Math.random() * waiting.length)];
+}
+
 export function findRoomBySocketId(socketId) {
   for (const room of rooms.values()) {
     if (room.players.some((p) => p.socketId === socketId)) return room;
