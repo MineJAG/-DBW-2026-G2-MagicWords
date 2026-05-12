@@ -27,8 +27,7 @@ export function GameProvider({ children }) {
   const onValid = useCallback((validWord, currentScore) => {
     submitWord(validWord);
     setPlayerScore(currentScore ?? 0);
-    setWord("");
-  }, [submitWord, setWord]);
+  }, [submitWord]);
 
   function startTimer(duration = timeMax) {
     const nextTimeStarted = Date.now();

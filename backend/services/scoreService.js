@@ -1,6 +1,6 @@
 "use strict";
 
-import { getStats, setStats } from "../models/user.js";
+import { getStats, updateStats } from "../models/user.js";
 
 const SCORING = {
   minUniqueLetters: 2,
@@ -14,46 +14,80 @@ function calculateWordScore(word) {
   return SCORING.basePointsPerLetter * distinct + SCORING.bonusFactor * distinct * distinct;
 }
 
-export async function submitWord(userId, word) {
+export async function submitWord(userId, word, masterWord) {
   const normalized = word.trim().toUpperCase();
-  const points = calculateWordScore(normalized);
+  const normalizedMaster = masterWord.trim().toUpperCase();
   const stats = await getStats(userId);
 
-  await setStats(userId, { currentScore: stats.currentScore + points });
-  await setStats(userId, { wordsCurrentMatch: stats.wordsCurrentMatch + 1 });
-  await setStats(userId, { totalCharacterCount: stats.totalCharacterCount + normalized.length });
-  if (normalized.length > (stats.longestWordFound?.length ?? 0)) {
-    await setStats(userId, { longestWordFound: normalized });
+  if (stats.lastMasterWord !== normalizedMaster) {
+    await updateStats(userId, {
+      $set: { foundWords: [], lastMasterWord: normalizedMaster }
+    });
+  } else if (stats.foundWords?.includes(normalized)) {
+    const err = new Error("Word already submitted.");
+    err.status = 400;
+    err.errors = { word: "Word already submitted." };
+    throw err;
   }
-  const updated = await getStats(userId);
+
+  const points = calculateWordScore(normalized);
+
+  const updated = await updateStats(userId, {
+    $inc: {
+      currentScore: points,
+      wordsCurrentMatch: 1,
+      totalCharacterCount: normalized.length,
+    },
+    $addToSet: { foundWords: normalized },
+    $max: { longestWordFound: normalized }
+  });
+
+  if (normalized.length > (stats.longestWordFound?.length ?? 0)) {
+    await updateStats(userId, { $set: { longestWordFound: normalized } });
+  }
+
   return { points, currentScore: updated.currentScore };
 }
 
+export async function resetFoundWords(userId) {
+  await updateStats(userId, { $set: { foundWords: [], lastMasterWord: null } });
+}
+
 export async function startGame(userId) {
-  const stats = await getStats(userId);
-  await setStats(userId, { gamesPlayed: stats.gamesPlayed + 1 });
-  await setStats(userId, { currentScore: 0 });
-  await setStats(userId, { wordsCurrentMatch: 0 });
+  await updateStats(userId, {
+    $inc: { gamesPlayed: 1 },
+    $set: { currentScore: 0, wordsCurrentMatch: 0, foundWords: [], lastMasterWord: null }
+  });
 }
 
 export async function finishGame(userId, win) {
   const stats = await getStats(userId);
+  const updates = {
+    $set: { foundWords: [], lastMasterWord: null },
+    $inc: { totalWordsFound: stats.wordsCurrentMatch, totalCharacterCount: 0 },
+  };
+
   if (win) {
-    await setStats(userId, { gamesWon : stats.gamesWon + 1 });
-    await setStats(userId, { winRate : (stats.gamesWon / stats.gamesPlayed) * 100 });
-    await setStats(userId, {streak : stats.streak + 1});
+    updates.$inc.gamesWon = 1;
+    updates.$inc.streak = 1;
   } else {
-    await setStats(userId, {streak : 0});
+    updates.$set.streak = 0;
   }
+
+  updates.$max = {
+    highestScore: stats.currentScore,
+    mostWordsInOneMatch: stats.wordsCurrentMatch
+  };
+
+  const updated = await updateStats(userId, updates);
   
-  if (stats.currentScore > stats.highestScore) {
-    await setStats(userId, { highestScore: stats.currentScore });
-  }
-
-  if (stats.wordsCurrentMatch > stats.mostWordsInOneMatch) {
-    await setStats(userId, { mostWordsInOneMatch: stats.wordsCurrentMatch });
-  }
-
-  await setStats(userId, { totalWordsFound: stats.totalWordsFound + stats.wordsCurrentMatch });
-  await setStats(userId, { averageWordLength : stats.totalCharacterCount + stats.totalWordsFound });
+  const gamesPlayed = updated.gamesPlayed || 1;
+  const totalWords = updated.totalWordsFound || 1;
+  
+  await updateStats(userId, {
+    $set: {
+      winRate: (updated.gamesWon / gamesPlayed) * 100,
+      averageWordLength: updated.totalCharacterCount / totalWords
+    }
+  });
 }

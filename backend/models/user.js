@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema(
       streak: { type: Number, default: 0 },
       currentScore: { type: Number, default: 0 },
       wordsCurrentMatch: { type: Number, default: 0 },
+      foundWords: { type: [String], default: [] },
+      lastMasterWord: { type: String, default: null },
     },
   },
   { timestamps: true }
@@ -74,12 +76,18 @@ export async function getStats(id) {
   return user?.stats ?? null;
 }
 
-export async function setStats(id, stats) {
-  const update = {};
-  for (const [key, value] of Object.entries(stats)) {
-    update[`stats.${key}`] = value;
+export async function updateStats(id, updates) {
+  const mongoUpdate = {};
+  
+  for (const [operator, fields] of Object.entries(updates)) {
+    if (!operator.startsWith("$")) continue;
+    mongoUpdate[operator] = {};
+    for (const [key, value] of Object.entries(fields)) {
+      mongoUpdate[operator][`stats.${key}`] = value;
+    }
   }
-  const user = await User.findByIdAndUpdate(id, { $set: update }, { returnDocument: "after" }).select("stats");
+
+  const user = await User.findByIdAndUpdate(id, mongoUpdate, { returnDocument: "after" }).select("stats");
   return user?.stats ?? null;
 }
 
