@@ -147,6 +147,13 @@ export async function getPictureByUsername(username) {
   return user?.picture ?? null;
 }
 
+export async function getRoomIdentityByUsername(username) {
+  if (!username) return { userId: null, picture: null };
+  const user = await User.findByUsername(username);
+  if (!user) return { userId: null, picture: null };
+  return { userId: String(user._id), picture: user.picture ?? null };
+}
+
 export async function changePicture(userId, picture) {
   const user = await User.updatePicture(userId, picture);
   if (!user) {

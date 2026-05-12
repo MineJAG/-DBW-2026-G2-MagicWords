@@ -22,6 +22,9 @@ export function validateGuess({ word, masterWord }) {
   if (!LETTERS_ONLY.test(word)) {
     return { word: "Word can only contain letters." };
   }
+  if (word.toUpperCase() === masterWord.toUpperCase()) {
+    return { word: "Your word cannot be the master word." };
+  }
   if (!hasValidLetters(word, masterWord)) {
     return { word: "Your word contains letters that are not in the master word." };
   }

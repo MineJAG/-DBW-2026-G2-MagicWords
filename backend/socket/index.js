@@ -12,7 +12,8 @@ import {
   changeRoomWord,
   rejoinRoom,
 } from "../services/roomService.js";
-import { getPictureByUsername } from "../services/userService.js";
+import { getRoomIdentityByUsername } from "../services/userService.js";
+import { startGame, finishGame } from "../services/scoreService.js";
 
 let io = null;
 
@@ -23,16 +24,55 @@ function reply(ack, payload) {
   if (typeof ack === "function") ack(payload);
 }
 
+async function finalizeAllPlayerStats(room) {
+  const maxScore = room.players.reduce((m, p) => Math.max(m, p.score ?? 0), 0);
+  await Promise.all(
+    room.players.map(async (p) => {
+      if (!p.userId) return;
+      try {
+        const win = maxScore > 0 && (p.score ?? 0) === maxScore;
+        await finishGame(p.userId, win);
+      } catch (err) {
+        console.error("Finalize stats error:", err);
+      }
+    })
+  );
+}
+
+async function finalizeLeftPlayer(leftPlayer) {
+  if (!leftPlayer?.userId) return;
+  try {
+    await finishGame(leftPlayer.userId, false);
+  } catch (err) {
+    console.error("Finalize left player error:", err);
+  }
+}
+
+async function startAllPlayerStats(room) {
+  await Promise.all(
+    room.players.map(async (p) => {
+      if (!p.userId) return;
+      try {
+        await startGame(p.userId);
+      } catch (err) {
+        console.error("Start stats error:", err);
+      }
+    })
+  );
+}
+
 function scheduleRoomFinish(room) {
   const { code, timerEnd } = room;
 
   const delay = Math.max(0, Number(timerEnd ?? 0) - Date.now());
-  setTimeout(() => {
+  setTimeout(async () => {
     const finishedRoom = finishRoom({ code, timerEnd });
     if (!finishedRoom) return;
 
     io.to(finishedRoom.code).emit("room:update", finishedRoom);
     io.to(finishedRoom.code).emit("room:finished", finishedRoom);
+
+    await finalizeAllPlayerStats(finishedRoom);
   }, delay);
 }
 
@@ -73,8 +113,8 @@ export function initSocket(httpServer) {
     socket.on("room:create", async (payload = {}, ack) => {
       try {
         const name = payload.name;
-        const picture = await getPictureByUsername(name);
-        const room = createRoom({ socketId: socket.id, name, picture });
+        const { userId, picture } = await getRoomIdentityByUsername(name);
+        const room = createRoom({ socketId: socket.id, name, picture, userId });
         socket.join(room.code);
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);
@@ -86,12 +126,13 @@ export function initSocket(httpServer) {
     socket.on("room:join", async (payload = {}, ack) => {
       try {
         const name = payload.name;
-        const picture = await getPictureByUsername(name);
+        const { userId, picture } = await getRoomIdentityByUsername(name);
         const room = joinRoom({
           code: payload.code,
           socketId: socket.id,
           name,
           picture,
+          userId,
         });
         socket.join(room.code);
         reply(ack, { ok: true, room });
@@ -101,12 +142,13 @@ export function initSocket(httpServer) {
       }
     });
 
-    socket.on("room:leave", (payload = {}, ack) => {
+    socket.on("room:leave", async (payload = {}, ack) => {
       const code = String(payload.code ?? "").trim();
-      const room = leaveRoom({ code, socketId: socket.id });
+      const { room, leftPlayer, wasPlaying } = leaveRoom({ code, socketId: socket.id });
       if (code) socket.leave(code);
       reply(ack, { ok: true });
       if (room) io.to(room.code).emit("room:update", room);
+      if (wasPlaying) await finalizeLeftPlayer(leftPlayer);
     });
 
     socket.on("room:kick", (payload = {}, ack) => {
@@ -128,13 +170,14 @@ export function initSocket(httpServer) {
       }
     });
 
-    socket.on("room:start", (payload = {}, ack) => {
+    socket.on("room:start", async (payload = {}, ack) => {
       try {
         const room = startRoom({
           code: payload.code,
           socketId: socket.id,
           timeLimit: payload.timeLimit,
         });
+        await startAllPlayerStats(room);
         scheduleRoomFinish(room);
         scheduleRoomWordChange(room);
         reply(ack, { ok: true, room });
@@ -169,12 +212,13 @@ export function initSocket(httpServer) {
     socket.on("disconnect", (reason) => {
       console.log(`Socket disconnected: ${socket.id} (${reason})`);
       const socketId = socket.id;
-      const handle = setTimeout(() => {
+      const handle = setTimeout(async () => {
         disconnectTimeouts.delete(socketId);
         const current = findRoomBySocketId(socketId);
         if (!current) return;
-        const updated = leaveRoom({ code: current.code, socketId });
-        if (updated) io.to(updated.code).emit("room:update", updated);
+        const { room, leftPlayer, wasPlaying } = leaveRoom({ code: current.code, socketId });
+        if (room) io.to(room.code).emit("room:update", room);
+        if (wasPlaying) await finalizeLeftPlayer(leftPlayer);
       }, DISCONNECT_GRACE_MS);
       disconnectTimeouts.set(socketId, handle);
     });

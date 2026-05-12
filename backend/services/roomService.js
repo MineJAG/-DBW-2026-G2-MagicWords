@@ -25,12 +25,13 @@ function generateRoomCode() {
   throw err;
 }
 
-function buildPlayer({ socketId, name, picture }) {
+function buildPlayer({ socketId, name, picture, userId }) {
   return {
     id: socketId,
     socketId,
     name,
     picture: picture ?? null,
+    userId: userId ?? null,
     score: 0,
   };
 }
@@ -57,10 +58,10 @@ function requirePlayerInfo({ socketId, name }) {
   }
 }
 
-export function createRoom({ socketId, name, picture }) {
+export function createRoom({ socketId, name, picture, userId }) {
   requirePlayerInfo({ socketId, name });
   const code = generateRoomCode();
-  const hostPlayer = buildPlayer({ socketId, name, picture });
+  const hostPlayer = buildPlayer({ socketId, name, picture, userId });
   const room = {
     code,
     host: buildHost(hostPlayer),
@@ -78,7 +79,7 @@ export function createRoom({ socketId, name, picture }) {
   return room;
 }
 
-export function joinRoom({ code, socketId, name, picture }) {
+export function joinRoom({ code, socketId, name, picture, userId }) {
   requirePlayerInfo({ socketId, name });
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -93,24 +94,27 @@ export function joinRoom({ code, socketId, name, picture }) {
     throw err;
   }
   if (room.players.some((p) => p.socketId === socketId)) return room;
-  room.players.push(buildPlayer({ socketId, name, picture }));
+  room.players.push(buildPlayer({ socketId, name, picture, userId }));
   return room;
 }
 
 export function leaveRoom({ code, socketId }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
-  if (!room) return null;
+  if (!room) return { room: null, leftPlayer: null, wasPlaying: false };
+
+  const leftPlayer = room.players.find((p) => p.socketId === socketId) ?? null;
+  const wasPlaying = room.status === ROOM_STATUS.PLAYING;
 
   room.players = room.players.filter((p) => p.socketId !== socketId);
   if (room.players.length === 0) {
     rooms.delete(normalizedCode);
-    return null;
+    return { room: null, leftPlayer, wasPlaying };
   }
   if (room.host?.socketId === socketId) {
     room.host = buildHost(room.players[0]);
   }
-  return room;
+  return { room, leftPlayer, wasPlaying };
 }
 
 export function kickPlayer({ code, hostSocketId, targetSocketId }) {
