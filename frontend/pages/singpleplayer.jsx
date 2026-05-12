@@ -1,6 +1,9 @@
 import { useGame } from "../context/gameContext.jsx";
+
 import { useAutoFocus } from "../hooks/useAutoFocus.js";
-import { useSingleplayerPlayers } from "../hooks/useSingleplayerPlayers.js";
+import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
+import { useRoomActions } from "../hooks/useRoomActions.js";
+import { useMultiplayerTimerSync } from "../hooks/useMultiplayerTimerSync.js";
 import { useWordSync } from "../hooks/useWordSync.js";
 
 import Navbar from "../components/navbar.jsx";
@@ -21,14 +24,14 @@ export default function Singleplayer() {
     input,
     setWord,
     errors,
-    handleSubmit,
-    onValid,
   } = useGame();
 
-  useWordSync("singleplayer");
+  useMultiplayerTimerSync("/leaderboard-singleplayer");
+  useWordSync("multiplayer");
   useAutoFocus(input);
 
-  const players = useSingleplayerPlayers();
+  const players = useScoredRoomPlayers();
+  const { submitMultiplayerWord } = useRoomActions();
 
   return (
     <div className="multiplayer-page">
@@ -83,7 +86,7 @@ export default function Singleplayer() {
                 </div>
 
                 <div className="col-12">
-                  <form onSubmit={(e) => handleSubmit(e, onValid)}>
+                  <form onSubmit={submitMultiplayerWord}>
                     <input
                       ref={input}
                       autoFocus

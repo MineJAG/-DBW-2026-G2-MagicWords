@@ -13,7 +13,6 @@ export function useWordSync(mode) {
     setTimeStarted,
     setTimerEnd,
     setPlayerScore,
-    timerEnd,
   } = useGame();
 
   useEffect(() => {
@@ -42,25 +41,4 @@ export function useWordSync(mode) {
       socket.off("room:word", applyMasterWord);
     };
   }, [mode, setMasterWord]);
-
-  useEffect(() => {
-    if (mode !== "singleplayer" || !timerEnd) return undefined;
-
-    function applyMasterWord(payload) {
-      if (payload?.masterWord) {
-        setMasterWord(payload.masterWord);
-      }
-    }
-
-    if (!socket.connected) socket.connect();
-    socket.on("singleplayer:word", applyMasterWord);
-    socket.emit("singleplayer:start", { timerEnd }, (res) => {
-      applyMasterWord(res);
-    });
-
-    return () => {
-      socket.emit("singleplayer:stop");
-      socket.off("singleplayer:word", applyMasterWord);
-    };
-  }, [mode, setMasterWord, timerEnd]);
 }

@@ -95,6 +95,35 @@ export function useRoomActions() {
     });
   }, [room, setRoomData, setRoomPlayers, setLoading, setError]);
 
+  const startSingleplayer = useCallback(() => {
+    if (!user) {
+      navigate("/signin");
+      return;
+    }
+    ensureConnected();
+    setLoading(true);
+    setError(null);
+    socket.emit("room:create", { name: user.name }, (createRes) => {
+      if (!createRes?.ok) {
+        setLoading(false);
+        setError(createRes?.error || "Could not start singleplayer.");
+        return;
+      }
+      saveRoomSession({ code: createRes.room.code, name: user.name });
+      socket.emit("room:start", { code: createRes.room.code }, (startRes) => {
+        setLoading(false);
+        if (!startRes?.ok) {
+          setError(startRes?.error || "Could not start singleplayer.");
+          return;
+        }
+        setRoom(startRes.room.code);
+        setRoomData(startRes.room);
+        setRoomPlayers(startRes.room.players ?? []);
+        navigate("/singleplayer");
+      });
+    });
+  }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
+
   const startRoom = useCallback(({ timeLimit } = {}) => {
     if (!room) {
       setError("Create or join a room before starting.");
@@ -123,6 +152,7 @@ export function useRoomActions() {
     leaveRoom,
     kickPlayer,
     startRoom,
+    startSingleplayer,
     submitMultiplayerWord,
   };
 }

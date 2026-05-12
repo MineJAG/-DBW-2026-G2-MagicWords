@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../lib/socket.js";
 
-export function useMultiplayerTimerSync() {
+export function useMultiplayerTimerSync(link = "/leaderboard-multiplayer") {
   const navigate = useNavigate();
 
   useEffect(() => {
     function handleRoomFinished() {
-      navigate("/leaderboard-multiplayer", { replace: true });
+      navigate(link, { replace: true });
     }
 
     socket.on("room:finished", handleRoomFinished);
@@ -17,5 +17,5 @@ export function useMultiplayerTimerSync() {
     return () => {
       socket.off("room:finished", handleRoomFinished);
     };
-  }, [navigate]);
+  }, [navigate, link]);
 }
