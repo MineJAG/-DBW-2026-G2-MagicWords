@@ -1,19 +1,15 @@
-import { AvatarPreview } from "./avatar.jsx";
 import { Icon } from "./icons.jsx";
+import { useSortedScore } from "../hooks/useSortedScore.js";
 
 import "../styles/variable.css";
 import "../styles/leaderboard.css";
 
 export default function Leaderboard({ players = [] }) {
-  const sortedPlayers = [...players].sort(
-    (firstPlayer, secondPlayer) =>
-      (secondPlayer.score ?? 0) - (firstPlayer.score ?? 0)
-  );
+  const sortedPlayers = useSortedScore(players);
 
   const second = sortedPlayers[1] ?? null;
   const first = sortedPlayers[0] ?? null;
   const third = sortedPlayers[2] ?? null;
-  const getAvatar = (player) => player?.picture ?? player?.avatar ?? null;
 
   return (
     <div className="Leaderboard-box">
@@ -31,8 +27,8 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-left">
                     <div className="leaderboard-box-content-body-left-player">
                       <div className="leaderboard-box-content-body-left-player-avatar">
-                        {getAvatar(second) ? (
-                          <AvatarPreview src={getAvatar(second)} />
+                        {second?.picture ? (
+                          <img src={second.picture} alt={`${second.name} avatar`} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
@@ -51,8 +47,8 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-center">
                     <div className="leaderboard-box-content-body-center-player">
                       <div className="leaderboard-box-content-body-center-player-avatar">
-                        {getAvatar(first) ? (
-                          <AvatarPreview src={getAvatar(first)} />
+                        {first?.picture ? (
+                          <img src={first.picture} alt={`${first.name} avatar`} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
@@ -71,8 +67,8 @@ export default function Leaderboard({ players = [] }) {
                   <div className="col-4 leaderboard-box-content-body-right">
                     <div className="leaderboard-box-content-body-right-player">
                       <div className="leaderboard-box-content-body-right-player-avatar">
-                        {getAvatar(third) ? (
-                          <AvatarPreview src={getAvatar(third)} />
+                        {third?.picture ? (
+                          <img src={third.picture} alt={`${third.name} avatar`} />
                         ) : (
                           <Icon name="anonymous" />
                         )}
