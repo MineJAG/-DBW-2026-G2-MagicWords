@@ -8,8 +8,20 @@ import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 
+let action = false;
+
 function ensureConnected() {
   if (!socket.connected) socket.connect();
+}
+
+function lockAction() {
+  if (action) return false;
+  action = true;
+  return true;
+}
+
+function unlockAction() {
+  action = false;
 }
 
 export function useRoomActions() {
@@ -23,10 +35,12 @@ export function useRoomActions() {
       navigate("/signin");
       return;
     }
+    if (!lockAction()) return;
     ensureConnected();
     setLoading(true);
     setError(null);
     socket.emit("room:create", { name: user.name }, (res) => {
+      unlockAction();
       setLoading(false);
       if (res?.ok) {
         setRoom(res.room.code);
@@ -46,6 +60,7 @@ export function useRoomActions() {
         navigate("/signin");
         return;
       }
+      if (!lockAction()) return;
       ensureConnected();
       setLoading(true);
       setError(null);
@@ -53,6 +68,7 @@ export function useRoomActions() {
         "room:join",
         { code, name: user.name },
         (res) => {
+          unlockAction();
           setLoading(false);
           if (res?.ok) {
             setRoom(res.room.code);
@@ -71,7 +87,9 @@ export function useRoomActions() {
 
   const leaveRoom = useCallback(() => {
     if (!room) return;
+    if (!lockAction()) return;
     socket.emit("room:leave", { code: room }, () => {
+      unlockAction();
       setRoom(null);
       setRoomData(null);
       setRoomPlayers([]);
@@ -81,10 +99,12 @@ export function useRoomActions() {
 
   const kickPlayer = useCallback((targetSocketId) => {
     if (!room || !targetSocketId) return;
+    if (!lockAction()) return;
 
     setLoading(true);
     setError(null);
     socket.emit("room:kick", { code: room, targetSocketId }, (res) => {
+      unlockAction();
       setLoading(false);
       if (res?.ok) {
         setRoomData(res.room);
@@ -100,17 +120,20 @@ export function useRoomActions() {
       navigate("/signin");
       return;
     }
+    if (!lockAction()) return;
     ensureConnected();
     setLoading(true);
     setError(null);
     socket.emit("room:create", { name: user.name }, (createRes) => {
       if (!createRes?.ok) {
+        unlockAction();
         setLoading(false);
         setError(createRes?.error || "Could not start singleplayer.");
         return;
       }
       saveRoomSession({ code: createRes.room.code, name: user.name });
       socket.emit("room:start", { code: createRes.room.code }, (startRes) => {
+        unlockAction();
         setLoading(false);
         if (!startRes?.ok) {
           setError(startRes?.error || "Could not start singleplayer.");
@@ -129,10 +152,12 @@ export function useRoomActions() {
       setError("Create or join a room before starting.");
       return;
     }
+    if (!lockAction()) return;
 
     setLoading(true);
     setError(null);
     socket.emit("room:start", { code: room, timeLimit }, (res) => {
+      unlockAction();
       setLoading(false);
       if (res?.ok) {
         setRoomData(res.room);
