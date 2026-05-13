@@ -1,9 +1,10 @@
 "use strict";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
+import { useRoomActions } from "./useRoomActions.js";
 import { socket } from "../lib/socket.js";
 import { getTimerEnd } from "../lib/timeUtils.js";
 
@@ -11,10 +12,16 @@ export function useWaitingRoom() {
   const navigate = useNavigate();
   const { timeMax, setTimeMax, resetTimer, setTimeStarted, setTimerEnd } = useGame();
   const { roomData } = useRoom();
+  const { setVisibility } = useRoomActions();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
   const hostSocketId = roomData?.host?.socketId;
   const currentSocketIsHost = hostSocketId === socket.id;
+  const isPublic = roomData?.isPublic !== false;
+
+  const handleToggleVisibility = useCallback(() => {
+    setVisibility(!isPublic);
+  }, [setVisibility, isPublic]);
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
@@ -54,5 +61,7 @@ export function useWaitingRoom() {
     setTimerError,
     hostSocketId,
     currentSocketIsHost,
+    isPublic,
+    handleToggleVisibility,
   };
 }
