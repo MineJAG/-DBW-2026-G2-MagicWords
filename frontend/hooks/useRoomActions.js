@@ -171,6 +171,20 @@ export function useRoomActions() {
     });
   }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
 
+  const setVisibility = useCallback((isPublic) => {
+    if (!room) return;
+    if (!lockAction()) return;
+    setError(null);
+    socket.emit("room:setVisibility", { code: room, isPublic }, (res) => {
+      unlockAction();
+      if (res?.ok) {
+        setRoomData(res.room);
+      } else {
+        setError(res?.error || "Could not change visibility.");
+      }
+    });
+  }, [room, setRoomData, setError]);
+
   const startRoom = useCallback(({ timeLimit } = {}) => {
     if (!room) {
       setError("Create or join a room before starting.");
@@ -201,6 +215,7 @@ export function useRoomActions() {
     joinRandomRoom,
     leaveRoom,
     kickPlayer,
+    setVisibility,
     startRoom,
     startSingleplayer,
     submitMultiplayerWord,
