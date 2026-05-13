@@ -39,7 +39,6 @@ export async function submitWord(userId, word, masterWord) {
       totalCharacterCount: normalized.length,
     },
     $addToSet: { foundWords: normalized },
-    $max: { longestWordFound: normalized }
   });
 
   if (normalized.length > (stats.longestWordFound?.length ?? 0)) {
