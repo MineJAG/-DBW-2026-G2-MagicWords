@@ -24,6 +24,8 @@ export default function WaitingRoom() {
     setTimerError,
     hostSocketId,
     currentSocketIsHost,
+    isPublic,
+    handleToggleVisibility,
   } = useWaitingRoom();
 
   return (
@@ -77,6 +79,12 @@ export default function WaitingRoom() {
                 ))}
                 {currentSocketIsHost ? (
                   <>
+                    <div className="col-12 startButton">
+                      <ClickableButton
+                        onClick={handleToggleVisibility}
+                        text={isPublic ? "Public" : "Private"}
+                      />
+                    </div>
                     <div className="col-12 timer">
                       <div className="timer-input-row">
                         <div className="timer-label">Time(min):</div>
