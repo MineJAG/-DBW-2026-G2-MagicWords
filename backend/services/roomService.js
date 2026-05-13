@@ -66,6 +66,7 @@ export function createRoom({ socketId, name, picture, userId }) {
     code,
     host: buildHost(hostPlayer),
     status: ROOM_STATUS.WAITING,
+    isPublic: true,
     timeLimit: DEFAULT_TIME_LIMIT,
     startedAt: null,
     timerEnd: null,
@@ -256,10 +257,27 @@ export function getRoom(code) {
 export function findAvailableRoom() {
   const waiting = [];
   for (const r of rooms.values()) {
-    if (r.status === ROOM_STATUS.WAITING) waiting.push(r);
+    if (r.status === ROOM_STATUS.WAITING && r.isPublic !== false) waiting.push(r);
   }
   if (waiting.length === 0) return null;
   return waiting[Math.floor(Math.random() * waiting.length)];
+}
+
+export function setRoomVisibility({ code, socketId, isPublic }) {
+  const normalizedCode = String(code ?? "").trim();
+  const room = rooms.get(normalizedCode);
+  if (!room) {
+    const err = new Error("Room not found.");
+    err.status = 404;
+    throw err;
+  }
+  if (room.host?.socketId !== socketId) {
+    const err = new Error("Only the room host can change visibility.");
+    err.status = 403;
+    throw err;
+  }
+  room.isPublic = Boolean(isPublic);
+  return room;
 }
 
 export function findRoomBySocketId(socketId) {
