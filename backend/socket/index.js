@@ -8,6 +8,7 @@ import {
   kickPlayer,
   findRoomBySocketId,
   findAvailableRoom,
+  setRoomVisibility,
   startRoom,
   finishRoom,
   changeRoomWord,
@@ -186,6 +187,20 @@ export function initSocket(httpServer) {
 
         targetSocket?.leave(room.code);
         io.to(targetSocketId).emit("room:kicked", { code: room.code });
+        reply(ack, { ok: true, room });
+        io.to(room.code).emit("room:update", room);
+      } catch (e) {
+        reply(ack, { ok: false, error: e.message });
+      }
+    });
+
+    socket.on("room:setVisibility", (payload = {}, ack) => {
+      try {
+        const room = setRoomVisibility({
+          code: payload.code,
+          socketId: socket.id,
+          isPublic: payload.isPublic,
+        });
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);
       } catch (e) {
