@@ -118,3 +118,8 @@
   text-decoration: none;
   color: inherit;
 }
+
+.leaderboard-content-stats-disclaimer {
+  color: var(--light-gray);
+  font-size: 0.85rem;
+}

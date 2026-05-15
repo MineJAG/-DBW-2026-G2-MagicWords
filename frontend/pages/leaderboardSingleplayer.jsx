@@ -53,6 +53,9 @@ export default function LeaderboardSinglePlayer() {
                 </div>
               ))}
             </div>
+            <div className="leaderboard-content-stats-disclaimer">
+              Singleplayer does not affect player stats and thus the ones shown are from the last multiplayer match.
+            </div>
             <div className="return">
               <Button link="/home" text="return" />
             </div>
