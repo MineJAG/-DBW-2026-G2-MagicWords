@@ -7,6 +7,19 @@ import * as userService from "../services/userService.js";
 import { getAuthUserId } from "./cookieController.js";
 import { getIO } from "../socket/index.js";
 
+/**
+ * Check a word the player typed. If it's valid, add points to their score
+ * and (if they're in a room) tell everyone else in the room about the new
+ * score via the `room:update` socket event.
+ *
+ * Works for guests too — they just get 0 points and no room sync. The
+ * room-sync step is wrapped in its own try/catch so a sync failure doesn't
+ * fail the word submission.
+ *
+ * @param {import("express").Request} req - Body: `{ word, masterWord, room? }`.
+ * @param {import("express").Response} res
+ * @returns {Promise<void>} Responds with `{ ...result, ...score }` on success.
+ */
 export async function validate(req, res) {
   const word = String(req.body.word ?? "").trim();
   const masterWord = String(req.body.masterWord ?? "").trim();
