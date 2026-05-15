@@ -8,12 +8,32 @@ const SCORING = {
   bonusFactor: 2,
 };
 
+/**
+ * Score a word based on how many distinct letters it has. Words with
+ * fewer than `minUniqueLetters` get 0. Otherwise the score grows
+ * quadratically, so longer/more varied words pay off more.
+ *
+ * @param {string} word
+ * @returns {number}
+ */
 function calculateWordScore(word) {
   const distinct = new Set(word).size;
   if (distinct < SCORING.minUniqueLetters) return 0;
   return SCORING.basePointsPerLetter * distinct + SCORING.bonusFactor * distinct * distinct;
 }
 
+/**
+ * Score a word for a logged-in user and update their stats.
+ *
+ * If the master word has changed since their last submission, the player's
+ * `foundWords` list is reset. Re-submitting the same word for the same
+ * master word throws a 400. Also tracks the player's longest word.
+ *
+ * @param {string} userId
+ * @param {string} word - The word the player submitted.
+ * @param {string} masterWord - The current master word.
+ * @returns {Promise<{ points: number, currentScore: number }>}
+ */
 export async function submitWord(userId, word, masterWord) {
   const normalized = word.trim().toUpperCase();
   const normalizedMaster = masterWord.trim().toUpperCase();
@@ -48,10 +68,24 @@ export async function submitWord(userId, word, masterWord) {
   return { points, currentScore: updated.currentScore };
 }
 
+/**
+ * Clear the player's "found words" list and forget the last master word.
+ * Used between games so old submissions don't block new ones.
+ *
+ * @param {string} userId
+ * @returns {Promise<void>}
+ */
 export async function resetFoundWords(userId) {
   await updateStats(userId, { $set: { foundWords: [], lastMasterWord: null } });
 }
 
+/**
+ * Mark the start of a new match for a user. Bumps `gamesPlayed` and zeroes
+ * out per-match counters (score, words, found list).
+ *
+ * @param {string} userId
+ * @returns {Promise<void>}
+ */
 export async function startGame(userId) {
   await updateStats(userId, {
     $inc: { gamesPlayed: 1 },
@@ -59,6 +93,16 @@ export async function startGame(userId) {
   });
 }
 
+/**
+ * Mark the end of a match. Folds per-match counters into all-time totals,
+ * bumps the win streak (or resets it on a loss), updates the player's
+ * personal bests, and recomputes derived stats like win rate and average
+ * word length.
+ *
+ * @param {string} userId
+ * @param {boolean} win - True if the player won.
+ * @returns {Promise<void>}
+ */
 export async function finishGame(userId, win) {
   const stats = await getStats(userId);
   const updates = {

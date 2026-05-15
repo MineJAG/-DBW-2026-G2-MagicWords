@@ -13,6 +13,12 @@ export const ROOM_STATUS = Object.freeze({
   FINISHED: "finished",
 });
 
+/**
+ * Make a unique 4-digit room code that isn't already in use. Gives up after
+ * a thousand tries and throws a 500.
+ *
+ * @returns {string}
+ */
 function generateRoomCode() {
   const min = 10 ** (ROOM_CODE_LENGTH - 1);
   const max = 10 ** ROOM_CODE_LENGTH;
@@ -25,6 +31,12 @@ function generateRoomCode() {
   throw err;
 }
 
+/**
+ * Build a fresh player object for a room with score 0.
+ *
+ * @param {{ socketId: string, name: string, picture?: string | null, userId?: string | null }} params
+ * @returns {{ id: string, socketId: string, name: string, picture: string | null, userId: string | null, score: number }}
+ */
 function buildPlayer({ socketId, name, picture, userId }) {
   return {
     id: socketId,
@@ -36,6 +48,12 @@ function buildPlayer({ socketId, name, picture, userId }) {
   };
 }
 
+/**
+ * Strip a player down to the small "host" shape (no score, no userId).
+ *
+ * @param {object} player
+ * @returns {{ id: string, socketId: string, name: string, picture: string | null }}
+ */
 function buildHost(player) {
   return {
     id: player.id,
@@ -45,6 +63,12 @@ function buildHost(player) {
   };
 }
 
+/**
+ * Make sure a socketId and name were passed in. Throws a 400 if not.
+ *
+ * @param {{ socketId?: string, name?: string }} params
+ * @returns {void}
+ */
 function requirePlayerInfo({ socketId, name }) {
   if (!socketId) {
     const err = new Error("Socket id is required.");
@@ -58,6 +82,13 @@ function requirePlayerInfo({ socketId, name }) {
   }
 }
 
+/**
+ * Make a new room with the caller as host. The room starts in "waiting"
+ * status, is public by default, and uses the default time limit.
+ *
+ * @param {{ socketId: string, name: string, picture?: string | null, userId?: string | null }} params
+ * @returns {object} The new room.
+ */
 export function createRoom({ socketId, name, picture, userId }) {
   requirePlayerInfo({ socketId, name });
   const code = generateRoomCode();
@@ -80,6 +111,14 @@ export function createRoom({ socketId, name, picture, userId }) {
   return room;
 }
 
+/**
+ * Add a player to an existing room. Throws 404 if the room isn't there
+ * and 409 if the game has already started. If the same socket is already
+ * in the room, the room is returned unchanged.
+ *
+ * @param {{ code: string, socketId: string, name: string, picture?: string | null, userId?: string | null }} params
+ * @returns {object} The updated room.
+ */
 export function joinRoom({ code, socketId, name, picture, userId }) {
   requirePlayerInfo({ socketId, name });
   const normalizedCode = String(code ?? "").trim();
@@ -99,6 +138,14 @@ export function joinRoom({ code, socketId, name, picture, userId }) {
   return room;
 }
 
+/**
+ * Remove a player from a room. If they were the last person, the room is
+ * deleted. If they were the host, the next player in the list becomes the
+ * new host. Returns info the caller can use to broadcast updates.
+ *
+ * @param {{ code: string, socketId: string }} params
+ * @returns {{ room: object | null, leftPlayer: object | null, wasPlaying: boolean }}
+ */
 export function leaveRoom({ code, socketId }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -118,6 +165,14 @@ export function leaveRoom({ code, socketId }) {
   return { room, leftPlayer, wasPlaying };
 }
 
+/**
+ * Kick a player from a room. Only the host can call this, and the host
+ * can't kick themselves. Throws 404 (room or player missing), 403 (not
+ * host), or 400 (trying to kick host).
+ *
+ * @param {{ code: string, hostSocketId: string, targetSocketId: string }} params
+ * @returns {object} The updated room.
+ */
 export function kickPlayer({ code, hostSocketId, targetSocketId }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -146,6 +201,15 @@ export function kickPlayer({ code, hostSocketId, targetSocketId }) {
   return room;
 }
 
+/**
+ * Begin the game in a room. Only the host can call this. Picks the first
+ * master word, sets the round timer, and flips the status to "playing".
+ * If a valid `timeLimit` (>= 60 seconds) is provided, it overrides the
+ * default; otherwise the room keeps the time it already has.
+ *
+ * @param {{ code: string, socketId: string, timeLimit?: number }} params
+ * @returns {object} The updated room.
+ */
 export function startRoom({ code, socketId, timeLimit }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -175,6 +239,14 @@ export function startRoom({ code, socketId, timeLimit }) {
   return room;
 }
 
+/**
+ * Mark a room as finished. Returns null (no-op) when the room is missing,
+ * not currently playing, or the given `timerEnd` doesn't match the room's
+ * current `timerEnd` (used to ignore stale "round over" events).
+ *
+ * @param {{ code: string, timerEnd?: number }} params
+ * @returns {object | null}
+ */
 export function finishRoom({ code, timerEnd }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -186,6 +258,14 @@ export function finishRoom({ code, timerEnd }) {
   return room;
 }
 
+/**
+ * Swap in a new master word mid-game. Returns null if the room is missing,
+ * not playing, the timer has already expired, or the `nextWordAt` doesn't
+ * match (so old timers don't trigger a swap).
+ *
+ * @param {{ code: string, nextWordAt?: number }} params
+ * @returns {object | null}
+ */
 export function changeRoomWord({ code, nextWordAt }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -201,6 +281,14 @@ export function changeRoomWord({ code, nextWordAt }) {
   return room;
 }
 
+/**
+ * Set a player's score in a room. Looks the player up by `socketId` first,
+ * then by `name` if no socketId was passed. Throws 404 if the room or
+ * player isn't found. Non-numeric scores are treated as 0.
+ *
+ * @param {{ code: string, socketId?: string, name?: string, score: number }} params
+ * @returns {object} The updated room.
+ */
 export function updatePlayerScore({ code, socketId, name, score }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -226,6 +314,15 @@ export function updatePlayerScore({ code, socketId, name, score }) {
   return room;
 }
 
+/**
+ * Reattach a player to their old slot in a room after a reconnect. Matches
+ * by name, swaps in the new socketId, and keeps host status if they were
+ * the host. Returns the room plus the old socketId so the caller can move
+ * the socket between socket.io rooms.
+ *
+ * @param {{ code: string, name: string, socketId: string }} params
+ * @returns {{ room: object, oldSocketId: string }}
+ */
 export function rejoinRoom({ code, name, socketId }) {
   requirePlayerInfo({ socketId, name });
   const normalizedCode = String(code ?? "").trim();
@@ -250,10 +347,22 @@ export function rejoinRoom({ code, name, socketId }) {
   return { room, oldSocketId };
 }
 
+/**
+ * Look up a room by its code. Returns null if none exists.
+ *
+ * @param {string} code
+ * @returns {object | null}
+ */
 export function getRoom(code) {
   return rooms.get(String(code ?? "").trim()) || null;
 }
 
+/**
+ * Pick a random public room that's still waiting for players. Used by the
+ * "join random" flow. Returns null if there are no joinable rooms.
+ *
+ * @returns {object | null}
+ */
 export function findAvailableRoom() {
   const waiting = [];
   for (const r of rooms.values()) {
@@ -263,6 +372,13 @@ export function findAvailableRoom() {
   return waiting[Math.floor(Math.random() * waiting.length)];
 }
 
+/**
+ * Toggle a room between public and private. Only the host can call this;
+ * non-hosts get a 403, missing rooms a 404.
+ *
+ * @param {{ code: string, socketId: string, isPublic: boolean }} params
+ * @returns {object} The updated room.
+ */
 export function setRoomVisibility({ code, socketId, isPublic }) {
   const normalizedCode = String(code ?? "").trim();
   const room = rooms.get(normalizedCode);
@@ -280,6 +396,14 @@ export function setRoomVisibility({ code, socketId, isPublic }) {
   return room;
 }
 
+/**
+ * Find the room a given socket is currently in (if any). Used on
+ * disconnect, so we know which room to clean up. Returns null if the
+ * socket isn't in any room.
+ *
+ * @param {string} socketId
+ * @returns {object | null}
+ */
 export function findRoomBySocketId(socketId) {
   for (const room of rooms.values()) {
     if (room.players.some((p) => p.socketId === socketId)) return room;
