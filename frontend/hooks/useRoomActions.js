@@ -26,7 +26,7 @@ function unlockAction() {
 
 export function useRoomActions() {
   const { room, setRoom, setRoomData, setRoomPlayers, setLoading, setError } = useRoom();
-  const { handleSubmit, onValid } = useGame();
+  const { handleSubmit, onValid, resetTimer } = useGame();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -163,13 +163,14 @@ export function useRoomActions() {
           setError(startRes?.error || "Could not start singleplayer.");
           return;
         }
+        resetTimer();
         setRoom(startRes.room.code);
         setRoomData(startRes.room);
         setRoomPlayers(startRes.room.players ?? []);
         navigate("/singleplayer");
       });
     });
-  }, [user, navigate, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
+  }, [user, navigate, resetTimer, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
 
   const setVisibility = useCallback((isPublic) => {
     if (!room) return;

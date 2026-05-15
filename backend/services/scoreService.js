@@ -80,17 +80,20 @@ export async function resetFoundWords(userId) {
 }
 
 /**
- * Mark the start of a new match for a user. Bumps `gamesPlayed` and zeroes
- * out per-match counters (score, words, found list).
+ * Mark the start of a new match for a user. Zeroes out per-match counters
+ * (score, words, found list). Bumps `gamesPlayed` for multiplayer only —
+ * singleplayer doesn't touch all-time stats.
  *
  * @param {string} userId
+ * @param {{ isSingleplayer?: boolean }} [options]
  * @returns {Promise<void>}
  */
-export async function startGame(userId) {
-  await updateStats(userId, {
-    $inc: { gamesPlayed: 1 },
+export async function startGame(userId, { isSingleplayer = false } = {}) {
+  const updates = {
     $set: { currentScore: 0, wordsCurrentMatch: 0, foundWords: [], lastMasterWord: null }
-  });
+  };
+  if (!isSingleplayer) updates.$inc = { gamesPlayed: 1 };
+  await updateStats(userId, updates);
 }
 
 /**

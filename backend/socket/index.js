@@ -55,7 +55,7 @@ async function startAllPlayerStats(room) {
     room.players.map(async (p) => {
       if (!p.userId) return;
       try {
-        await startGame(p.userId);
+        await startGame(p.userId, { isSingleplayer: room.isSingleplayer });
       } catch (err) {
         console.error("Start stats error:", err);
       }
