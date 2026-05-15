@@ -1,5 +1,6 @@
 import { useUser } from "../context/userContext.jsx";
 import { useGame } from "../context/gameContext.jsx";
+import { useDisplayStatsSingleplayer } from "../hooks/useDisplayStatsSingleplayer.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -12,7 +13,7 @@ export default function LeaderboardSinglePlayer() {
   const { user } = useUser();
   const { playerScore } = useGame();
   const currentScore = playerScore ?? 0;
-  const userStats = user?.stats ?? {};
+  const displayedStats = useDisplayStatsSingleplayer(user?.stats);
 
   return (
     <div className="Leaderboard">
@@ -46,7 +47,7 @@ export default function LeaderboardSinglePlayer() {
               </div>
             </div>
             <div className="leaderboard-content-stats-list">
-              {Object.entries(userStats).map(([key, value]) => (
+              {displayedStats.map(([key, value]) => (
                 <div key={key} className="leaderboard-content-stats-item">
                   <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {value}
                 </div>
