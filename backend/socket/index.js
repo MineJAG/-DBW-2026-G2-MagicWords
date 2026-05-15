@@ -74,7 +74,7 @@ function scheduleRoomFinish(room) {
     io.to(finishedRoom.code).emit("room:update", finishedRoom);
     io.to(finishedRoom.code).emit("room:finished", finishedRoom);
 
-    await finalizeAllPlayerStats(finishedRoom);
+    if (!finishedRoom.isSingleplayer) await finalizeAllPlayerStats(finishedRoom);
   }, delay);
 }
 
@@ -116,7 +116,13 @@ export function initSocket(httpServer) {
       try {
         const name = payload.name;
         const { userId, picture } = await getRoomIdentityByUsername(name);
-        const room = createRoom({ socketId: socket.id, name, picture, userId });
+        const room = createRoom({
+          socketId: socket.id,
+          name,
+          picture,
+          userId,
+          isSingleplayer: payload.isSingleplayer,
+        });
         socket.join(room.code);
         reply(ack, { ok: true, room });
         io.to(room.code).emit("room:update", room);
@@ -168,11 +174,12 @@ export function initSocket(httpServer) {
 
     socket.on("room:leave", async (payload = {}, ack) => {
       const code = String(payload.code ?? "").trim();
+      const current = findRoomBySocketId(socket.id);
       const { room, leftPlayer, wasPlaying } = leaveRoom({ code, socketId: socket.id });
       if (code) socket.leave(code);
       reply(ack, { ok: true });
       if (room) io.to(room.code).emit("room:update", room);
-      if (wasPlaying) await finalizeLeftPlayer(leftPlayer);
+      if (wasPlaying && !current?.isSingleplayer) await finalizeLeftPlayer(leftPlayer);
     });
 
     socket.on("room:kick", (payload = {}, ack) => {
@@ -256,7 +263,7 @@ export function initSocket(httpServer) {
         if (!current) return;
         const { room, leftPlayer, wasPlaying } = leaveRoom({ code: current.code, socketId });
         if (room) io.to(room.code).emit("room:update", room);
-        if (wasPlaying) await finalizeLeftPlayer(leftPlayer);
+        if (wasPlaying && !current.isSingleplayer) await finalizeLeftPlayer(leftPlayer);
       }, DISCONNECT_GRACE_MS);
       disconnectTimeouts.set(socketId, handle);
     });

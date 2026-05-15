@@ -86,15 +86,16 @@ function requirePlayerInfo({ socketId, name }) {
  * Make a new room with the caller as host. The room starts in "waiting"
  * status, is public by default, and uses the default time limit.
  *
- * @param {{ socketId: string, name: string, picture?: string | null, userId?: string | null }} params
+ * @param {{ socketId: string, name: string, picture?: string | null, userId?: string | null, isSingleplayer?: boolean }} params
  * @returns {object} The new room.
  */
-export function createRoom({ socketId, name, picture, userId }) {
+export function createRoom({ socketId, name, picture, userId, isSingleplayer = false }) {
   requirePlayerInfo({ socketId, name });
   const code = generateRoomCode();
   const hostPlayer = buildPlayer({ socketId, name, picture, userId });
   const room = {
     code,
+    isSingleplayer: Boolean(isSingleplayer),
     host: buildHost(hostPlayer),
     status: ROOM_STATUS.WAITING,
     isPublic: true,

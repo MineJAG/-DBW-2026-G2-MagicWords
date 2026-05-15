@@ -148,7 +148,7 @@ export function useRoomActions() {
     ensureConnected();
     setLoading(true);
     setError(null);
-    socket.emit("room:create", { name: user.name }, (createRes) => {
+    socket.emit("room:create", { name: user.name, isSingleplayer: true }, (createRes) => {
       if (!createRes?.ok) {
         unlockAction();
         setLoading(false);
