@@ -22,10 +22,27 @@ let io = null;
 const DISCONNECT_GRACE_MS = 10_000;
 const disconnectTimeouts = new Map();
 
+/**
+ * Safely invoke a Socket.io acknowledgement callback. Clients may emit without
+ * an `ack`, so we no-op when none was provided.
+ *
+ * @param {Function | undefined} ack - The client's acknowledgement callback.
+ * @param {object} payload - Reply body, typically `{ ok, room? , error? }`.
+ * @returns {void}
+ */
 function reply(ack, payload) {
   if (typeof ack === "function") ack(payload);
 }
 
+/**
+ * Mark every player in a finished room as having finished a game, awarding a
+ * win to whoever holds the top score (ties all count as wins; a max of 0
+ * counts for no one). Errors per player are logged and swallowed so one
+ * failure doesn't poison the rest.
+ *
+ * @param {object} room
+ * @returns {Promise<void>}
+ */
 async function finalizeAllPlayerStats(room) {
   const maxScore = room.players.reduce((m, p) => Math.max(m, p.score ?? 0), 0);
   await Promise.all(
@@ -41,6 +58,14 @@ async function finalizeAllPlayerStats(room) {
   );
 }
 
+/**
+ * Mark a single player who left/disconnected mid-game as having finished
+ * (without a win). Used for the player who walks out, not the rest of the
+ * room.
+ *
+ * @param {object | null | undefined} leftPlayer
+ * @returns {Promise<void>}
+ */
 async function finalizeLeftPlayer(leftPlayer) {
   if (!leftPlayer?.userId) return;
   try {
@@ -50,6 +75,13 @@ async function finalizeLeftPlayer(leftPlayer) {
   }
 }
 
+/**
+ * Open a fresh per-match stats slate for every logged-in player in the room.
+ * Errors per player are logged and swallowed.
+ *
+ * @param {object} room
+ * @returns {Promise<void>}
+ */
 async function startAllPlayerStats(room) {
   await Promise.all(
     room.players.map(async (p) => {
@@ -63,6 +95,15 @@ async function startAllPlayerStats(room) {
   );
 }
 
+/**
+ * Schedule the server-side finish of a room. When `timerEnd` is reached, the
+ * room is closed in state, `room:update` + `room:finished` are broadcast, and
+ * (multiplayer only) every player's stats are finalized. The room object is
+ * captured here, then re-read by code at firing time via the service.
+ *
+ * @param {object} room - Must include `code` and `timerEnd` (ms timestamp).
+ * @returns {void}
+ */
 function scheduleRoomFinish(room) {
   const { code, timerEnd } = room;
 
@@ -78,6 +119,13 @@ function scheduleRoomFinish(room) {
   }, delay);
 }
 
+/**
+ * Broadcast the current master word and word-window timestamps to every
+ * socket in a room.
+ *
+ * @param {object} room
+ * @returns {void}
+ */
 function emitWord(room) {
   io.to(room.code).emit("room:word", {
     masterWord: room.masterWord,
@@ -86,6 +134,16 @@ function emitWord(room) {
   });
 }
 
+/**
+ * Schedule the next master-word rotation. At `nextWordAt`, the room's word is
+ * rotated via the service and the result is broadcast to the room; the
+ * function then recurses to schedule the following rotation. Skips scheduling
+ * when there's no next word or the next rotation would land at/after the
+ * room's `timerEnd`.
+ *
+ * @param {object} room
+ * @returns {void}
+ */
 function scheduleRoomWordChange(room) {
   const { code, nextWordAt, timerEnd } = room;
   if (!nextWordAt || (timerEnd && nextWordAt >= timerEnd)) return;
@@ -101,6 +159,23 @@ function scheduleRoomWordChange(room) {
   }, delay);
 }
 
+/**
+ * Build the Socket.io server, attach it to the given HTTP server, and wire up
+ * every `room:*` event handler. Must be called exactly once at boot; later
+ * code reaches the same instance via {@link getIO}.
+ *
+ * Wired events (all emitted by the client and acknowledged via `ack`):
+ * - `room:create`, `room:join`, `room:joinRandom`, `room:rejoin`
+ * - `room:leave`, `room:kick`
+ * - `room:setVisibility`, `room:start`
+ * - `disconnect` (Socket.io built-in; we add a grace period before leaving)
+ *
+ * Server-emitted events: `room:update`, `room:started`, `room:finished`,
+ * `room:word`, `room:kicked`.
+ *
+ * @param {import("http").Server} httpServer
+ * @returns {import("socket.io").Server}
+ */
 export function initSocket(httpServer) {
   io = new Server(httpServer, {
     cors: {
@@ -272,6 +347,13 @@ export function initSocket(httpServer) {
   return io;
 }
 
+/**
+ * Accessor for the singleton Socket.io server. Throws if {@link initSocket}
+ * hasn't run yet — useful for catching boot-order bugs early.
+ *
+ * @returns {import("socket.io").Server}
+ * @throws {Error} If called before `initSocket`.
+ */
 export function getIO() {
   if (!io) throw new Error("Socket.IO not initialized. Call initSocket(httpServer) first.");
   return io;
