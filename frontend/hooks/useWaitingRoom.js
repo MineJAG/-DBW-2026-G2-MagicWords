@@ -8,6 +8,26 @@ import { useRoomActions } from "./useRoomActions.js";
 import { socket } from "../lib/socket.js";
 import { getTimerEnd } from "../lib/timeUtils.js";
 
+/**
+ * State for the waiting-room screen. Tracks the host-controlled timer input
+ * (and its validation message), exposes whether the current socket is the
+ * host, and toggles public/private visibility. Listens for `room:started`
+ * to seed game-context timer fields and navigate every player to
+ * `/multiplayer` together.
+ *
+ * @returns {{
+ *   timeMax: number,
+ *   setTimeMax: (seconds: number) => void,
+ *   minutes: string,
+ *   setMinutes: (value: string) => void,
+ *   timerError: string,
+ *   setTimerError: (value: string) => void,
+ *   hostSocketId: string | undefined,
+ *   currentSocketIsHost: boolean,
+ *   isPublic: boolean,
+ *   handleToggleVisibility: () => void,
+ * }}
+ */
 export function useWaitingRoom() {
   const navigate = useNavigate();
   const { timeMax, setTimeMax, resetTimer, setTimeStarted, setTimerEnd } = useGame();

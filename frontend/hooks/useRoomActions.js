@@ -8,22 +8,68 @@ import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 
+/**
+ * Module-level "currently dispatching a room action" flag. Prevents a
+ * double-clicked button from firing two `room:*` emits before the first ack
+ * arrives. Plain boolean (not state) on purpose so a re-render can't reset it.
+ *
+ * @type {boolean}
+ */
 let action = false;
 
+/**
+ * Open the shared socket if it isn't already. Safe to call repeatedly.
+ *
+ * @returns {void}
+ */
 function ensureConnected() {
   if (!socket.connected) socket.connect();
 }
 
+/**
+ * Try to take the action lock. Returns `false` if another action is already
+ * in flight, in which case the caller should bail out.
+ *
+ * @returns {boolean}
+ */
 function lockAction() {
   if (action) return false;
   action = true;
   return true;
 }
 
+/**
+ * Release the action lock. Always paired with a {@link lockAction} that
+ * returned `true`, including in ack/error paths.
+ *
+ * @returns {void}
+ */
 function unlockAction() {
   action = false;
 }
 
+/**
+ * Every multiplayer-room action the UI can take, wrapped over the shared
+ * socket. Each action:
+ *
+ * - bounces the user to `/signin` if they aren't logged in (where relevant),
+ * - guards against double-fire via {@link lockAction},
+ * - sets `loading` / `error` on the room context,
+ * - updates room context state from the server's response,
+ * - persists the room session so a refresh can rejoin.
+ *
+ * @returns {{
+ *   createRoom: () => void,
+ *   joinRoom: (code: string) => void,
+ *   joinRandomRoom: () => void,
+ *   leaveRoom: () => void,
+ *   kickPlayer: (targetSocketId: string) => void,
+ *   setVisibility: (isPublic: boolean) => void,
+ *   startRoom: (options?: { timeLimit?: number }) => void,
+ *   startSingleplayer: () => void,
+ *   submitMultiplayerWord: (event: Event) => void,
+ * }}
+ */
 export function useRoomActions() {
   const { room, setRoom, setRoomData, setRoomPlayers, setLoading, setError } = useRoom();
   const { handleSubmit, onValid, resetTimer } = useGame();

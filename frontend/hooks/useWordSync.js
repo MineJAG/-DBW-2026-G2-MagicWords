@@ -6,6 +6,21 @@ import { useRoom } from "../context/roomContext.jsx";
 import { useUser } from "../context/userContext.jsx";
 import { socket } from "../lib/socket.js";
 
+/**
+ * Sync game-context fields (master word, timers, this player's score, words
+ * already submitted) from the multiplayer room. Two effects:
+ *
+ * 1. On `roomData` change, hydrate every game-context field from the snapshot
+ *    and — once per mount — restore the user's previous `foundWords` if
+ *    their stored `lastMasterWord` still matches the current master word
+ *    (this lets a refresh mid-match keep the words they had already found).
+ * 2. Subscribe to `room:word` so word rotations land in context immediately.
+ *
+ * No-ops when `mode !== "multiplayer"`.
+ *
+ * @param {"multiplayer" | "singleplayer" | string} mode
+ * @returns {void}
+ */
 export function useWordSync(mode) {
   const { roomData } = useRoom();
   const { user } = useUser();

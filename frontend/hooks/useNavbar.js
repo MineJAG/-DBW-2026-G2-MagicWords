@@ -6,6 +6,19 @@ import { useTheme } from "../context/themeContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
 import { useRoomActions } from "./useRoomActions.js";
 
+/**
+ * Bundles the data and callbacks the navbar needs: the current user and
+ * theme for display, a toggler that flips light/dark, and a "leave on
+ * navigate" handler that pulls the user out of any active room before
+ * routing away (a no-op when not in a room).
+ *
+ * @returns {{
+ *   user: object | null,
+ *   theme: "light" | "dark",
+ *   handleToggleTheme: () => void,
+ *   handleLeaveOnNav: () => void,
+ * }}
+ */
 export function useNavbar() {
   const { user } = useUser();
   const { theme, setTheme } = useTheme();

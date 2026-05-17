@@ -3,6 +3,30 @@
 import { useState } from "react";
 import { api } from "../lib/api.js";
 
+/**
+ * State + validation + submit for the in-game word input.
+ *
+ * Client-side rules: non-empty, ≥2 letters, only letters (incl. accented),
+ * every letter must appear in `masterWord`, and the word can't already be in
+ * `submittedWords` or in the in-flight `pendingWords` set. If those pass, the
+ * word is POSTed to `/words/validate`. The server's response triggers
+ * `onValid(word, currentScore)`; on a 400 the field errors are shown inline.
+ *
+ * `pendingWords` is tracked so two rapid submits of the same word can't both
+ * succeed before the first ack arrives. `submitting` is true while any word
+ * is in flight, so the caller can disable the form.
+ *
+ * @param {string} masterWord - The current master word.
+ * @param {string[]} [submittedWords=[]] - Words already accepted this match.
+ * @returns {{
+ *   word: string,
+ *   setWord: (value: string) => void,
+ *   errors: Record<string, string>,
+ *   validate: (wordToValidate?: string) => Record<string, string>,
+ *   handleSubmit: (e: Event, onValid?: (word: string, currentScore: number) => void, payload?: object) => Promise<void>,
+ *   submitting: boolean,
+ * }}
+ */
 export function useWordValidation(masterWord, submittedWords = []) {
   const [word, setWord] = useState("");
   const [errors, setErrors] = useState({});

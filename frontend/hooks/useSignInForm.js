@@ -5,6 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api.js";
 import { useUser } from "../context/userContext.jsx";
 
+/**
+ * Controlled state + validation + submit for the sign-in form. Accepts either
+ * a username or an email in the `usernameOrEmail` field (detected by `@`).
+ * On a successful login, populates the user context and navigates to
+ * `/home`. On 400/401 the field errors from the server are shown inline.
+ *
+ * @returns {{
+ *   usernameOrEmail: string,
+ *   setUsernameOrEmail: (value: string) => void,
+ *   password: string,
+ *   setPassword: (value: string) => void,
+ *   errors: Record<string, string>,
+ *   handleSubmit: (e: Event) => Promise<void>,
+ * }}
+ */
 export function useSignInForm() {
   const navigate = useNavigate();
   const { setUser } = useUser();

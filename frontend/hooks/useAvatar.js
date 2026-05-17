@@ -4,6 +4,22 @@ import { useRef, useState } from "react";
 import { useUser } from "../context/userContext.jsx";
 import { api } from "../lib/api.js";
 
+/**
+ * Profile-picture upload widget state. Holds the currently displayed picture
+ * (as a data URL), an optional error message, and a hidden-file-input ref
+ * the parent can wire to a visible button. On a successful upload, the user
+ * context is refreshed; on failure, the preview reverts so the UI doesn't
+ * lie about what the server has.
+ *
+ * @param {string | null} [initialSrc=null] - Starting picture, usually `user.picture`.
+ * @returns {{
+ *   picture: string | null,
+ *   error: string | null,
+ *   inputRef: React.RefObject<HTMLInputElement>,
+ *   handleFileChange: (e: Event) => void,
+ *   openFilePicker: () => void,
+ * }}
+ */
 export function useAvatar(initialSrc = null) {
   const { setUser } = useUser();
   const [picture, setPicture] = useState(initialSrc);

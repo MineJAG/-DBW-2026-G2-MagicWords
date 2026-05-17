@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from "react";
 
+/**
+ * Map from the labels rendered on the on-screen keyboard to the `KeyboardEvent.code`
+ * values they should highlight on. Some labels (Shift, Control, Alt) map to a
+ * pair so either physical side lights up.
+ *
+ * @type {Record<string, string[]>}
+ */
 const KEY_CODE_MAP = {
   1: ["Digit1"], 2: ["Digit2"], 3: ["Digit3"], 4: ["Digit4"], 5: ["Digit5"],
   6: ["Digit6"], 7: ["Digit7"], 8: ["Digit8"], 9: ["Digit9"], 0: ["Digit0"],
@@ -20,6 +27,14 @@ const KEY_CODE_MAP = {
   Spacebar: ["Space"],
 };
 
+/**
+ * Track which physical keys are currently held down, so the on-screen
+ * keyboard component can light up matching keys. Active keys are kept in a
+ * `Set` of `KeyboardEvent.code` strings.
+ *
+ * @returns {{ isActive: (label: string) => boolean }} - `isActive(label)`
+ *   returns true if any code mapped to `label` is currently held.
+ */
 export function useKeyboard() {
   const [active, setActive] = useState(() => new Set());
 

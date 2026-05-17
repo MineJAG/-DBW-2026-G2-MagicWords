@@ -8,6 +8,25 @@ import {
   clearRoomSession,
 } from "../lib/roomSession.js";
 
+/**
+ * Keep the room context in sync with the server while the user is in a room.
+ * Wires three socket listeners:
+ *
+ * - `room:update` — server pushed a fresh snapshot; mirror it into context.
+ * - `room:kicked` — server removed us; clear session and bounce to `/home`.
+ * - `connect` — on (re)connect, try to rejoin via the saved session; if
+ *   rejoin fails, clear the session and go home.
+ *
+ * Called once at the room-context provider level so child components don't
+ * have to worry about socket plumbing.
+ *
+ * @param {{
+ *   setRoom: (code: string | null) => void,
+ *   setRoomData: (room: object | null) => void,
+ *   setRoomPlayers: (players: object[]) => void,
+ * }} params
+ * @returns {void}
+ */
 export function useRoomSync({ setRoom, setRoomData, setRoomPlayers }) {
   const navigate = useNavigate();
 
