@@ -1,6 +1,4 @@
 import { useRoom } from "../context/roomContext.jsx";
-import { setWaitingRoomTimer } from "../lib/timeSetter.js";
-import { useRoomActions } from "../hooks/useRoomActions.js";
 import { useWaitingRoom } from "../hooks/useWaitingRoom.js";
 
 import Navbar from "../components/navbar.jsx";
@@ -14,18 +12,18 @@ import "../styles/waitingroom.css";
 
 export default function WaitingRoom() {
   const { room, roomPlayers, loading, error: roomError } = useRoom();
-  const { kickPlayer, startRoom } = useRoomActions();
   const {
     timeMax,
-    setTimeMax,
     minutes,
-    setMinutes,
     timerError,
-    setTimerError,
     hostSocketId,
     currentSocketIsHost,
     isPublic,
     handleToggleVisibility,
+    handleMinutesChange,
+    handleSetTimer,
+    handleStartRoom,
+    kickPlayer,
   } = useWaitingRoom();
 
   return (
@@ -94,24 +92,13 @@ export default function WaitingRoom() {
                           inputMode="numeric"
                           placeholder={String(timeMax / 60)}
                           value={minutes}
-                          onChange={(e) => {
-                            setMinutes(e.target.value.replace(/\D/g, ""));
-                            setTimerError("");
-                          }}
+                          onChange={handleMinutesChange}
                         />
                         <button
                           type="button"
                           className="timer-set-button"
                           disabled={!currentSocketIsHost}
-                          onClick={() => {
-                            const error = setWaitingRoomTimer({
-                              minutes,
-                              setMinutes,
-                              setTimeMax,
-                            });
-
-                            setTimerError(error);
-                          }}
+                          onClick={handleSetTimer}
                         >
                           Set
                         </button>
@@ -123,21 +110,7 @@ export default function WaitingRoom() {
                     <div className="col-12 startButton">
                       <ClickableButton
                         disabled={loading || !currentSocketIsHost}
-                        onClick={() => {
-                          setTimerError("");
-                          const error = setWaitingRoomTimer({
-                            minutes,
-                            setMinutes,
-                            setTimeMax,
-                          });
-
-                          if (error) {
-                            setTimerError(error);
-                            return;
-                          }
-
-                          startRoom({ timeLimit: Number(minutes) * 60 });
-                        }}
+                        onClick={handleStartRoom}
                         text="Start"
                       />
                     </div>

@@ -7,6 +7,7 @@ import { useRoom } from "../context/roomContext.jsx";
 import { useRoomActions } from "./useRoomActions.js";
 import { socket } from "../lib/socket.js";
 import { getTimerEnd } from "../lib/timeUtils.js";
+import { setWaitingRoomTimer } from "../lib/timeSetter.js";
 
 /**
  * State for the waiting-room screen. Tracks the host-controlled timer input
@@ -26,13 +27,17 @@ import { getTimerEnd } from "../lib/timeUtils.js";
  *   currentSocketIsHost: boolean,
  *   isPublic: boolean,
  *   handleToggleVisibility: () => void,
+ *   handleMinutesChange: (event: import("react").ChangeEvent<HTMLInputElement>) => void,
+ *   handleSetTimer: () => void,
+ *   handleStartRoom: () => void,
+ *   kickPlayer: (socketId: string) => void,
  * }}
  */
 export function useWaitingRoom() {
   const navigate = useNavigate();
   const { timeMax, setTimeMax, resetTimer, setTimeStarted, setTimerEnd } = useGame();
   const { roomData } = useRoom();
-  const { setVisibility } = useRoomActions();
+  const { setVisibility, startRoom, kickPlayer } = useRoomActions();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
   const hostSocketId = roomData?.host?.socketId;
@@ -42,6 +47,26 @@ export function useWaitingRoom() {
   const handleToggleVisibility = useCallback(() => {
     setVisibility(!isPublic);
   }, [setVisibility, isPublic]);
+
+  const handleMinutesChange = useCallback((event) => {
+    setMinutes(event.target.value.replace(/\D/g, ""));
+    setTimerError("");
+  }, []);
+
+  const handleSetTimer = useCallback(() => {
+    const error = setWaitingRoomTimer({ minutes, setMinutes, setTimeMax });
+    setTimerError(error);
+  }, [minutes, setTimeMax]);
+
+  const handleStartRoom = useCallback(() => {
+    setTimerError("");
+    const error = setWaitingRoomTimer({ minutes, setMinutes, setTimeMax });
+    if (error) {
+      setTimerError(error);
+      return;
+    }
+    startRoom({ timeLimit: Number(minutes) * 60 });
+  }, [minutes, setTimeMax, startRoom]);
 
   useEffect(() => {
     setMinutes(String(Math.round(timeMax / 60)));
@@ -83,5 +108,9 @@ export function useWaitingRoom() {
     currentSocketIsHost,
     isPublic,
     handleToggleVisibility,
+    handleMinutesChange,
+    handleSetTimer,
+    handleStartRoom,
+    kickPlayer,
   };
 }
