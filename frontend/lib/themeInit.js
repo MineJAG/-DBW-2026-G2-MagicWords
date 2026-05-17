@@ -2,8 +2,16 @@
 
 const THEME_KEY = "theme";
 
-// Runs before React mounts so the page does not flash the wrong theme;
-// Context cannot be read here because no React tree exists yet.
+/**
+ * Apply the saved light/dark theme to `<html>` before React mounts, so the
+ * page never flashes the wrong theme on load. Reads `theme` from
+ * `localStorage`, defaulting to `"dark"`.
+ *
+ * Runs imperatively (not through `ThemeContext`) because no React tree
+ * exists yet at this point in the boot.
+ *
+ * @returns {void}
+ */
 export default function initializeTheme() {
   const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
 

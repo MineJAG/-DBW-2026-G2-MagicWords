@@ -2,6 +2,16 @@
 
 const BASE_URL = "http://localhost:3000/api";
 
+/**
+ * Send a JSON request to the backend API. Always includes credentials so the
+ * session cookie travels with the call. On a non-2xx response, throws an
+ * object the caller can inspect via `.status`, `.message`, and `.errors`.
+ *
+ * @param {string} path - Path under `/api`, e.g. `"/auth/login"`.
+ * @param {{ method?: string, body?: object }} [options]
+ * @returns {Promise<object>} The parsed JSON body (or `{}` if empty).
+ * @throws {{ status: number, message: string, errors: any }}
+ */
 async function request(path, options = {}) {
   const response = await fetch(`${BASE_URL}${path}`, {
     method: options.method || "GET",
@@ -22,6 +32,20 @@ async function request(path, options = {}) {
   return data;
 }
 
+/**
+ * Named helpers for every backend REST endpoint the frontend talks to. Each
+ * helper returns the parsed response body, or throws the `request` error
+ * object. Components should call these instead of `fetch` directly.
+ *
+ * @property {(payload: { username: string, email: string, password: string }) => Promise<object>} register - `POST /auth/register`.
+ * @property {(payload: { usernameOrEmail: string, password: string }) => Promise<object>} login - `POST /auth/login`.
+ * @property {() => Promise<object>} me - `GET /auth/me`, returns the current user.
+ * @property {() => Promise<object>} logout - `POST /auth/logout`.
+ * @property {(payload: { username: string }) => Promise<object>} updateUsername - `PATCH /auth/username`.
+ * @property {(payload: { picture: string | null }) => Promise<object>} updatePicture - `PATCH /auth/picture`.
+ * @property {(payload: { word: string }) => Promise<object>} validateWord - `POST /words/validate`.
+ * @property {() => Promise<object>} getMasterWord - `GET /words/master`.
+ */
 export const api = {
   register: (payload) =>
     request("/auth/register", { method: "POST", body: payload }),
