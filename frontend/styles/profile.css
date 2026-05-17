@@ -199,7 +199,7 @@
 
 @media (max-width: 991px) {
   .chart-col {
-    display: none !important;
+    margin-top: 1.5rem;
   }
 
   .profile-top-row {
