@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/gameContext.jsx";
 import { useRoom } from "../context/roomContext.jsx";
+import { useUser } from "../context/userContext.jsx";
 import { useRoomActions } from "./useRoomActions.js";
 import { socket } from "../lib/socket.js";
 import { getTimerEnd } from "../lib/timeUtils.js";
@@ -37,6 +38,7 @@ export function useWaitingRoom() {
   const navigate = useNavigate();
   const { timeMax, setTimeMax, resetTimer, setTimeStarted, setTimerEnd } = useGame();
   const { roomData } = useRoom();
+  const { setUser } = useUser();
   const { setVisibility, startRoom, kickPlayer } = useRoomActions();
   const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
   const [timerError, setTimerError] = useState("");
@@ -84,6 +86,11 @@ export function useWaitingRoom() {
         nextRoom?.timerEnd ?? getTimerEnd(nextTimeStarted, nextTimeMax);
 
       resetTimer();
+      setUser((prev) =>
+        prev?.stats?.foundWords?.length
+          ? { ...prev, stats: { ...prev.stats, foundWords: [] } }
+          : prev
+      );
       setTimeMax(nextTimeMax);
       setTimeStarted(nextTimeStarted);
       setTimerEnd(nextTimerEnd);
@@ -95,7 +102,7 @@ export function useWaitingRoom() {
     return () => {
       socket.off("room:started", handleRoomStarted);
     };
-  }, [timeMax, navigate, setTimeMax, resetTimer, setTimeStarted, setTimerEnd]);
+  }, [timeMax, navigate, setTimeMax, resetTimer, setUser, setTimeStarted, setTimerEnd]);
 
   return {
     timeMax,

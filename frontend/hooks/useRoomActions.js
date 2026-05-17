@@ -73,7 +73,7 @@ function unlockAction() {
 export function useRoomActions() {
   const { room, setRoom, setRoomData, setRoomPlayers, setLoading, setError } = useRoom();
   const { handleSubmit, onValid, resetTimer } = useGame();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
 
   const createRoom = useCallback(() => {
@@ -210,13 +210,18 @@ export function useRoomActions() {
           return;
         }
         resetTimer();
+        setUser((prev) =>
+          prev?.stats?.foundWords?.length
+            ? { ...prev, stats: { ...prev.stats, foundWords: [] } }
+            : prev
+        );
         setRoom(startRes.room.code);
         setRoomData(startRes.room);
         setRoomPlayers(startRes.room.players ?? []);
         navigate("/singleplayer");
       });
     });
-  }, [user, navigate, resetTimer, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
+  }, [user, setUser, navigate, resetTimer, setRoom, setRoomData, setRoomPlayers, setLoading, setError]);
 
   const setVisibility = useCallback((isPublic) => {
     if (!room) return;
