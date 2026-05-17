@@ -29,7 +29,7 @@ export async function validate(req, res) {
     const result = wordService.submitGuess({ word, masterWord });
     const userId = getAuthUserId(req);
     const score = userId
-      ? await scoreService.submitWord(userId, result.word)
+      ? await scoreService.submitWord(userId, result.word, masterWord)
       : { points: 0, currentScore: 0 };
 
     if (roomCode && userId) {

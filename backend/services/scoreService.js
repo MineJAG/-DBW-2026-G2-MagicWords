@@ -23,20 +23,27 @@ function calculateWordScore(word) {
 }
 
 /**
- * Score a word for a logged-in user and update their stats. The
- * `foundWords` list is match-scoped: it accumulates across master-word
- * rotations and is only cleared at game start/end. Re-submitting any word
- * already in the list throws a 400. Also tracks the player's longest word.
+ * Score a word for a logged-in user and update their stats.
+ *
+ * If the master word has changed since their last submission, the player's
+ * `foundWords` list is reset. Re-submitting the same word for the same
+ * master word throws a 400. Also tracks the player's longest word.
  *
  * @param {string} userId
  * @param {string} word - The word the player submitted.
+ * @param {string} masterWord - The current master word.
  * @returns {Promise<{ points: number, currentScore: number }>}
  */
-export async function submitWord(userId, word) {
+export async function submitWord(userId, word, masterWord) {
   const normalized = word.trim().toUpperCase();
+  const normalizedMaster = masterWord.trim().toUpperCase();
   const stats = await getStats(userId);
 
-  if (stats.foundWords?.includes(normalized)) {
+  if (stats.lastMasterWord !== normalizedMaster) {
+    await updateStats(userId, {
+      $set: { foundWords: [], lastMasterWord: normalizedMaster }
+    });
+  } else if (stats.foundWords?.includes(normalized)) {
     const err = new Error("Word already submitted.");
     err.status = 400;
     err.errors = { word: "Word already submitted." };
