@@ -1,7 +1,33 @@
 "use strict";
-import { useState } from "react";
 
-export function signInFormValidation() {
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api.js";
+import { useUser } from "../context/userContext.jsx";
+
+/**
+ * Controlled state + validation + submit for the sign-up form. Enforces:
+ * - username 5–20 chars, alphanumeric only,
+ * - email matches a basic RFC-ish pattern,
+ * - password 6–12 chars and includes at least one digit,
+ * - password confirmation matches.
+ *
+ * On success populates the user context and navigates to `/home`. On 400/409
+ * the server's per-field errors are shown inline (e.g. "username taken").
+ *
+ * @returns {{
+ *   username: string, setUsername: (value: string) => void,
+ *   email: string, setEmail: (value: string) => void,
+ *   password: string, setPassword: (value: string) => void,
+ *   passwordVerification: string, setPasswordVerification: (value: string) => void,
+ *   errors: Record<string, string>,
+ *   handleSubmit: (e: Event) => Promise<void>,
+ * }}
+ */
+export function useSignUpForm() {
+  const navigate = useNavigate();
+  const { setUser } = useUser();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,10 +68,22 @@ export function signInFormValidation() {
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const validationErrors = validate();
     setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      const data = await api.register({ username, email, password });
+      setUser(data);
+      navigate("/home", { replace: true });
+    } catch (e) {
+      if (e.status === 409 || e.status === 400) {
+        setErrors(e.errors);
+      }
+    }
   }
 
   return {

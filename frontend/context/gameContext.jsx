@@ -1,13 +1,20 @@
 import { createContext, useContext, useState, useCallback, useRef } from "react";
-import { useWordValidation } from "../hooks/wordValidation.js";
-import { calculateWordScore } from "../hooks/scoring.js";
-import { getTimeLeft, getTimerEnd } from "../hooks/timer.js";
-import { useRoom } from "./roomContext.jsx";
+import { useWordValidation } from "../hooks/useWordValidation.js";
+import { getTimerEnd } from "../lib/timeUtils.js";
 
 const GameContext = createContext(null);
 
+/**
+ * Holds everything about the current round: the masterword, the timer, the
+ * player's score, and the words they've already submitted. Also exposes the
+ * word-input helpers from `useWordValidation`.
+ *
+ * Use `resetTimer()` to clear round data between rounds.
+ *
+ * @param {{ children: import("react").ReactNode }}
+ * @returns {JSX.Element}
+ */
 export function GameProvider({ children }) {
-  const { room: roomCode, roomPlayers: players, setRoomPlayers: setPlayers } = useRoom();
   const [masterWord, setMasterWord] = useState("");
   const [timeMax, setTimeMax] = useState(600);
   const [timeStarted, setTimeStarted] = useState(null);
@@ -16,46 +23,44 @@ export function GameProvider({ children }) {
   const [winner, setWinner] = useState(null);
   const [isPublic, setIsPublic] = useState(null); // true = public, false = private
   const [submittedWords, setSubmittedWords] = useState([]);
+  const [playerScore, setPlayerScore] = useState(0);
   const input = useRef(null);
 
-  const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord);
+  const { word, setWord, errors, handleSubmit } = useWordValidation(masterWord, submittedWords);
 
-  const submitWord = useCallback((word) => {
-    if (!word) return;
-    const normalized = word.trim().toUpperCase();
-    if (!normalized) return;
+  /**
+   * Add a word to the list of submitted words. Empty input is ignored. The
+   * word is trimmed and turned into uppercase before being saved.
+   *
+   * @param {string} value
+   * @returns {void}
+   */
+  const submitWord = useCallback((value) => {
+    if (!value) return;
+    const normalized = value.trim().toUpperCase();
+    setSubmittedWords((prev) => [...prev, normalized]);
+  }, []);
 
-    // Skip duplicates without awarding points
-    let isDuplicate = false;
-    setSubmittedWords((prev) => {
-      if (prev.includes(normalized)) {
-        isDuplicate = true;
-        return prev;
-      }
-      return [...prev, normalized];
-    });
-    if (isDuplicate) return;
-
-    const points = calculateWordScore(
-      normalized,
-      getTimeLeft(timerEnd),
-      { totalTime: timeMax }
-    );
-
-    setPlayers((prev) =>
-      prev.map((player) =>
-        player.isHost
-          ? { ...player, score: (player.score ?? 0) + points }
-          : player
-      )
-    );
-  }, [timeMax, timerEnd, setPlayers]);
-
-  const onValid = useCallback((validWord) => {
+  /**
+   * Runs after the server says a word is valid. Adds the word to the list
+   * and updates the player's score.
+   *
+   * @param {string} validWord - The word the server accepted.
+   * @param {number} [currentScore] - The new score from the server.
+   * @returns {void}
+   */
+  const onValid = useCallback((validWord, currentScore) => {
     submitWord(validWord);
-    setWord("");
-  }, [submitWord, setWord]);
+    setPlayerScore(currentScore ?? 0);
+  }, [submitWord]);
 
+  /**
+   * Start the round timer. Saves when the round started and works out when
+   * it should end.
+   *
+   * @param {number} [duration=timeMax] - How long the round lasts, in seconds.
+   * @returns {void}
+   */
   function startTimer(duration = timeMax) {
     const nextTimeStarted = Date.now();
     const nextTimerEnd = getTimerEnd(nextTimeStarted, duration);
@@ -64,24 +69,25 @@ export function GameProvider({ children }) {
     setTimerEnd(nextTimerEnd);
   }
 
+  /**
+   * Wipe the round: clears the timer, the big word, the submitted words,
+   * and the score. Call this between rounds.
+   *
+   * @returns {void}
+   */
   function resetTimer() {
     setTimeStarted(null);
     setTimerEnd(null);
     setMasterWord("");
-  }
-
-  function changeWord(changeCount = 1) {
-    const nextWordNumber = Math.max(1, changeCount);
-    setMasterWord(`WORD${nextWordNumber}`);
+    setSubmittedWords([]);
+    setPlayerScore(0);
   }
 
   return (
     <GameContext.Provider
       value={{
-        roomCode,
-        players,
-        setPlayers,
         masterWord,
+        setMasterWord,
         timeMax,
         setTimeMax,
         timeStarted,
@@ -90,7 +96,6 @@ export function GameProvider({ children }) {
         setTimerEnd,
         startTimer,
         resetTimer,
-        changeWord,
         gameStatus,
         setGameStatus,
         winner,
@@ -99,6 +104,8 @@ export function GameProvider({ children }) {
         setIsPublic,
         submittedWords,
         setSubmittedWords,
+        playerScore,
+        setPlayerScore,
         submitWord,
         word,
         input,
@@ -113,6 +120,39 @@ export function GameProvider({ children }) {
   );
 }
 
+/**
+ * Hook to read the game state from any component.
+ *
+ * @returns {{
+ *   masterWord: string,                                                                            // the big word for this round
+ *   setMasterWord: (v: string) => void,
+ *   timeMax: number,                                                                               // round length in seconds
+ *   setTimeMax: (v: number) => void,
+ *   timeStarted: number | null,                                                                    // when the round began (ms)
+ *   setTimeStarted: (v: number | null) => void,
+ *   timerEnd: number | null,                                                                       // when the round ends (ms)
+ *   setTimerEnd: (v: number | null) => void,
+ *   startTimer: (duration?: number) => void,
+ *   resetTimer: () => void,
+ *   gameStatus: "waiting" | "playing" | "finished",
+ *   setGameStatus: (v: string) => void,
+ *   winner: object | null,                                                                         // who won, once the round ends
+ *   setWinner: (v: object | null) => void,
+ *   isPublic: boolean | null,                                                                      // is the room public?
+ *   setIsPublic: (v: boolean | null) => void,
+ *   submittedWords: string[],                                                                      // words already played
+ *   setSubmittedWords: (v: string[]) => void,
+ *   playerScore: number,
+ *   setPlayerScore: (v: number) => void,
+ *   submitWord: (value: string) => void,
+ *   word: string,                                                                                  // current input value
+ *   input: import("react").RefObject<HTMLInputElement>,                                            // ref for the input field
+ *   setWord: (v: string) => void,
+ *   errors: { word?: string },                                                                     // input errors
+ *   handleSubmit: (event: Event, onValid?: Function, payload?: object) => Promise<void>,
+ *   onValid: (validWord: string, currentScore?: number) => void,
+ * }}
+ */
 export function useGame() {
   return useContext(GameContext);
 }

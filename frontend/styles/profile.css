@@ -171,6 +171,32 @@
   background: #f38ba826;
 }
 
+.logout-btn {
+  background: var(--ink-black);
+  color: #ef4444;
+  border-style: var(--border-type);
+  border-color: #ef4444;
+  border-width: var(--border-width);
+  border-radius: 10px;
+  padding: 16px 48px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+  text-align: center;
+  text-decoration: var(--remove-decoration);
+  transition:
+    var(--transition-background), var(--transition-color),
+    box-shadow 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: var(--ink-black);
+  box-shadow: 0 0 20px #ef4444;
+}
+
 @media (max-width: 991px) {
   .chart-col {
     display: none !important;

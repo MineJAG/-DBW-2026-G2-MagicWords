@@ -1,8 +1,8 @@
-import { codeValidation } from "../hooks/codeValidation.js";
+import { useCodeForm } from "../hooks/useCodeForm.js";
 import { Icon } from "./icons.jsx";
 
 export default function CodeModal({ isOpen, onClose, onSuccess }) {
-  const { code, error, handleChange, handleSubmit, reset } = codeValidation(onSuccess);
+  const { code, error, handleChange, handleSubmit, reset } = useCodeForm(onSuccess);
 
   if (!isOpen) return null;
 

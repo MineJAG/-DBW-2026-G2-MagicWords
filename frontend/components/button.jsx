@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { Icon } from "./icons.jsx";
 
-export default function Button({ link, text }) {
+export default function Button({ link, text, onClick }) {
   return (
     <button>
-      <Link to={link}>{text}</Link>
+      <Link to={link} onClick={onClick}>{text}</Link>
     </button>
   );
 }

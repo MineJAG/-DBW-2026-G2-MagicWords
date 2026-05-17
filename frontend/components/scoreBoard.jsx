@@ -1,8 +1,8 @@
 import { Icon } from "./icons.jsx";
-import sortScore from "../hooks/sortScoreboard.js";
+import { useSortedScore } from "../hooks/useSortedScore.js";
 
 export default function ScoreBoard({ players }) {
-  const sortedPlayers = sortScore(players);
+  const sortedPlayers = useSortedScore(players);
 
   return (
     <aside className="scoreboard">
@@ -12,8 +12,8 @@ export default function ScoreBoard({ players }) {
           <div key={player.id ?? index} className="scoreboard-player-card">
             <div className="scoreboard-score">{player.score ?? 0}</div>
             <div className="scoreboard-avatar">
-              {player.avatar ? (
-                <img src={player.avatar} alt={`${player.name} avatar`} />
+              {player.picture ? (
+                <img src={player.picture} alt={`${player.name} avatar`} />
               ) : (
                 <Icon className="scoreboard-avatar-icon" name="anonymous" />
               )}

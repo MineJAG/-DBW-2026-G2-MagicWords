@@ -1,4 +1,4 @@
-import useAvatar from "../hooks/changeAvatar.js";
+import { useAvatar } from "../hooks/useAvatar.js";
 import { UploadButton } from "./button.jsx";
 import { Icon } from "./icons.jsx";
 

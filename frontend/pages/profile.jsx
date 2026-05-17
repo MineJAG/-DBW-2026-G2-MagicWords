@@ -1,4 +1,5 @@
-import { changeUsername } from "../hooks/changeUsername.js";
+import { useChangeUsername } from "../hooks/useChangeUsername.js";
+import { useLogout } from "../hooks/useLogout.js";
 
 import { useUser } from "../context/userContext.jsx";
 
@@ -14,6 +15,7 @@ import "../styles/profile.css";
 
 export default function Profile() {
   const { user } = useUser();
+  const { handleLogout } = useLogout();
 
   const {
     isEditingName,
@@ -24,7 +26,7 @@ export default function Profile() {
     handleConfirm,
     handleCancel,
     handleStartEditing,
-  } = changeUsername(user?.name);
+  } = useChangeUsername(user?.name);
 
   return (
     <>
@@ -116,7 +118,7 @@ export default function Profile() {
                       </tr>
                       <tr>
                         <td>Games Lost</td>
-                        <td>{user?.stats.gamesLost}</td>
+                        <td>{(user?.stats.gamesPlayed ?? 0) - (user?.stats.gamesWon ?? 0)}</td>
                       </tr>
                       <tr>
                         <td>Win Rate</td>
@@ -164,8 +166,8 @@ export default function Profile() {
                         <td>{user?.stats.mostWordsInOneMatch}</td>
                       </tr>
                       <tr>
-                        <td>Longest Streak</td>
-                        <td>{user?.stats.longestStreak}</td>
+                        <td>Streak</td>
+                        <td>{user?.stats.streak}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -174,6 +176,11 @@ export default function Profile() {
                 size="text-container-profile-size"
               />
             </div>
+          </div>
+          <div className="m-top text-center pb-5">
+            <button className="logout-btn" onClick={handleLogout}>
+              Log Out
+            </button>
           </div>
         </div>
       </div>

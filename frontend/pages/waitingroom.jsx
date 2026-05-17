@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useRoom } from "../context/roomContext.jsx";
-import { AvatarPreview } from "../components/avatar.jsx";
-import { useGame } from "../context/gameContext.jsx";
-import { setWaitingRoomTimer } from "../hooks/timeSetter.js";
+import { useWaitingRoom } from "../hooks/useWaitingRoom.js";
 
 import Navbar from "../components/navbar.jsx";
 import { Icon } from "../components/icons.jsx";
@@ -15,24 +11,20 @@ import "../styles/waitingroom.css";
 
 
 export default function WaitingRoom() {
-  const navigate = useNavigate();
-  const { room, roomPlayers } = useRoom();
+  const { room, roomPlayers, loading, error: roomError } = useRoom();
   const {
     timeMax,
-    setTimeMax,
-    resetTimer,
-    startTimer,
-  } = useGame();
-  const [minutes, setMinutes] = useState(String(Math.round(timeMax / 60)));
-  const [timerError, setTimerError] = useState("");
-
-  useEffect(() => {
-    setMinutes(String(Math.round(timeMax / 60)));
-  }, [timeMax]);
-
-  useEffect(() => {
-    resetTimer();
-  }, []);
+    minutes,
+    timerError,
+    hostSocketId,
+    currentSocketIsHost,
+    isPublic,
+    handleToggleVisibility,
+    handleMinutesChange,
+    handleSetTimer,
+    handleStartRoom,
+    kickPlayer,
+  } = useWaitingRoom();
 
   return (
     <div className="waiting-room-page">
@@ -41,18 +33,19 @@ export default function WaitingRoom() {
       <div className="row justify-content-center">
         <div className="col-12">
           <h1 className="header">Waiting Room - {room} </h1>
+          {roomError ? <div className="text-danger text-center mb-3">{roomError}</div> : null}
 
           <div className="row justify-content-center">
             <div className="col-12 col-lg-6">
               <div className="player-list">
                 {roomPlayers.map((player) => (
-                  <div key={player.name} className="player">
+                  <div key={player.socketId ?? player.name} className="player">
                     <div className="row align-items-center w-100">
                       <div className="col-3 col-md-2">
                         <div className="player-avatar">
-                          {player.avatar ? (
-                            <AvatarPreview
-                              src={player.avatar}
+                          {player.picture ? (
+                            <img
+                              src={player.picture}
                               alt={`${player.name} avatar`}
                             />
                           ) : (
@@ -66,65 +59,64 @@ export default function WaitingRoom() {
                       </div>
 
                       <div className="col-2 text-center">
-                        {player.isHost ? (
+                        {player.socketId === hostSocketId ? (
                           <div className="player-host">
                             <Icon name="star" />
                           </div>
                         ) : (
-                          <div className="player-not-host">
-                            <Icon name="close" onClick={() => {}} />
+                          <div
+                            className="player-not-host"
+                            onClick={currentSocketIsHost ? () => kickPlayer(player.socketId) : undefined}
+                          >
+                            {currentSocketIsHost ? <Icon name="close" /> : null}
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
                 ))}
-                <div className="col-12 timer">
-                  <div className="timer-input-row">
-                    <div className="timer-label">Time(min):</div>
-                    <input
-                      className="timer-input"
-                      type="text"
-                      inputMode="numeric"
-                      placeholder={String(timeMax / 60)}
-                      value={minutes}
-                      onChange={(e) => {
-                        setMinutes(e.target.value.replace(/\D/g, ""));
-                        setTimerError("");
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="timer-set-button"
-                      onClick={() => {
-                        const error = setWaitingRoomTimer({
-                          minutes,
-                          setMinutes,
-                          setTimeMax,
-                        });
-
-                        setTimerError(error);
-                      }}
-                    >
-                      Set
-                    </button>
+                {currentSocketIsHost ? (
+                  <>
+                    <div className="col-12 startButton">
+                      <ClickableButton
+                        onClick={handleToggleVisibility}
+                        text={isPublic ? "Public" : "Private"}
+                      />
+                    </div>
+                    <div className="col-12 timer">
+                      <div className="timer-input-row">
+                        <div className="timer-label">Time(min):</div>
+                        <input
+                          className="timer-input"
+                          type="text"
+                          inputMode="numeric"
+                          placeholder={String(timeMax / 60)}
+                          value={minutes}
+                          onChange={handleMinutesChange}
+                        />
+                        <button
+                          type="button"
+                          className="timer-set-button"
+                          disabled={!currentSocketIsHost}
+                          onClick={handleSetTimer}
+                        >
+                          Set
+                        </button>
+                      </div>
+                      {timerError ? (
+                        <div className="text-danger mt-2">{timerError}</div>
+                      ) : null}
+                    </div>
+                    <div className="col-12 startButton">
+                      <ClickableButton
+                        disabled={loading || !currentSocketIsHost}
+                        onClick={handleStartRoom}
+                        text="Start"
+                      />
+                    </div>
+                  </>
+                ) : null}
                   </div>
-                  {timerError ? (
-                    <div className="text-danger mt-2">{timerError}</div>
-                  ) : null}
-                </div>
-                <div className="col-12 startButton">
-                  <ClickableButton
-                    onClick={() => {
-                      setTimerError("");
-                      resetTimer();
-                      startTimer();
-                      navigate("/multiplayer");
-                    }}
-                    text="Create"
-                  />
-                </div>
-              </div>
               </div>
             </div>
           </div>

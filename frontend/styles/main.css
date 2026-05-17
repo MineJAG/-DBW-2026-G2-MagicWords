@@ -66,6 +66,8 @@ nav a > img {
   border: var(--border-type);
   border-color: var(--light-purple);
   border-width: var(--border-width);
+  object-fit: cover;
+  object-position: center;
   transition:
     var(--transition-background), var(--transition-color),
     var(--transition-shadow);

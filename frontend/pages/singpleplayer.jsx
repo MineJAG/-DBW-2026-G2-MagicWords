@@ -1,7 +1,10 @@
-import { useEffect, useRef } from "react";
 import { useGame } from "../context/gameContext.jsx";
-import { useUser } from "../context/userContext.jsx";
-import { resetChangeCount, startWordChangeInterval }  from "../hooks/wordChange.js";
+
+import { useAutoFocus } from "../hooks/useAutoFocus.js";
+import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
+import { useRoomActions } from "../hooks/useRoomActions.js";
+import { useMultiplayerTimerSync } from "../hooks/useMultiplayerTimerSync.js";
+import { useWordSync } from "../hooks/useWordSync.js";
 
 import Navbar from "../components/navbar.jsx";
 import ScoreBoard from "../components/scoreBoard.jsx";
@@ -13,63 +16,22 @@ import "../styles/scoreBoard.css";
 import "../styles/multiplayer.css";
 
 export default function Singleplayer() {
-    //TODO: placeholders to reutilize placeholder code, change later
   const {
-    players,
     masterWord,
     timerEnd,
-    timeMax,
-    resetTimer,
-    changeWord,
     submittedWords,
     word,
     input,
     setWord,
     errors,
-    handleSubmit,
-    onValid,
   } = useGame();
-  const { user } = useUser();
-  const changeCount = useRef(0);
 
-  useEffect(() => {
-    input.current?.focus();
-  }, [input]);
+  useMultiplayerTimerSync("/leaderboard-singleplayer");
+  useWordSync("multiplayer");
+  useAutoFocus(input);
 
-  useEffect(() => {
-    if (timerEnd == null) {
-      resetChangeCount(changeCount);
-      return undefined;
-    }
-
-    const wordChangeInterval = startWordChangeInterval({
-      timerEnd,
-      timeMax,
-      changeCount,
-      changeWord,
-    });
-
-    return () => {
-      clearInterval(wordChangeInterval);
-      resetChangeCount(changeCount);
-    };
-  }, [timerEnd, timeMax]);
-
-  useEffect(() => {
-    return () => {
-      resetTimer();
-    };
-  }, []);
-
-  const activePlayer = players.find((player) => player.isHost) ?? players[0];
-  const singleplayerScoreboard = [
-    {
-      id: user?.name ?? activePlayer?.id ?? "singleplayer-player",
-      name: user?.name ?? activePlayer?.name ?? "You",
-      score: activePlayer?.score ?? user?.stats?.currentScore ?? 0,
-      avatar: user?.picture ?? activePlayer?.avatar ?? null,
-    },
-  ];
+  const players = useScoredRoomPlayers();
+  const { submitMultiplayerWord } = useRoomActions();
 
   return (
     <div className="multiplayer-page">
@@ -78,7 +40,7 @@ export default function Singleplayer() {
       <div className="container-fluid multiplayer-shell">
         <div className="row multiplayer-layout g-3 g-lg-4">
           <div className="col-12 col-lg-4 col-xl-3">
-            <ScoreBoard players={singleplayerScoreboard} />
+            <ScoreBoard players={players} />
           </div>
           <div className="col-12 col-lg-8 col-xl-9">
             <section className="multiplayer-stage">
@@ -124,7 +86,7 @@ export default function Singleplayer() {
                 </div>
 
                 <div className="col-12">
-                  <form onSubmit={(e) => handleSubmit(e, onValid)}>
+                  <form onSubmit={submitMultiplayerWord}>
                     <input
                       ref={input}
                       autoFocus

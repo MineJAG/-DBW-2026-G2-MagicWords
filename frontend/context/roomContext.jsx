@@ -1,31 +1,39 @@
 import { createContext, useContext, useState } from "react";
+import { useRoomSync } from "../hooks/useRoomSync.js";
 
 const RoomContext = createContext(null);
 
+/**
+ * Keeps track of the room you're in: the code, the players, and a few flags.
+ *
+ * It also starts `useRoomSync`, which listens to the server for room updates
+ * and kicks while the provider is mounted.
+ *
+ * @param {{ children: import("react").ReactNode }}
+ * @returns {JSX.Element}
+ */
 export function RoomProvider({ children }) {
-  const [room, setRoom] = useState(1234);
-  const [roomPlayers, setRoomPlayers] = useState([
-    { id: 1, name: "player1", score: 1234, avatar: null, isHost: true },
-    { id: 2, name: "player2", score: 2180, avatar: null, isHost: false },
-    { id: 3, name: "player3", score: 1102, avatar: null, isHost: false },
-    { id: 4, name: "player4", score: 945, avatar: null, isHost: false },
-    { id: 5, name: "player5", score: 880, avatar: null, isHost: false },
-    { id: 6, name: "player6", score: 810, avatar: null, isHost: false },
-  ]);
+  const [room, setRoom] = useState(null);
+  const [roomData, setRoomData] = useState(null);
+  const [roomPlayers, setRoomPlayers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useRoomSync({ setRoom, setRoomData, setRoomPlayers });
 
   return (
     <RoomContext.Provider
       value={{
         room,
         setRoom,
+        roomData,
+        setRoomData,
         roomPlayers,
         setRoomPlayers,
         loading,
         setLoading,
         error,
-        setError
+        setError,
       }}
     >
       {children}
@@ -33,6 +41,22 @@ export function RoomProvider({ children }) {
   );
 }
 
+/**
+ * Hook to read the room state from any component.
+ *
+ * @returns {{
+ *   room: string | null,   // room code, or null if not in one
+ *   setRoom: (code: string | null) => void,
+ *   roomData: object | null,   // full room info from the server
+ *   setRoomData: (data: object | null) => void,
+ *   roomPlayers: Array<{ socketId: string, name: string, score?: number }>,    // players in the room
+ *   setRoomPlayers: (players: Array<object>) => void,
+ *   loading: boolean,    // true while waiting on the server
+ *   setLoading: (v: boolean) => void,
+ *   error: string | null,    // last error message, if any
+ *   setError: (v: string | null) => void,
+ * }}
+ */
 export const useRoom = () => {
   return useContext(RoomContext);
 };

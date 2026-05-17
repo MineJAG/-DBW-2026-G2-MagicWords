@@ -1,8 +1,8 @@
 import { useUser } from "../context/userContext.jsx";
 import { useGame } from "../context/gameContext.jsx";
+import { useDisplayStatsSingleplayer } from "../hooks/useDisplayStatsSingleplayer.js";
 
 import Navbar from "../components/navbar.jsx";
-import { AvatarPreview } from "../components/avatar.jsx";
 import { Icon } from "../components/icons.jsx";
 import Button from "../components/button.jsx";
 
@@ -11,10 +11,9 @@ import "../styles/leaderboardSingleplayer.css";
 
 export default function LeaderboardSinglePlayer() {
   const { user } = useUser();
-  const { players } = useGame();
-  const activePlayer = players.find((player) => player.isHost) ?? players[0];
-  const currentScore = activePlayer?.score ?? user?.stats?.currentScore ?? 0;
-  const userStats = user?.stats ?? {};
+  const { playerScore } = useGame();
+  const currentScore = playerScore ?? 0;
+  const displayedStats = useDisplayStatsSingleplayer(user?.stats);
 
   return (
     <div className="Leaderboard">
@@ -38,7 +37,7 @@ export default function LeaderboardSinglePlayer() {
             <div className="row">
               <div className="col-6 leaderboard-content-stats-user-Avatar">
                 {user?.picture ? (
-                  <AvatarPreview src={user?.picture} />
+                  <img src={user.picture} alt={`${user.name} avatar`} />
                 ) : (
                   <Icon name="anonymous" />
                 )}
@@ -48,11 +47,14 @@ export default function LeaderboardSinglePlayer() {
               </div>
             </div>
             <div className="leaderboard-content-stats-list">
-              {Object.entries(userStats).map(([key, value]) => (
+              {displayedStats.map(([key, value]) => (
                 <div key={key} className="leaderboard-content-stats-item">
                   <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {value}
                 </div>
               ))}
+            </div>
+            <div className="leaderboard-content-stats-disclaimer">
+              Singleplayer does not affect player stats and thus the ones shown are from the last multiplayer match.
             </div>
             <div className="return">
               <Button link="/home" text="return" />

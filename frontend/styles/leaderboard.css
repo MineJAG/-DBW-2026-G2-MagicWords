@@ -30,12 +30,37 @@
   margin-bottom: 8px;
 }
 
+.leaderboard-player-score {
+  color: var(--light-purple);
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .leaderboard-box-content-body-left-player-avatar,
 .leaderboard-box-content-body-center-player-avatar,
 .leaderboard-box-content-body-right-player-avatar {
   width: 10vh;
   height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   overflow: hidden;
+}
+
+.leaderboard-box-content-body-left-player-avatar img,
+.leaderboard-box-content-body-center-player-avatar img,
+.leaderboard-box-content-body-right-player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.leaderboard-box-content-body-left-player-avatar svg,
+.leaderboard-box-content-body-center-player-avatar svg,
+.leaderboard-box-content-body-right-player-avatar svg {
+  width: 100%;
+  height: 100%;
 }
 
 .leaderboard-box-content-body-left-graybox,

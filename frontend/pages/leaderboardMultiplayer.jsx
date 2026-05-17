@@ -2,14 +2,12 @@ import Navbar from "../components/navbar.jsx";
 import Leaderboard from "../components/leaderboard.jsx";
 import "../styles/variable.css";
 import "../styles/leaderboardmultiplayer.css";
-import { useGame } from "../context/gameContext.jsx";
+import { useScoredRoomPlayers } from "../hooks/useScoredRoomPlayers.js";
 import Button from "../components/button.jsx";
 
 
 export default function LeaderboardMultiplayer() {
-  const {
-    players,
-  } = useGame();
+  const players = useScoredRoomPlayers();
 
   return (
     <div className="Leaderboard">
