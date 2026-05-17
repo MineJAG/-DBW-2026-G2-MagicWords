@@ -11,7 +11,8 @@ import { socket } from "../lib/socket.js";
  * already submitted) from the multiplayer room. Two effects:
  *
  * 1. On `roomData` change, hydrate every game-context field from the snapshot
- *    and — once per mount — restore the user's previous `foundWords`
+ *    and — once per mount — restore the user's previous `foundWords` if
+ *    their stored `lastMasterWord` still matches the current master word
  *    (this lets a refresh mid-match keep the words they had already found).
  * 2. Subscribe to `room:word` so word rotations land in context immediately.
  *
@@ -45,7 +46,9 @@ export function useWordSync(mode) {
 
     if (!restoredWords.current && user?.stats && roomData.masterWord) {
       restoredWords.current = true;
-      setSubmittedWords(user.stats.foundWords ?? []);
+      if (user.stats.lastMasterWord === roomData.masterWord) {
+        setSubmittedWords(user.stats.foundWords ?? []);
+      }
     }
   }, [mode, roomData, user, setMasterWord, setTimeMax, setTimeStarted, setTimerEnd, setPlayerScore, setSubmittedWords]);
 
